@@ -1,0 +1,5 @@
+C:\teste6\NFCAtividadeServidor\Negocio\bin\Debug\Negocio.dll
+C:\teste6\NFCAtividadeServidor\Negocio\bin\Debug\Negocio.pdb
+C:\teste6\NFCAtividadeServidor\Negocio\obj\Debug\Negocio.csproj.CoreCompileInputs.cache
+C:\teste6\NFCAtividadeServidor\Negocio\obj\Debug\Negocio.dll
+C:\teste6\NFCAtividadeServidor\Negocio\obj\Debug\Negocio.pdb

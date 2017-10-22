@@ -1,0 +1,5 @@
+C:\teste6\NFCAtividadeServidor\Persistencia\bin\Debug\Persistencia.dll
+C:\teste6\NFCAtividadeServidor\Persistencia\bin\Debug\Persistencia.pdb
+C:\teste6\NFCAtividadeServidor\Persistencia\obj\Debug\Persistencia.csproj.CoreCompileInputs.cache
+C:\teste6\NFCAtividadeServidor\Persistencia\obj\Debug\Persistencia.dll
+C:\teste6\NFCAtividadeServidor\Persistencia\obj\Debug\Persistencia.pdb
