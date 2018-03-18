@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace NFCAtividadeAPI.Models
+namespace Persistencia.Modelos
 {
-    public class Atividade
+    public class TAG
     {
         public int Id { get; set; }
         public string Nome { get; set; }
-        public List<TAG> listTag { get; set; }
+        public List<string> listAntecessores { get; set; }
     }
 }
