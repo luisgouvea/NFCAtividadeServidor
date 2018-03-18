@@ -14,7 +14,7 @@ namespace NFCAtividadeAPI.Controllers
         public HttpResponseMessage getAtivExecutar([FromBody]List<String> parametros)
         {
             //TODO: getUsuario
-            String idUsuario = parametros[0];
+            String idUsuarioo = parametros[0];
 
             List<Atividade> listaAtividades = Negocio.AtividadeNG.GetAllAtividades();
                         

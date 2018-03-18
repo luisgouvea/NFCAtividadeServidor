@@ -4,12 +4,24 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NFCAtividadeAPI", "NFCAtividadeAPI\NFCAtividadeAPI.csproj", "{F0C5FA5F-9D7D-48AC-8149-8F6C819AC6D6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B047C006-AE0D-4540-BE3A-797E7A832B20} = {B047C006-AE0D-4540-BE3A-797E7A832B20}
+		{1638F85F-D963-4446-A0A6-F468E85275A3} = {1638F85F-D963-4446-A0A6-F468E85275A3}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NFCAtividadeAPI.Tests", "NFCAtividadeAPI.Tests\NFCAtividadeAPI.Tests.csproj", "{6308D7D5-99BD-4462-B7C5-32D241FCEE91}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Negocio", "Negocio\Negocio.csproj", "{B047C006-AE0D-4540-BE3A-797E7A832B20}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1638F85F-D963-4446-A0A6-F468E85275A3} = {1638F85F-D963-4446-A0A6-F468E85275A3}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistencia", "Persistencia\Persistencia.csproj", "{1638F85F-D963-4446-A0A6-F468E85275A3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2F391489-7C99-41CB-8674-A6DB30BAEDE4} = {2F391489-7C99-41CB-8674-A6DB30BAEDE4}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryDB", "LibraryDB\LibraryDB.csproj", "{2F391489-7C99-41CB-8674-A6DB30BAEDE4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +45,10 @@ Global
 		{1638F85F-D963-4446-A0A6-F468E85275A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1638F85F-D963-4446-A0A6-F468E85275A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1638F85F-D963-4446-A0A6-F468E85275A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F391489-7C99-41CB-8674-A6DB30BAEDE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F391489-7C99-41CB-8674-A6DB30BAEDE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F391489-7C99-41CB-8674-A6DB30BAEDE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F391489-7C99-41CB-8674-A6DB30BAEDE4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
