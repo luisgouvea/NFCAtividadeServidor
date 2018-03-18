@@ -9,7 +9,7 @@ namespace LibraryDB
     {
         public static IDbConnection getConection()
         {
-            string bdConnectionString = null;
+            string bdConnectionString = "Server=tcp:nfcatividadedb.database.windows.net,1433;Initial Catalog=NFCAtividadeDB;Persist Security Info=False;User ID=luisgouvea;Password=13109323Puc;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
             return (IDbConnection)MSSQL.getSqlConnection(bdConnectionString);
         }
 
