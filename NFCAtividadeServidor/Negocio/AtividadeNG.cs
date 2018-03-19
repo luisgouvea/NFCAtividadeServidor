@@ -13,5 +13,10 @@ namespace Negocio
         {
             return Persistencia.AtividadeDD.GetAllAtividades();
         }
+
+        public static List<Atividade> getAllAtivExecutar(string idUsuario)
+        {
+            return Persistencia.AtividadeDD.getAllAtivExecutarByUsuario(idUsuario);
+        }
     }
 }

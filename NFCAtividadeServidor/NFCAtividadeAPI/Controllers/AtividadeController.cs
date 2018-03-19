@@ -14,10 +14,17 @@ namespace NFCAtividadeAPI.Controllers
         public HttpResponseMessage getAtivExecutar([FromBody]List<String> parametros)
         {
             //TODO: getUsuario
-            String idUsuarioo = parametros[0];
+            String idUsuario = parametros[0];
 
-            List<Atividade> listaAtividades = Negocio.AtividadeNG.GetAllAtividades();
-                        
+            List<Atividade> listaAtividades = Negocio.AtividadeNG.getAllAtivExecutar(idUsuario);
+
+            //foreach (Atividade ativ in listaAtividades)
+            //{
+            //    int id = ativ.Id;
+            //    List<TAG> listaTags = Negocio.TagNG.getTagsByAtividade(id);
+            //}
+
+
             //List<TAG> listaTagAtiv1 = new List<TAG>
             //{
             //    new TAG {Id = 1, Nome = "TAG_B", listAntecessores = new List<string> {"A->B","D->B"}},
