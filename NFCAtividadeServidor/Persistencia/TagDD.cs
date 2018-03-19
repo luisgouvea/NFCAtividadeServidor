@@ -41,6 +41,7 @@ namespace Persistencia
                         {
                             TAG tag = new TAG();
                             tag.Nome = dReader["comentario"] != DBNull.Value ? dReader["comentario"].ToString() : string.Empty;
+                            tag.Id = dReader["id_tag"] != DBNull.Value ? Int32.Parse(dReader["id_tag"].ToString()) : 0;
                             listTags.Add(tag);
                         }
 
@@ -56,7 +57,71 @@ namespace Persistencia
             }
             catch (Exception exp)
             {
-                throw new Exception("[AtividadeDD.GetAllAtividades()]: " + exp.Message);
+                throw new Exception("[AtividadeDD.getTagsByAtividade()]: " + exp.Message);
+            }
+            finally
+            {
+                if (dReader != null) dReader.Close();
+                if (conexao != null) conexao.Close();
+            }
+
+            return null;
+        }
+
+        public static List<string> getTagsAntecessoras(int idTag)
+        {
+            IDbConnection conexao = null;
+            IDataReader dReader = null;
+
+            try
+            {
+
+                //string sql = "select * from TagEncadeamento where id_tag_target = " + Convert.ToString(idTag);
+
+                string sql = "select comentario from Tag where id_tag in " +
+                    "(" +
+                        "select te.id_tag_antecessora from Tag t " +
+                        "inner join TagEncadeamento te " +
+                        "on t.id_tag = te.id_tag_target " +
+                        "where te.id_tag_target = " + idTag 
+                        +
+                    ")";
+
+                 conexao = DataBase.getConection();
+                IDbCommand command = DataBase.getCommand(sql, conexao);
+
+                //IDbDataParameter parametro = command.CreateParameter();
+                //DataBase.getParametroCampo(ref parametro, "@campo", campo.Trim(), tipoDadoBD.VarChar, clienteWeb.BancoCliente.Provider, campo.Trim().Length);
+                //DataBase.getParametroCampo(ref parametro, "@campo", "gg", tipoDadoBD.VarChar, "ff".Length);
+                //command.Parameters.Add(parametro);
+
+                conexao.Open();
+                dReader = command.ExecuteReader();
+
+                if (dReader != null)
+                {
+                    try
+                    {
+                        List<string> listAntecessoras = new List<string>();
+                        while (dReader.Read())
+                        {
+                            string nome = dReader["comentario"] != DBNull.Value ? dReader["comentario"].ToString() : string.Empty;
+                            listAntecessoras.Add(nome);
+                        }
+
+                        conexao.Close();
+                        dReader.Close();
+                        return listAntecessoras;
+                    }
+                    catch (Exception exp)
+                    {
+                        throw new Exception("Ocorreu um erro: " + exp.Message);
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                throw new Exception("[TagDD.getTagsAntecessoras()]: " + exp.Message);
             }
             finally
             {

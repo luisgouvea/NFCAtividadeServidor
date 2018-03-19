@@ -98,6 +98,7 @@ namespace Persistencia
                         {
                             Atividade atividade = new Atividade();
                             atividade.Nome = dReader["nome"] != DBNull.Value ? dReader["nome"].ToString() : string.Empty;
+                            atividade.Id = dReader["id_atividade"] != DBNull.Value ? Int32.Parse(dReader["id_atividade"].ToString()) :0;
                             listAtividades.Add(atividade);
                         }
 

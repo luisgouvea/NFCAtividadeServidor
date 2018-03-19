@@ -94,6 +94,7 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AtividadeController.cs" />
+    <Compile Include="Controllers\TagController.cs" />
     <Compile Include="Controllers\TesteComunicacaoController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Global.asax.cs">
