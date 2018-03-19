@@ -20,7 +20,7 @@ namespace Persistencia
             {
 
                 //string sql = "select * from Usuario where login = " + login + " AND " + "senha = " + senha;
-                string sql = "select * from Usuario";
+                string sql = "select * from Usuario where nome = @nome and senha = @senha";
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
