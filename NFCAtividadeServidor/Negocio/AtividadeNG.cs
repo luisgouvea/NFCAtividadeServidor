@@ -18,5 +18,10 @@ namespace Negocio
         {
             return Persistencia.AtividadeDD.getAllAtivExecutarByUsuario(idUsuario);
         }
+
+        public static bool adicionarAtividade(Atividade atividade)
+        {
+            return Persistencia.AtividadeDD.addAtividade(atividade);
+        }
     }
 }

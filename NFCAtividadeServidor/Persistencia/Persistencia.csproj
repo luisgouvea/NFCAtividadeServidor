@@ -45,9 +45,12 @@
   <ItemGroup>
     <Compile Include="AtividadeDD.cs" />
     <Compile Include="Modelos\Atividade.cs" />
+    <Compile Include="Modelos\StatusAtividade.cs" />
     <Compile Include="Modelos\TAG.cs" />
     <Compile Include="Modelos\TAGEncadeamento.cs" />
     <Compile Include="Modelos\Usuario.cs" />
+    <Compile Include="Modelos\UsuarioCriador.cs" />
+    <Compile Include="Modelos\UsuarioExecutor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TagDD.cs" />
     <Compile Include="UsuarioDD.cs" />

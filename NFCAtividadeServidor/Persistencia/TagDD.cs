@@ -40,8 +40,9 @@ namespace Persistencia
                         while (dReader.Read())
                         {
                             TAG tag = new TAG();
-                            tag.Nome = dReader["comentario"] != DBNull.Value ? dReader["comentario"].ToString() : string.Empty;
-                            tag.Id = dReader["id_tag"] != DBNull.Value ? Int32.Parse(dReader["id_tag"].ToString()) : 0;
+                            tag.Nome = Conversao.FieldToString(dReader["comentario"]);
+                            //tag.Nome = Conversao.FieldToString(dReader["nome"]);
+                            tag.Id = Conversao.FieldToInteger(dReader["id_tag"]);
                             listTags.Add(tag);
                         }
 

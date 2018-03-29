@@ -98,7 +98,7 @@ namespace Persistencia
                         {
                             Atividade atividade = new Atividade();
                             atividade.Nome = dReader["nome"] != DBNull.Value ? dReader["nome"].ToString() : string.Empty;
-                            atividade.Id = dReader["id_atividade"] != DBNull.Value ? Int32.Parse(dReader["id_atividade"].ToString()) :0;
+                            atividade.Id = dReader["id_atividade"] != DBNull.Value ? Int32.Parse(dReader["id_atividade"].ToString()) : 0;
                             listAtividades.Add(atividade);
                         }
 
@@ -123,6 +123,56 @@ namespace Persistencia
             }
 
             return null;
+        }
+
+        public static bool addAtividade(Atividade ativ)
+        {
+            IDbConnection conexao = null;
+            IDbTransaction transacao = null;
+
+            try
+            {
+
+                string sql = "INSERT INTO Atividade " +
+                    "(id_status, id_usuario_executor, id_usuario_criador, nome) " +
+                    "VALUES (@id_status, @id_usuario_executor, @id_usuario_criador, @nome)";
+
+                conexao = DataBase.getConection();
+                IDbCommand command = DataBase.getCommand(sql, conexao);
+
+                IDbDataParameter parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@id_status", ativ.IdStatus, tipoDadoBD.Integer);
+                command.Parameters.Add(parametro);
+
+                parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@id_usuario_executor", ativ.IdUsuarioExecutor, tipoDadoBD.Integer);
+                command.Parameters.Add(parametro);
+
+                parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@id_usuario_criador", ativ.IdUsuarioCriador, tipoDadoBD.Integer);
+                command.Parameters.Add(parametro);
+
+                parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@nome", ativ.Nome, tipoDadoBD.VarChar);
+                command.Parameters.Add(parametro);
+
+                conexao.Open();
+                transacao = conexao.BeginTransaction();
+                command.Transaction = transacao;
+
+                command.ExecuteNonQuery();
+
+                if (transacao != null) transacao.Commit();
+                if (transacao != null) transacao.Dispose();
+                if (conexao != null) conexao.Close();
+
+
+                return true;
+            }
+            catch (Exception exp)
+            {
+                throw new Exception("[AtividadeDD.addAtividade()]: " + exp.Message);
+            }
         }
     }
 }

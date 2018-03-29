@@ -1,10 +1,12 @@
 ﻿using Persistencia.Modelos;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Newtonsoft.Json;
 
 namespace NFCAtividadeAPI.Controllers
 {
@@ -15,7 +17,7 @@ namespace NFCAtividadeAPI.Controllers
         {
             //TODO: getUsuario
             String idUsuario = parametros[0];
-
+            //List<TAG> li = List<TAG>(parametros[1]);
             List<Atividade> listaAtividades = Negocio.AtividadeNG.getAllAtivExecutar(idUsuario);
 
             //foreach (Atividade ativ in listaAtividades)
@@ -46,30 +48,46 @@ namespace NFCAtividadeAPI.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, listaAtividades);
         }
 
-        [HttpGet]
-        public HttpResponseMessage getAtivExecutar()
+        [HttpPost]
+        public HttpResponseMessage criarAtividade([FromBody]Dictionary<String, String> parametros)
         {
-            List<Atividade> listaAtividades = Negocio.AtividadeNG.GetAllAtividades();
+            try
+            {
+                Atividade atividadeObj = new Atividade();
+                atividadeObj.Nome = parametros["nomeAtividade"];
+                atividadeObj.DataCriacao = DateTime.Now;
+                atividadeObj.DataFinalizacao = DateTime.Now;
+                atividadeObj.IdUsuarioCriador = 1;
+                atividadeObj.IdUsuarioExecutor = 1;
+                atividadeObj.IdStatus = 1;
+                Negocio.AtividadeNG.adicionarAtividade(atividadeObj);
+                return Request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, false);
+            }
+        }
 
-            //List<TAG> listaTagAtiv1 = new List<TAG>
-            //{
-            //    new TAG {Id = 1, Nome = "TAG_B", listAntecessores = new List<string> {"A->B","D->B"}},
-            //    new TAG {Id = 2, Nome = "TAG_D", listAntecessores = new List<string> {"C->D","E->D"} }
-            //};
-
-            //List<TAG> listaTagAtiv2 = new List<TAG>
-            //{
-            //    new TAG {Id = 3, Nome = "TAG_C", listAntecessores = new List<string> {"A->C","D->C"}},
-            //    new TAG {Id = 4, Nome = "TAG_E", listAntecessores = new List<string> {"C->E","F->E"} }
-            //};
-
-            //List<Atividade> listaAtividades = new List<Atividade>
-            //{
-            //    new Atividade { Id = 1, Nome = "Atividade_1", listTag = listaTagAtiv1},
-            //    new Atividade { Id = 2, Nome = "Atividade_2", listTag = listaTagAtiv2}
-            //};
-
-            return Request.CreateResponse(HttpStatusCode.OK, listaAtividades);
+        [HttpGet]
+        public HttpResponseMessage criarAtividade()
+        {
+            try
+            {
+                Atividade atividadeObj = new Atividade();
+                atividadeObj.Nome = "Ronda";
+                atividadeObj.DataCriacao = DateTime.Now;
+                atividadeObj.DataFinalizacao = DateTime.Now;
+                atividadeObj.IdUsuarioCriador = 1;
+                atividadeObj.IdUsuarioExecutor = 1;
+                atividadeObj.IdStatus = 1;
+                Negocio.AtividadeNG.adicionarAtividade(atividadeObj);
+                return Request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, e.Message);
+            }
         }
     }
 }
