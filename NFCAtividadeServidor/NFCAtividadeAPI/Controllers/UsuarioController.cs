@@ -11,15 +11,17 @@ namespace NFCAtividadeAPI.Controllers
     public class UsuarioController : ApiController
     {
         [HttpPost]
-        public HttpResponseMessage LogarUsuario([FromBody]Dictionary<String, String> parametros)
+        public HttpResponseMessage LogarUsuario([FromBody]List<String> parametros)
         {
             try
             {
-                string login = parametros["login"];
-                string senha = parametros["senha"];
+                //string login = parametros["login"];
+                //string senha = parametros["senha"];
+                string login = parametros[0];
+                string senha = parametros[1];
                 Usuario usuario = Negocio.UsuarioNG.getUsuario(login, senha);
 
-                return Request.CreateResponse(HttpStatusCode.OK, usuario);
+                return Request.CreateResponse(HttpStatusCode.OK, usuario.Id);
             }
             catch (Exception e)
             {

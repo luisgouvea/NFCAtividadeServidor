@@ -13,10 +13,10 @@ namespace NFCAtividadeAPI.Controllers
     public class AtividadeController : ApiController
     {
         [HttpPost]
-        public HttpResponseMessage getAtivExecutar([FromBody]List<String> parametros)
+        public HttpResponseMessage getAtivExecutar([FromBody]String idUsuario)
         {
             //TODO: getUsuario
-            String idUsuario = parametros[0];
+            //String idUsuario = parametros[0];
             //List<TAG> li = List<TAG>(parametros[1]);
             List<Atividade> listaAtividades = Negocio.AtividadeNG.getAllAtivExecutar(idUsuario);
 
