@@ -125,6 +125,58 @@ namespace Persistencia
             return null;
         }
 
+        public static List<Atividade> getAllAtivAdicionadasByUsuario(string idUsuario)
+        {
+            IDbConnection conexao = null;
+            IDataReader dReader = null;
+
+            try
+            {
+
+                string sql = "select * from Atividade where id_usuario_criador = " + idUsuario;
+
+                conexao = DataBase.getConection();
+                IDbCommand command = DataBase.getCommand(sql, conexao);
+
+                conexao.Open();
+                dReader = command.ExecuteReader();
+
+                if (dReader != null)
+                {
+                    try
+                    {
+                        List<Atividade> listAtividades = new List<Atividade>();
+                        while (dReader.Read())
+                        {
+                            Atividade atividade = new Atividade();
+                            atividade.Nome = Conversao.FieldToString(dReader["nome"]);
+                            atividade.Id = Conversao.FieldToInteger(dReader["id_atividade"]);
+                            listAtividades.Add(atividade);
+                        }
+
+                        conexao.Close();
+                        dReader.Close();
+                        return listAtividades;
+                    }
+                    catch (Exception exp)
+                    {
+                        throw new Exception("Ocorreu um erro: " + exp.Message);
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                throw new Exception("[AtividadeDD.getAllAtivAdicionadasByUsuario()]: " + exp.Message);
+            }
+            finally
+            {
+                if (dReader != null) dReader.Close();
+                if (conexao != null) conexao.Close();
+            }
+
+            return null;
+        }
+        
         public static bool addAtividade(Atividade ativ)
         {
             IDbConnection conexao = null;
