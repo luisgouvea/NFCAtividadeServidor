@@ -30,5 +30,23 @@ namespace NFCAtividadeAPI.Controllers
             
             return Request.CreateResponse(HttpStatusCode.OK, listaTags);
         }
+
+        [HttpPost]
+        public HttpResponseMessage getTagsByIdAtividade([FromBody]int idUsuario)
+        {
+            List<TAG> listaTags = Negocio.TagNG.getAllTagsByIdAtividade(idUsuario);
+
+            return Request.CreateResponse(HttpStatusCode.OK, listaTags);
+        }
+
+        [HttpPost]
+        public HttpResponseMessage addTag([FromBody]List<String> infToAddTag)
+        {
+            int idAtividade = Convert.ToInt32(infToAddTag[0]);
+            TAG tag = Newtonsoft.Json.JsonConvert.DeserializeObject<TAG>(infToAddTag[1]);
+            Boolean adicionado = Negocio.TagNG.addTag(tag, idAtividade);
+
+            return Request.CreateResponse(HttpStatusCode.OK, adicionado);
+        }
     }
 }

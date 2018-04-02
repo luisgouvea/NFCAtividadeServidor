@@ -9,6 +9,7 @@ namespace Persistencia.Modelos
     public class TAG
     {
         public int Id { get; set; }
+        public int IdAtividade { get; set; }
         public string Nome { get; set; }
         public DateTime DataCheck { get; set; }
         public string Comentario { get; set; }

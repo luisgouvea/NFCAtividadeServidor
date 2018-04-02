@@ -58,7 +58,7 @@ namespace Persistencia
             }
             catch (Exception exp)
             {
-                throw new Exception("[AtividadeDD.getTagsByAtividade()]: " + exp.Message);
+                throw new Exception("[TagDD.getTagsByAtividade()]: " + exp.Message);
             }
             finally
             {
@@ -67,6 +67,47 @@ namespace Persistencia
             }
 
             return null;
+        }
+
+        public static Boolean addTag(TAG tag, int idAtividade)
+        {
+            IDbConnection conexao = null;
+            IDbTransaction transacao = null;
+
+            try
+            {
+
+                string sql = "INSERT INTO Tag " +
+                    "(id_atividade, comentario) " +
+                    "VALUES (@id_atividade, @comentario)";
+
+                conexao = DataBase.getConection();
+                IDbCommand command = DataBase.getCommand(sql, conexao);
+
+                IDbDataParameter parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@id_atividade", tag.IdAtividade, tipoDadoBD.Integer);
+                command.Parameters.Add(parametro);
+
+                parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@comentario", tag.Comentario, tipoDadoBD.VarChar);
+                command.Parameters.Add(parametro);
+
+                conexao.Open();
+                transacao = conexao.BeginTransaction();
+                command.Transaction = transacao;
+
+                command.ExecuteNonQuery();
+
+                if (transacao != null) transacao.Commit();
+                if (transacao != null) transacao.Dispose();
+                if (conexao != null) conexao.Close();
+                
+                return true;
+            }
+            catch (Exception exp)
+            {
+                throw new Exception("[TagDD.addTag()]: " + exp.Message);
+            }
         }
 
         public static List<string> getTagsAntecessoras(int idTag)

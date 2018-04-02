@@ -29,5 +29,15 @@ namespace Negocio
             }
             return listaTags;
         }
+
+        public static Boolean addTag(TAG tag, int idAtividade)
+        {
+            return Persistencia.TagDD.addTag(tag, idAtividade);
+        }
+
+        public static List<TAG> getAllTagsByIdAtividade(int idAtividade)
+        {
+            return Persistencia.TagDD.getTagsByAtividade(idAtividade);
+        }
     }
 }
