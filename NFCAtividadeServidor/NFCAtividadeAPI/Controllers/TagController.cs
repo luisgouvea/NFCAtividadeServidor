@@ -40,11 +40,10 @@ namespace NFCAtividadeAPI.Controllers
         }
 
         [HttpPost]
-        public HttpResponseMessage addTag([FromBody]List<String> infToAddTag)
+        public HttpResponseMessage addTag([FromBody] TAG tag)
         {
-            int idAtividade = Convert.ToInt32(infToAddTag[0]);
-            TAG tag = Newtonsoft.Json.JsonConvert.DeserializeObject<TAG>(infToAddTag[1]);
-            Boolean adicionado = Negocio.TagNG.addTag(tag, idAtividade);
+            //TAG tag = Newtonsoft.Json.JsonConvert.DeserializeObject<TAG>(infToAddTag[1]);
+            Boolean adicionado = Negocio.TagNG.addTag(tag);
 
             return Request.CreateResponse(HttpStatusCode.OK, adicionado);
         }

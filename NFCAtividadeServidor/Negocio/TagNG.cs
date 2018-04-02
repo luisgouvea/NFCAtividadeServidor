@@ -30,9 +30,9 @@ namespace Negocio
             return listaTags;
         }
 
-        public static Boolean addTag(TAG tag, int idAtividade)
+        public static Boolean addTag(TAG tag)
         {
-            return Persistencia.TagDD.addTag(tag, idAtividade);
+            return Persistencia.TagDD.addTag(tag);
         }
 
         public static List<TAG> getAllTagsByIdAtividade(int idAtividade)

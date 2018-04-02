@@ -69,7 +69,7 @@ namespace Persistencia
             return null;
         }
 
-        public static Boolean addTag(TAG tag, int idAtividade)
+        public static Boolean addTag(TAG tag)
         {
             IDbConnection conexao = null;
             IDbTransaction transacao = null;
@@ -89,7 +89,7 @@ namespace Persistencia
                 command.Parameters.Add(parametro);
 
                 parametro = command.CreateParameter();
-                DataBase.getParametroCampo(ref parametro, "@comentario", tag.Comentario, tipoDadoBD.VarChar);
+                DataBase.getParametroCampo(ref parametro, "@comentario", tag.Nome, tipoDadoBD.VarChar);
                 command.Parameters.Add(parametro);
 
                 conexao.Open();
