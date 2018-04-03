@@ -59,7 +59,7 @@ namespace Negocio
             {
                 try
                 {
-                    Persistencia.TagDD.insertEncadeamentoTag(tag);
+                    Persistencia.TagDD.insertEncadeamentoTag(tag.Id, tagAnte.Id);
                 }
                 catch
                 {

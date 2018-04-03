@@ -233,7 +233,7 @@ namespace Persistencia
             return null;
         }
 
-        public static Boolean insertEncadeamentoTag(TAG tag)
+        public static Boolean insertEncadeamentoTag(int id_tag_target, int id_tag_antecessora)
         {
             IDbConnection conexao = null;
             IDbTransaction transacao = null;
@@ -242,18 +242,18 @@ namespace Persistencia
             {
 
                 string sql = "INSERT INTO TagEncadeamento " +
-                    "(id_atividade, comentario) " +
-                    "VALUES (@id_atividade, @comentario)";
+                    "(id_tag_target, id_tag_antecessora) " +
+                    "VALUES (@id_tag_target, @id_tag_antecessora)";
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
 
                 IDbDataParameter parametro = command.CreateParameter();
-                DataBase.getParametroCampo(ref parametro, "@id_atividade", tag.IdAtividade, tipoDadoBD.Integer);
+                DataBase.getParametroCampo(ref parametro, "@id_tag_target", id_tag_target, tipoDadoBD.Integer);
                 command.Parameters.Add(parametro);
 
                 parametro = command.CreateParameter();
-                DataBase.getParametroCampo(ref parametro, "@comentario", tag.Nome, tipoDadoBD.VarChar);
+                DataBase.getParametroCampo(ref parametro, "@id_tag_antecessora", id_tag_antecessora, tipoDadoBD.Integer);
                 command.Parameters.Add(parametro);
 
                 conexao.Open();
@@ -270,7 +270,7 @@ namespace Persistencia
             }
             catch (Exception exp)
             {
-                throw new Exception("[TagDD.setarEncadeamentoTag()]: " + exp.Message);
+                throw new Exception("[TagDD.insertEncadeamentoTag()]: " + exp.Message);
             }
         }        
     }
