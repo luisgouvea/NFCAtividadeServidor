@@ -39,5 +39,22 @@ namespace Negocio
         {
             return Persistencia.TagDD.getTagsByAtividade(idAtividade);
         }
+
+        public static Boolean setarEncadeamentoTag(TAG tag)
+        {
+            int idTagTarget = tag.Id;
+            foreach(TAG tagAnte in tag.listaEncadeamento)
+            {
+                try
+                {
+                    Persistencia.TagDD.insertEncadeamentoTag(tag);
+                }
+                catch
+                {
+                    //Persistencia.TagDD.updateEncadeamentoTag(tag);
+                }
+            }
+            return true;
+        }        
     }
 }

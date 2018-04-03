@@ -47,5 +47,13 @@ namespace NFCAtividadeAPI.Controllers
 
             return Request.CreateResponse(HttpStatusCode.OK, adicionado);
         }
+
+        [HttpPost]
+        public HttpResponseMessage setarEncadeamentoTag([FromBody] TAG tag)
+        {
+            Boolean persistido = Negocio.TagNG.setarEncadeamentoTag(tag);
+
+            return Request.CreateResponse(HttpStatusCode.OK, persistido);
+        }
     }
 }

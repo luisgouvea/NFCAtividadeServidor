@@ -173,5 +173,46 @@ namespace Persistencia
 
             return null;
         }
+
+        public static Boolean insertEncadeamentoTag(TAG tag)
+        {
+            IDbConnection conexao = null;
+            IDbTransaction transacao = null;
+
+            try
+            {
+
+                string sql = "INSERT INTO TagEncadeamento " +
+                    "(id_atividade, comentario) " +
+                    "VALUES (@id_atividade, @comentario)";
+
+                conexao = DataBase.getConection();
+                IDbCommand command = DataBase.getCommand(sql, conexao);
+
+                IDbDataParameter parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@id_atividade", tag.IdAtividade, tipoDadoBD.Integer);
+                command.Parameters.Add(parametro);
+
+                parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@comentario", tag.Nome, tipoDadoBD.VarChar);
+                command.Parameters.Add(parametro);
+
+                conexao.Open();
+                transacao = conexao.BeginTransaction();
+                command.Transaction = transacao;
+
+                command.ExecuteNonQuery();
+
+                if (transacao != null) transacao.Commit();
+                if (transacao != null) transacao.Dispose();
+                if (conexao != null) conexao.Close();
+
+                return true;
+            }
+            catch (Exception exp)
+            {
+                throw new Exception("[TagDD.setarEncadeamentoTag()]: " + exp.Message);
+            }
+        }        
     }
 }
