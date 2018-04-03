@@ -174,6 +174,65 @@ namespace Persistencia
             return null;
         }
 
+        public static List<TAG> getTagsAntecessorasModel(int idTag)
+        {
+            IDbConnection conexao = null;
+            IDataReader dReader = null;
+
+            try
+            {
+
+                string sql = "select * from Tag where id_tag in " +
+                    "(" +
+                        "select te.id_tag_antecessora from Tag t " +
+                        "inner join TagEncadeamento te " +
+                        "on t.id_tag = te.id_tag_target " +
+                        "where te.id_tag_target = " + idTag
+                        +
+                    ")";
+
+                conexao = DataBase.getConection();
+                IDbCommand command = DataBase.getCommand(sql, conexao);
+                
+                conexao.Open();
+                dReader = command.ExecuteReader();
+
+                if (dReader != null)
+                {
+                    try
+                    {
+                        List<TAG> listAntecessoras = new List<TAG>();
+                        while (dReader.Read())
+                        {
+                            string nome = Conversao.FieldToString(dReader["comentario"]);
+                            TAG tag = new TAG();
+                            tag.Nome = nome;
+                            listAntecessoras.Add(tag);
+                        }
+
+                        conexao.Close();
+                        dReader.Close();
+                        return listAntecessoras;
+                    }
+                    catch (Exception exp)
+                    {
+                        throw new Exception("Ocorreu um erro: " + exp.Message);
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                throw new Exception("[TagDD.getTagsAntecessorasModel()]: " + exp.Message);
+            }
+            finally
+            {
+                if (dReader != null) dReader.Close();
+                if (conexao != null) conexao.Close();
+            }
+
+            return null;
+        }
+
         public static Boolean insertEncadeamentoTag(TAG tag)
         {
             IDbConnection conexao = null;

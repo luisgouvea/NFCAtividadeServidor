@@ -40,6 +40,18 @@ namespace Negocio
             return Persistencia.TagDD.getTagsByAtividade(idAtividade);
         }
 
+        public static List<TAG> newGetAllTagsByIdAtividade(int idAtividade)
+        {
+            List<TAG> listTags = Persistencia.TagDD.getTagsByAtividade(idAtividade);
+            foreach (TAG tag in listTags)
+            {
+                int id = tag.Id;
+                List<TAG> listAntecessoras = Persistencia.TagDD.getTagsAntecessorasModel(id);
+                tag.listaEncadeamento = listAntecessoras;
+            }
+            return listTags;
+        }
+
         public static Boolean setarEncadeamentoTag(TAG tag)
         {
             int idTagTarget = tag.Id;

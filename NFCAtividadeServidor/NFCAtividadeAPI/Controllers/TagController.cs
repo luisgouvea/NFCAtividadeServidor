@@ -32,9 +32,17 @@ namespace NFCAtividadeAPI.Controllers
         }
 
         [HttpPost]
-        public HttpResponseMessage getTagsByIdAtividade([FromBody]int idUsuario)
+        public HttpResponseMessage getTagsByIdAtividade([FromBody]int idAtividade)
         {
-            List<TAG> listaTags = Negocio.TagNG.getAllTagsByIdAtividade(idUsuario);
+            List<TAG> listaTags = Negocio.TagNG.getAllTagsByIdAtividade(idAtividade);
+
+            return Request.CreateResponse(HttpStatusCode.OK, listaTags);
+        }
+
+        [HttpPost]
+        public HttpResponseMessage newGetTagsByIdAtividade([FromBody]int idAtividade)
+        {
+            List<TAG> listaTags = Negocio.TagNG.newGetAllTagsByIdAtividade(idAtividade);
 
             return Request.CreateResponse(HttpStatusCode.OK, listaTags);
         }
