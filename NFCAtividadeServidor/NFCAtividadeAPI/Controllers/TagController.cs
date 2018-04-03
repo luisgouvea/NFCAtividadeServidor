@@ -30,7 +30,7 @@ namespace NFCAtividadeAPI.Controllers
             
             return Request.CreateResponse(HttpStatusCode.OK, listaTags);
         }
-
+        //ATUAL LISTAGEM DE TAGS
         [HttpPost]
         public HttpResponseMessage getTagsByIdAtividade([FromBody]int idAtividade)
         {
@@ -38,7 +38,7 @@ namespace NFCAtividadeAPI.Controllers
 
             return Request.CreateResponse(HttpStatusCode.OK, listaTags);
         }
-
+        //LISTAGEM COM LISTA DE ANTECESSORAS - TESTAR AINDA
         [HttpPost]
         public HttpResponseMessage newGetTagsByIdAtividade([FromBody]int idAtividade)
         {
