@@ -204,9 +204,13 @@ namespace Persistencia
                         List<TAG> listAntecessoras = new List<TAG>();
                         while (dReader.Read())
                         {
+                            int idPk = Conversao.FieldToInteger(dReader["id_tag"]);
                             string nome = Conversao.FieldToString(dReader["comentario"]);
+                            int idAtividade = Conversao.FieldToInteger(dReader["id_atividade"]);
                             TAG tag = new TAG();
+                            tag.Id = idPk;
                             tag.Nome = nome;
+                            tag.IdAtividade = idAtividade;
                             listAntecessoras.Add(tag);
                         }
 
