@@ -237,6 +237,42 @@ namespace Persistencia
             return null;
         }
 
+        public static Boolean deleteEncadeamentoTag(int id_tag_target)
+        {
+            IDbConnection conexao = null;
+            IDbTransaction transacao = null;
+
+            try
+            {
+
+                string sql = "DELETE FROM TagEncadeamento " +
+                    "WHERE id_tag_target = @id_tag_target";
+
+                conexao = DataBase.getConection();
+                IDbCommand command = DataBase.getCommand(sql, conexao);
+
+                IDbDataParameter parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@id_tag_target", id_tag_target, tipoDadoBD.Integer);
+                command.Parameters.Add(parametro);
+                
+                conexao.Open();
+                transacao = conexao.BeginTransaction();
+                command.Transaction = transacao;
+
+                command.ExecuteNonQuery();
+
+                if (transacao != null) transacao.Commit();
+                if (transacao != null) transacao.Dispose();
+                if (conexao != null) conexao.Close();
+
+                return true;
+            }
+            catch (Exception exp)
+            {
+                throw new Exception("[TagDD.insertEncadeamentoTag()]: " + exp.Message);
+            }
+        }
+
         public static Boolean insertEncadeamentoTag(int id_tag_target, int id_tag_antecessora)
         {
             IDbConnection conexao = null;

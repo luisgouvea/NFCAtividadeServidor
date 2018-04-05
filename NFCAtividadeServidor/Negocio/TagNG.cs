@@ -52,19 +52,16 @@ namespace Negocio
             return listTags;
         }
 
+        /**
+         *  Sempre assumir que a lista de encadeamento do param tag (TAG), esta com todos os seus antecessores
+        **/
         public static Boolean setarEncadeamentoTag(TAG tag)
         {
             int idTagTarget = tag.Id;
-            foreach(TAG tagAnte in tag.listaEncadeamento)
+            Persistencia.TagDD.deleteEncadeamentoTag(idTagTarget); // delete all encadeamento
+            foreach (TAG tagAnte in tag.listaEncadeamento)
             {
-                try
-                {
-                    Persistencia.TagDD.insertEncadeamentoTag(tag.Id, tagAnte.Id);
-                }
-                catch
-                {
-                    //Persistencia.TagDD.updateEncadeamentoTag(tag);
-                }
+                Persistencia.TagDD.insertEncadeamentoTag(idTagTarget, tagAnte.Id); // cria novamente
             }
             return true;
         }        
