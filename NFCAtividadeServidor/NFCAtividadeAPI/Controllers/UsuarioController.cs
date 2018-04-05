@@ -28,5 +28,20 @@ namespace NFCAtividadeAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest, e.Message);
             }
         }
+
+        [HttpPost]
+        public HttpResponseMessage ListAllUsuarioAddAtivVincExecutor(int idUsuarioTarget)
+        {
+            try
+            {
+                List<Usuario> listUsuario = Negocio.UsuarioNG.listAllUsuarioAddAtivVincExecutor(idUsuarioTarget);
+
+                return Request.CreateResponse(HttpStatusCode.OK, listUsuario);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, e.Message);
+            }
+        }
     }
 }

@@ -63,5 +63,51 @@ namespace Persistencia
                 if (conexao != null) conexao.Close();
             }
         }
+
+        public static List<Usuario> listAllUsuarioAddAtivVincExecutor(int idUsuarioTarget)
+        {
+            IDbConnection conexao = null;
+            IDataReader dReader = null;
+
+            try
+            {
+
+                string sql = "SELECT * FROM Usuario where id_usuario != " + Convert.ToString(idUsuarioTarget);
+
+                conexao = DataBase.getConection();
+                IDbCommand command = DataBase.getCommand(sql, conexao);
+
+                conexao.Open();
+                dReader = command.ExecuteReader();
+
+                if (dReader != null)
+                {
+                    try
+                    {
+                        List<Usuario> listUsuario = new List<Usuario>();
+                        while (dReader.Read())
+                        {
+                            Usuario usuario = new Usuario();
+                            usuario.Id = Conversao.FieldToInteger(dReader["id_usuario"]);
+                            usuario.Nome = Conversao.FieldToString(dReader["nome"]);
+                            listUsuario.Add(usuario);
+                        }
+
+                        conexao.Close();
+                        dReader.Close();
+                        return listUsuario;
+                    }
+                    catch (Exception exp)
+                    {
+                        throw new Exception("Ocorreu um erro: " + exp.Message);
+                    }
+                }
+                return null;
+            }
+            catch (Exception exp)
+            {
+                throw new Exception("[TagDD.listAllUsuarioAddAtivVincExecutor()]: " + exp.Message);
+            }
+        }
     }
 }
