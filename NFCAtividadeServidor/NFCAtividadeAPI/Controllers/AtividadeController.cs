@@ -56,39 +56,11 @@ namespace NFCAtividadeAPI.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, listaAtividades);
         }
 
-        //[HttpPost]
-        //public HttpResponseMessage criarAtividade([FromBody]Dictionary<String, String> parametros)
-        //{
-        //    try
-        //    {
-        //        Atividade atividadeObj = new Atividade();
-        //        atividadeObj.Nome = parametros["nomeAtividade"];
-        //        atividadeObj.DataCriacao = DateTime.Now;
-        //        atividadeObj.DataFinalizacao = DateTime.Now;
-        //        atividadeObj.IdUsuarioCriador = 1;
-        //        atividadeObj.IdUsuarioExecutor = 1;
-        //        atividadeObj.IdStatus = 1;
-        //        Negocio.AtividadeNG.adicionarAtividade(atividadeObj);
-        //        return Request.CreateResponse(HttpStatusCode.OK, true);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return Request.CreateResponse(HttpStatusCode.BadRequest, false);
-        //    }
-        //}
-
         [HttpPost]
         public HttpResponseMessage criarAtividade([FromBody] Atividade ativ)
         {
             try
             {
-                //Atividade atividadeObj = new Atividade();
-                //atividadeObj.Nome = "Teste";
-                //atividadeObj.DataCriacao = DateTime.Now;
-                //atividadeObj.DataFinalizacao = DateTime.Now;
-                //atividadeObj.IdUsuarioCriador = 1;
-                //atividadeObj.IdUsuarioExecutor = 1;
-                //atividadeObj.IdStatus = 1;
                 ativ.IdStatus = 1;
                 Boolean adicionado = Negocio.AtividadeNG.adicionarAtividade(ativ);
                 return Request.CreateResponse(HttpStatusCode.OK, adicionado);
