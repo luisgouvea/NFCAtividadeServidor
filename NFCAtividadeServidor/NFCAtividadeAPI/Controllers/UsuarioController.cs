@@ -30,7 +30,7 @@ namespace NFCAtividadeAPI.Controllers
         }
 
         [HttpPost]
-        public HttpResponseMessage ListAllUsuarioAddAtivVincExecutor(int idUsuarioTarget)
+        public HttpResponseMessage ListAllUsuarioAddAtivVincExecutor([FromBody]int idUsuarioTarget)
         {
             try
             {
