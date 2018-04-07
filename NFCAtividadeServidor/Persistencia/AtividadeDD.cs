@@ -97,8 +97,9 @@ namespace Persistencia
                         while (dReader.Read())
                         {
                             Atividade atividade = new Atividade();
-                            atividade.Nome = dReader["nome"] != DBNull.Value ? dReader["nome"].ToString() : string.Empty;
-                            atividade.Id = dReader["id_atividade"] != DBNull.Value ? Int32.Parse(dReader["id_atividade"].ToString()) : 0;
+                            atividade.Nome = Conversao.FieldToString(dReader["nome"]);
+                            atividade.Id = Conversao.FieldToInteger(dReader["id_atividade"]);
+                            atividade.Descricao = Conversao.FieldToString(dReader["descricao"]);
                             listAtividades.Add(atividade);
                         }
 
@@ -151,6 +152,7 @@ namespace Persistencia
                             Atividade atividade = new Atividade();
                             atividade.Nome = Conversao.FieldToString(dReader["nome"]);
                             atividade.Id = Conversao.FieldToInteger(dReader["id_atividade"]);
+                            atividade.Descricao = Conversao.FieldToString(dReader["descricao"]);
                             listAtividades.Add(atividade);
                         }
 

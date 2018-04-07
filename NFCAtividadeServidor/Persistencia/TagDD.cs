@@ -40,8 +40,8 @@ namespace Persistencia
                         while (dReader.Read())
                         {
                             TAG tag = new TAG();
-                            tag.Nome = Conversao.FieldToString(dReader["comentario"]);
-                            //tag.Nome = Conversao.FieldToString(dReader["nome"]);
+                            tag.Nome = Conversao.FieldToString(dReader["nome"]);
+                            tag.PalavraChave = Conversao.FieldToString(dReader["palavra_chave"]);
                             tag.Id = Conversao.FieldToInteger(dReader["id_tag"]);
                             listTags.Add(tag);
                         }
@@ -205,11 +205,13 @@ namespace Persistencia
                         while (dReader.Read())
                         {
                             int idPk = Conversao.FieldToInteger(dReader["id_tag"]);
-                            string nome = Conversao.FieldToString(dReader["comentario"]);
+                            string nome = Conversao.FieldToString(dReader["nome"]);
+                            string palavra_chave = Conversao.FieldToString(dReader["palavra_chave"]);
                             int idAtividade = Conversao.FieldToInteger(dReader["id_atividade"]);
                             TAG tag = new TAG();
                             tag.Id = idPk;
                             tag.Nome = nome;
+                            tag.PalavraChave = palavra_chave;
                             tag.IdAtividade = idAtividade;
                             listAntecessoras.Add(tag);
                         }

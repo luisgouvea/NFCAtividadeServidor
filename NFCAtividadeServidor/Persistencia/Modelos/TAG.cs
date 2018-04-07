@@ -11,6 +11,7 @@ namespace Persistencia.Modelos
         public int Id { get; set; }
         public int IdAtividade { get; set; }
         public string Nome { get; set; }
+        public string PalavraChave { get; set; }
         public DateTime DataCheck { get; set; }
         public string Comentario { get; set; }
         public List<string> listAntecessores { get; set; }

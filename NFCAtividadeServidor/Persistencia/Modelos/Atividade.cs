@@ -10,6 +10,7 @@ namespace Persistencia.Modelos
     {
         public int Id { get; set; }
         public string Nome { get; set; }
+        public string Descricao { get; set; }
         public int IdStatus { get; set; }
         public int IdUsuarioCriador { get; set; }
         public int IdUsuarioExecutor { get; set; }
