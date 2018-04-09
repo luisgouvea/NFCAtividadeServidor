@@ -68,7 +68,7 @@ namespace Persistencia
             return null;
         }
 
-        public static List<Atividade> getAllAtivExecutarByUsuario(string idUsuario)
+        public static List<Atividade> getAllAtivExecutarByUsuario(int idUsuario)
         {
             IDbConnection conexao = null;
             IDataReader dReader = null;
@@ -76,7 +76,7 @@ namespace Persistencia
             try
             {
 
-                string sql = "select * from Atividade where id_usuario_executor = " + idUsuario;
+                string sql = "select * from Atividade where id_usuario_executor = " + Convert.ToString(idUsuario);
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
@@ -126,7 +126,7 @@ namespace Persistencia
             return null;
         }
 
-        public static List<Atividade> getAllAtivAdicionadasByUsuario(string idUsuario)
+        public static List<Atividade> getAllAtivAdicionadasByUsuario(int idUsuario)
         {
             IDbConnection conexao = null;
             IDataReader dReader = null;
@@ -134,7 +134,7 @@ namespace Persistencia
             try
             {
 
-                string sql = "select * from Atividade where id_usuario_criador = " + idUsuario;
+                string sql = "select * from Atividade where id_usuario_criador = " + Convert.ToString(idUsuario);
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);

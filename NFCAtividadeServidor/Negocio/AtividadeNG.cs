@@ -14,12 +14,12 @@ namespace Negocio
             return Persistencia.AtividadeDD.GetAllAtividades();
         }
 
-        public static List<Atividade> getAllAtivExecutar(string idUsuario)
+        public static List<Atividade> getAllAtivExecutar(int idUsuario)
         {
             return Persistencia.AtividadeDD.getAllAtivExecutarByUsuario(idUsuario);
         }
 
-        public static List<Atividade> getAllAtivAdicionadas(string idUsuario)
+        public static List<Atividade> getAllAtivAdicionadas(int idUsuario)
         {
             return Persistencia.AtividadeDD.getAllAtivAdicionadasByUsuario(idUsuario);
         }
