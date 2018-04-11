@@ -106,7 +106,7 @@ namespace Persistencia
             }
             catch (Exception exp)
             {
-                throw new Exception("[TagDD.listAllUsuarioAddAtivVincExecutor()]: " + exp.Message);
+                throw new Exception("[UsuarioDD.listAllUsuarioAddAtivVincExecutor()]: " + exp.Message);
             }
         }
     }

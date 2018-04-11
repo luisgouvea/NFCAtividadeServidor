@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace Persistencia.Modelos
 {
-    public class TAG
+    public class Tarefa
     {
         public int Id { get; set; }
         public int IdAtividade { get; set; }
+        public int IdTag { get; set; }
         public string Nome { get; set; }
         public string PalavraChave { get; set; }
         public DateTime DataCheck { get; set; }
         public string Comentario { get; set; }
-        public List<string> listAntecessores { get; set; }
-        public List<TAG> listaEncadeamento { get; set; }
+        public List<Tarefa> listaEncadeamento { get; set; }
     }
 }

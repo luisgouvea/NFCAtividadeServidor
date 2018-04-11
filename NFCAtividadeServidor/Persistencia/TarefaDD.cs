@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace Persistencia
 {
-    public class TagDD
+    public class TarefaDD
     {
-        public static List<TAG> getTagsByAtividade(int idAtividade)
+        public static List<Tarefa> getTarefasByAtividade(int idAtividade)
         {
             IDbConnection conexao = null;
             IDataReader dReader = null;
@@ -19,15 +19,10 @@ namespace Persistencia
             try
             {
 
-                string sql = "select * from Tag where id_atividade = " + Convert.ToString(idAtividade);
+                string sql = "select * from Tarefa where id_atividade = " + Convert.ToString(idAtividade);
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
-
-                //IDbDataParameter parametro = command.CreateParameter();
-                //DataBase.getParametroCampo(ref parametro, "@campo", campo.Trim(), tipoDadoBD.VarChar, clienteWeb.BancoCliente.Provider, campo.Trim().Length);
-                //DataBase.getParametroCampo(ref parametro, "@campo", "gg", tipoDadoBD.VarChar, "ff".Length);
-                //command.Parameters.Add(parametro);
 
                 conexao.Open();
                 dReader = command.ExecuteReader();
@@ -36,19 +31,19 @@ namespace Persistencia
                 {
                     try
                     {
-                        List<TAG> listTags = new List<TAG>();
+                        List<Tarefa> listTarefas = new List<Tarefa>();
                         while (dReader.Read())
                         {
-                            TAG tag = new TAG();
-                            tag.Nome = Conversao.FieldToString(dReader["nome"]);
-                            tag.PalavraChave = Conversao.FieldToString(dReader["palavra_chave"]);
-                            tag.Id = Conversao.FieldToInteger(dReader["id_tag"]);
-                            listTags.Add(tag);
+                            Tarefa tarefa = new Tarefa();
+                            tarefa.Nome = Conversao.FieldToString(dReader["nome"]);
+                            tarefa.PalavraChave = Conversao.FieldToString(dReader["palavra_chave"]);
+                            tarefa.Id = Conversao.FieldToInteger(dReader["id_tarefa"]);
+                            listTarefas.Add(tarefa);
                         }
 
                         conexao.Close();
                         dReader.Close();
-                        return listTags;
+                        return listTarefas;
                     }
                     catch (Exception exp)
                     {
@@ -58,7 +53,7 @@ namespace Persistencia
             }
             catch (Exception exp)
             {
-                throw new Exception("[TagDD.getTagsByAtividade()]: " + exp.Message);
+                throw new Exception("[TarefaDD.getTarefasByAtividade()]: " + exp.Message);
             }
             finally
             {
@@ -69,7 +64,7 @@ namespace Persistencia
             return null;
         }
 
-        public static Boolean addTag(TAG tag)
+        public static Boolean addTarefa(Tarefa tarefa)
         {
             IDbConnection conexao = null;
             IDbTransaction transacao = null;
@@ -77,19 +72,23 @@ namespace Persistencia
             try
             {
 
-                string sql = "INSERT INTO Tag " +
-                    "(id_atividade, comentario) " +
-                    "VALUES (@id_atividade, @comentario)";
+                string sql = "INSERT INTO Tarefa " +
+                    "(id_atividade, id_tag, comentario) " +
+                    "VALUES (@id_atividade, @id_tag, @comentario)";
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
 
                 IDbDataParameter parametro = command.CreateParameter();
-                DataBase.getParametroCampo(ref parametro, "@id_atividade", tag.IdAtividade, tipoDadoBD.Integer);
+                DataBase.getParametroCampo(ref parametro, "@id_atividade", tarefa.IdAtividade, tipoDadoBD.Integer);
                 command.Parameters.Add(parametro);
 
                 parametro = command.CreateParameter();
-                DataBase.getParametroCampo(ref parametro, "@comentario", tag.Nome, tipoDadoBD.VarChar);
+                DataBase.getParametroCampo(ref parametro, "@id_atividade", tarefa.IdTag, tipoDadoBD.Integer);
+                command.Parameters.Add(parametro);
+
+                parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@comentario", tarefa.Nome, tipoDadoBD.VarChar);
                 command.Parameters.Add(parametro);
 
                 conexao.Open();
@@ -106,11 +105,11 @@ namespace Persistencia
             }
             catch (Exception exp)
             {
-                throw new Exception("[TagDD.addTag()]: " + exp.Message);
+                throw new Exception("[TarefaDD.addTarefa()]: " + exp.Message);
             }
         }
 
-        public static List<TAG> getTagsAntecessoras(int idTag)
+        public static List<Tarefa> getTarefasAntecessoras(int idTarefa)
         {
             IDbConnection conexao = null;
             IDataReader dReader = null;
@@ -118,12 +117,12 @@ namespace Persistencia
             try
             {
 
-                string sql = "select * from Tag where id_tag in " +
+                string sql = "select * from Tarefa where id_tarefa in " +
                     "(" +
-                        "select te.id_tag_antecessora from Tag t " +
-                        "inner join TagEncadeamento te " +
-                        "on t.id_tag = te.id_tag_target " +
-                        "where te.id_tag_target = " + idTag
+                        "select te.id_tarefa_antecessora from Tarefa t " +
+                        "inner join TarefaEncadeamento te " +
+                        "on t.id_tarefa = te.id_tarefa_target " +
+                        "where te.id_tarefa_target = " + idTarefa
                         +
                     ")";
 
@@ -137,19 +136,19 @@ namespace Persistencia
                 {
                     try
                     {
-                        List<TAG> listAntecessoras = new List<TAG>();
+                        List<Tarefa> listAntecessoras = new List<Tarefa>();
                         while (dReader.Read())
                         {
-                            int idPk = Conversao.FieldToInteger(dReader["id_tag"]);
+                            int idPk = Conversao.FieldToInteger(dReader["id_tarefa"]);
                             string nome = Conversao.FieldToString(dReader["nome"]);
                             string palavra_chave = Conversao.FieldToString(dReader["palavra_chave"]);
                             int idAtividade = Conversao.FieldToInteger(dReader["id_atividade"]);
-                            TAG tag = new TAG();
-                            tag.Id = idPk;
-                            tag.Nome = nome;
-                            tag.PalavraChave = palavra_chave;
-                            tag.IdAtividade = idAtividade;
-                            listAntecessoras.Add(tag);
+                            Tarefa tarefa = new Tarefa();
+                            tarefa.Id = idPk;
+                            tarefa.Nome = nome;
+                            tarefa.PalavraChave = palavra_chave;
+                            tarefa.IdAtividade = idAtividade;
+                            listAntecessoras.Add(tarefa);
                         }
 
                         conexao.Close();
@@ -164,7 +163,7 @@ namespace Persistencia
             }
             catch (Exception exp)
             {
-                throw new Exception("[TagDD.getTagsAntecessorasModel()]: " + exp.Message);
+                throw new Exception("[TarefaDD.getTarefasAntecessoras()]: " + exp.Message);
             }
             finally
             {
@@ -175,7 +174,7 @@ namespace Persistencia
             return null;
         }
 
-        public static Boolean deleteEncadeamentoTag(int id_tag_target)
+        public static Boolean deleteEncadeamentoTarefa(int id_tarefa_target)
         {
             IDbConnection conexao = null;
             IDbTransaction transacao = null;
@@ -183,14 +182,14 @@ namespace Persistencia
             try
             {
 
-                string sql = "DELETE FROM TagEncadeamento " +
-                    "WHERE id_tag_target = @id_tag_target";
+                string sql = "DELETE FROM TarefaEncadeamento " +
+                    "WHERE id_tarefa_target = @id_tarefa_target";
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
 
                 IDbDataParameter parametro = command.CreateParameter();
-                DataBase.getParametroCampo(ref parametro, "@id_tag_target", id_tag_target, tipoDadoBD.Integer);
+                DataBase.getParametroCampo(ref parametro, "@id_tarefa_target", id_tarefa_target, tipoDadoBD.Integer);
                 command.Parameters.Add(parametro);
                 
                 conexao.Open();
@@ -207,11 +206,11 @@ namespace Persistencia
             }
             catch (Exception exp)
             {
-                throw new Exception("[TagDD.insertEncadeamentoTag()]: " + exp.Message);
+                throw new Exception("[TarefaDD.deleteEncadeamentoTarefa()]: " + exp.Message);
             }
         }
 
-        public static Boolean insertEncadeamentoTag(int id_tag_target, int id_tag_antecessora)
+        public static Boolean insertEncadeamentoTarefa(int id_tarefa_target, int id_tarefa_antecessora)
         {
             IDbConnection conexao = null;
             IDbTransaction transacao = null;
@@ -219,19 +218,19 @@ namespace Persistencia
             try
             {
 
-                string sql = "INSERT INTO TagEncadeamento " +
-                    "(id_tag_target, id_tag_antecessora) " +
-                    "VALUES (@id_tag_target, @id_tag_antecessora)";
+                string sql = "INSERT INTO TarefaEncadeamento " +
+                    "(id_tarefa_target, id_tarefa_antecessora) " +
+                    "VALUES (@id_tarefa_target, @id_tarefa_antecessora)";
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
 
                 IDbDataParameter parametro = command.CreateParameter();
-                DataBase.getParametroCampo(ref parametro, "@id_tag_target", id_tag_target, tipoDadoBD.Integer);
+                DataBase.getParametroCampo(ref parametro, "@id_tarefa_target", id_tarefa_target, tipoDadoBD.Integer);
                 command.Parameters.Add(parametro);
 
                 parametro = command.CreateParameter();
-                DataBase.getParametroCampo(ref parametro, "@id_tag_antecessora", id_tag_antecessora, tipoDadoBD.Integer);
+                DataBase.getParametroCampo(ref parametro, "@id_tarefa_antecessora", id_tarefa_antecessora, tipoDadoBD.Integer);
                 command.Parameters.Add(parametro);
 
                 conexao.Open();
@@ -248,7 +247,7 @@ namespace Persistencia
             }
             catch (Exception exp)
             {
-                throw new Exception("[TagDD.insertEncadeamentoTag()]: " + exp.Message);
+                throw new Exception("[TarefaDD.insertEncadeamentoTarefa()]: " + exp.Message);
             }
         }        
     }

@@ -16,7 +16,7 @@ namespace Persistencia.Modelos
         public int IdUsuarioExecutor { get; set; }
         public DateTime DataFinalizacao { get; set; }
         public DateTime DataCriacao { get; set; }
-        public bool RepetirTag { get; set; }
-        public List<TAG> listTag { get; set; }
+        public bool RepetirTarefa { get; set; }
+        public List<Tarefa> listTarefa { get; set; }
     }
 }
