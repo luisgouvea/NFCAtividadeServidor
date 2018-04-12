@@ -11,6 +11,7 @@ namespace Negocio
     {
         public static Boolean addTag(TAG tag)
         {
+            tag.Id = Convert.ToInt32(generatedIdTag());
             return Persistencia.TagDD.addTag(tag);
         }
 
@@ -19,5 +20,14 @@ namespace Negocio
             List<TAG> listTags = Persistencia.TagDD.getTagsByUsuario(idUsuario);
             return listTags;
         }
+
+        #region Métodos Privados
+        private static long generatedIdTag()
+        {
+            DateTime foo = DateTime.UtcNow;
+            long unixTime = ((DateTimeOffset)foo).ToUnixTimeSeconds();
+            return unixTime;
+        }
+        #endregion
     }
 }

@@ -20,14 +20,18 @@ namespace Persistencia
             {
 
                 string sql = "INSERT INTO Tag " +
-                    "(id_usuario, nome) " +
-                    "VALUES (@id_usuario, @nome)";
+                    "(id_usuario, nome, id_tag) " +
+                    "VALUES (@id_usuario, @nome, @id_tag)";
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
 
                 IDbDataParameter parametro = command.CreateParameter();
                 DataBase.getParametroCampo(ref parametro, "@id_usuario", tag.IdUsuario, tipoDadoBD.Integer);
+                command.Parameters.Add(parametro);
+
+                parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@id_tag", tag.Id, tipoDadoBD.Integer);
                 command.Parameters.Add(parametro);
 
                 parametro = command.CreateParameter();
