@@ -18,7 +18,7 @@ namespace NFCAtividadeAPI.Controllers
             //TODO: getUsuario
             //String idUsuario = parametros[0];
             List<Atividade> listaAtividades = Negocio.AtividadeNG.getAllAtivExecutar(idUsuario);
-            
+
             return Request.CreateResponse(HttpStatusCode.OK, listaAtividades);
         }
 
@@ -38,6 +38,20 @@ namespace NFCAtividadeAPI.Controllers
                 ativ.IdStatus = 1;
                 Boolean adicionado = Negocio.AtividadeNG.adicionarAtividade(ativ);
                 return Request.CreateResponse(HttpStatusCode.OK, adicionado);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Ocorreu um erro: " + e.Message);
+            }
+        }
+
+        [HttpPost]
+        public HttpResponseMessage realizarCheck([FromBody] int idTagCheck)
+        {
+            try
+            {
+                //Negocio.AtividadeNG.realizarCheck(idTagCheck);
+                return Request.CreateResponse(HttpStatusCode.OK, true);
             }
             catch (Exception e)
             {

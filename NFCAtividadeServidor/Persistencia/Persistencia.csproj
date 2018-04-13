@@ -52,6 +52,7 @@
     <Compile Include="Modelos\Usuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TagDD.cs" />
+    <Compile Include="TarefaCheckDD.cs" />
     <Compile Include="TarefaDD.cs" />
     <Compile Include="UsuarioDD.cs" />
   </ItemGroup>

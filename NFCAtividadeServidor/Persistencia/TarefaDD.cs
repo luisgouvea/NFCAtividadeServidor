@@ -64,6 +64,53 @@ namespace Persistencia
             return null;
         }
 
+        public static Tarefa getTarefaByTag(int idTag)
+        {
+            IDbConnection conexao = null;
+            IDataReader dReader = null;
+
+            try
+            {
+
+                string sql = "select * from Tarefa where id_tag = " + Convert.ToString(idTag);
+
+                conexao = DataBase.getConection();
+                IDbCommand command = DataBase.getCommand(sql, conexao);
+
+                conexao.Open();
+                dReader = command.ExecuteReader();
+
+                if (dReader != null)
+                {
+                    dReader.Read();
+                    Tarefa tarefa = new Tarefa();
+                    tarefa.Nome = Conversao.FieldToString(dReader["nome"]);
+                    tarefa.PalavraChave = Conversao.FieldToString(dReader["palavra_chave"]);
+                    tarefa.Id = Conversao.FieldToInteger(dReader["id_tarefa"]);
+
+                    conexao.Close();
+                    dReader.Close();
+                    return tarefa;
+                }
+                else
+                {
+                    throw new Exception("[TarefaDD.getTarefaByTag()]: Não foi possível localizar a Tag.");
+                }
+
+
+            }
+            catch (Exception exp)
+            {
+                throw new Exception("[TarefaDD.getTarefaByTag()]: " + exp.Message);
+            }
+
+            finally
+            {
+                if (dReader != null) dReader.Close();
+                if (conexao != null) conexao.Close();
+            }
+        }
+
         public static Boolean addTarefa(Tarefa tarefa)
         {
             IDbConnection conexao = null;
@@ -173,7 +220,7 @@ namespace Persistencia
 
             return null;
         }
-
+                
         public static Boolean deleteEncadeamentoTarefa(int id_tarefa_target)
         {
             IDbConnection conexao = null;
