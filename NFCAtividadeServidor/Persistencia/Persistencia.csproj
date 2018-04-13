@@ -47,6 +47,7 @@
     <Compile Include="Modelos\Atividade.cs" />
     <Compile Include="Modelos\StatusAtividade.cs" />
     <Compile Include="Modelos\TAG.cs" />
+    <Compile Include="Modelos\TagCheck.cs" />
     <Compile Include="Modelos\Tarefa.cs" />
     <Compile Include="Modelos\TarefaEncadeamento.cs" />
     <Compile Include="Modelos\Usuario.cs" />
