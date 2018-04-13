@@ -50,7 +50,7 @@ namespace Negocio
             try
             {
                 //realizar historico dessa tarefa
-                //TarefaCheckNG.addRegistroCheckNFC(tarefa);
+                TarefaCheckNG.addRegistroCheckNFC(tarefa);
             }
             catch (Exception e)
             {

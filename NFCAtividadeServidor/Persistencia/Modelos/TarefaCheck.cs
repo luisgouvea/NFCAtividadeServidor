@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Persistencia.Modelos
 {
-    public class TagCheck
+    public class TarefaCheck
     {
         public int Id { get; set; }
         public int IdTarefa { get; set; }
