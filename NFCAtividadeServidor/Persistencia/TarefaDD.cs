@@ -36,7 +36,6 @@ namespace Persistencia
                         {
                             Tarefa tarefa = new Tarefa();
                             tarefa.Nome = Conversao.FieldToString(dReader["nome"]);
-                            tarefa.PalavraChave = Conversao.FieldToString(dReader["palavra_chave"]);
                             tarefa.Id = Conversao.FieldToInteger(dReader["id_tarefa"]);
                             listTarefas.Add(tarefa);
                         }
