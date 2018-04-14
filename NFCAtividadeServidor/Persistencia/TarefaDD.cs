@@ -85,7 +85,6 @@ namespace Persistencia
                     dReader.Read();
                     Tarefa tarefa = new Tarefa();
                     tarefa.Nome = Conversao.FieldToString(dReader["nome"]);
-                    tarefa.PalavraChave = Conversao.FieldToString(dReader["palavra_chave"]);
                     tarefa.Id = Conversao.FieldToInteger(dReader["id_tarefa"]);
 
                     conexao.Close();
@@ -188,12 +187,10 @@ namespace Persistencia
                         {
                             int idPk = Conversao.FieldToInteger(dReader["id_tarefa"]);
                             string nome = Conversao.FieldToString(dReader["nome"]);
-                            string palavra_chave = Conversao.FieldToString(dReader["palavra_chave"]);
                             int idAtividade = Conversao.FieldToInteger(dReader["id_atividade"]);
                             Tarefa tarefa = new Tarefa();
                             tarefa.Id = idPk;
                             tarefa.Nome = nome;
-                            tarefa.PalavraChave = palavra_chave;
                             tarefa.IdAtividade = idAtividade;
                             listAntecessoras.Add(tarefa);
                         }

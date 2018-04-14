@@ -20,8 +20,8 @@ namespace Persistencia
             {
 
                 string sql = "INSERT INTO Tag " +
-                    "(id_usuario, nome, id_tag) " +
-                    "VALUES (@id_usuario, @nome, @id_tag)";
+                    "(id_usuario, nome, id_tag, palavra_chave) " +
+                    "VALUES (@id_usuario, @nome, @id_tag, @palavra_chave)";
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
@@ -37,6 +37,10 @@ namespace Persistencia
                 parametro = command.CreateParameter();
                 DataBase.getParametroCampo(ref parametro, "@nome", tag.Nome, tipoDadoBD.VarChar);
                 command.Parameters.Add(parametro);
+
+                //parametro = command.CreateParameter();
+                //DataBase.getParametroCampo(ref parametro, "@palavra_chave", tag.PalavraChave, tipoDadoBD.VarChar);
+                //command.Parameters.Add(parametro);
 
                 conexao.Open();
                 transacao = conexao.BeginTransaction();
@@ -82,6 +86,7 @@ namespace Persistencia
                             TAG tag = new TAG();
                             tag.Nome = Conversao.FieldToString(dReader["nome"]);
                             tag.IdUsuario = Conversao.FieldToInteger(dReader["id_usuario"]);
+                            tag.PalavraChave = Conversao.FieldToString(dReader["palavra_chave"]);
                             tag.Id = Conversao.FieldToInteger(dReader["id_tag"]);
                             listTags.Add(tag);
                         }

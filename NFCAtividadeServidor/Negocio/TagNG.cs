@@ -11,7 +11,7 @@ namespace Negocio
     {
         public static Boolean addTag(TAG tag)
         {
-            tag.Id = Convert.ToInt32(generatedIdTag());
+            //tag.Id = Convert.ToInt32(generatedIdTag());
             return Persistencia.TagDD.addTag(tag);
         }
 
