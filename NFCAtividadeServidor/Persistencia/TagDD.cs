@@ -19,9 +19,13 @@ namespace Persistencia
             try
             {
 
+                //string sql = "INSERT INTO Tag " +
+                //    "(id_usuario, nome, id_tag, palavra_chave) " +
+                //    "VALUES (@id_usuario, @nome, @id_tag, @palavra_chave)";
+
                 string sql = "INSERT INTO Tag " +
-                    "(id_usuario, nome, id_tag, palavra_chave) " +
-                    "VALUES (@id_usuario, @nome, @id_tag, @palavra_chave)";
+                    "(id_usuario, nome, id_tag) " +
+                    "VALUES (@id_usuario, @nome, @id_tag)";
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
