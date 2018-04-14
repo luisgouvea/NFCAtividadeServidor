@@ -13,25 +13,46 @@ namespace NFCAtividadeAPI.Controllers
         [HttpPost]
         public HttpResponseMessage getTarefasByIdAtividade([FromBody]int idAtividade)
         {
-            List<Tarefa> listaTarefas = Negocio.TarefaNG.getAllTarefasByIdAtividade(idAtividade);
+            try
+            {
+                List<Tarefa> listaTarefas = Negocio.TarefaNG.getAllTarefasByIdAtividade(idAtividade);
 
-            return Request.CreateResponse(HttpStatusCode.OK, listaTarefas);
+                return Request.CreateResponse(HttpStatusCode.OK, listaTarefas);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Ocorreu um erro: " + e.Message);
+            }
         }
 
         [HttpPost]
         public HttpResponseMessage addTarefa([FromBody] Tarefa tarefa)
         {
-            Boolean adicionado = Negocio.TarefaNG.addTarefa(tarefa);
+            try
+            {
+                Boolean adicionado = Negocio.TarefaNG.addTarefa(tarefa);
 
-            return Request.CreateResponse(HttpStatusCode.OK, adicionado);
+                return Request.CreateResponse(HttpStatusCode.OK, adicionado);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Ocorreu um erro: " + e.Message);
+            }
         }
 
         [HttpPost]
         public HttpResponseMessage setarEncadeamentoTarefa([FromBody] Tarefa tarefa)
         {
-            Boolean persistido = Negocio.TarefaNG.setarEncadeamentoTarefa(tarefa);
+            try
+            {
+                Boolean persistido = Negocio.TarefaNG.setarEncadeamentoTarefa(tarefa);
 
-            return Request.CreateResponse(HttpStatusCode.OK, persistido);
+                return Request.CreateResponse(HttpStatusCode.OK, persistido);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Ocorreu um erro: " + e.Message);
+            }
         }
     }
 }
