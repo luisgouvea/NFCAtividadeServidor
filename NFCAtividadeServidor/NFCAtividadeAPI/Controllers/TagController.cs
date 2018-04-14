@@ -13,17 +13,29 @@ namespace NFCAtividadeAPI.Controllers
         [HttpPost]
         public HttpResponseMessage addTag([FromBody] TAG tag)
         {
-            Boolean adicionado = Negocio.TagNG.addTag(tag);
-
-            return Request.CreateResponse(HttpStatusCode.OK, adicionado);
+            try
+            {
+                Boolean adicionado = Negocio.TagNG.addTag(tag);
+                return Request.CreateResponse(HttpStatusCode.OK, adicionado);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Ocorreu um erro: " + e.Message);
+            }
         }
 
         [HttpPost]
         public HttpResponseMessage getTagsByIdUsuario([FromBody]int idUsuario)
         {
-            List<TAG> listaTags = Negocio.TagNG.getAllTagsByIdUsuario(idUsuario);
-
-            return Request.CreateResponse(HttpStatusCode.OK, listaTags);
+            try
+            {
+                List<TAG> listaTags = Negocio.TagNG.getAllTagsByIdUsuario(idUsuario);
+                return Request.CreateResponse(HttpStatusCode.OK, listaTags);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Ocorreu um erro: " + e.Message);
+            }
         }
     }
 }
