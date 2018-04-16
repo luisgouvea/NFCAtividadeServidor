@@ -30,8 +30,19 @@ namespace Negocio
         {
             Tarefa tarefa = Persistencia.TarefaDD.getTarefaByTag(idTag);
             return tarefa;
-        }       
-        
+        }
+
+        public static Tarefa getTarefa(int idTarefa)
+        {
+            Tarefa tarefa = Persistencia.TarefaDD.getTarefa(idTarefa);
+            return tarefa;
+        }
+
+        public static List<Tarefa> getTarefasAntecessoras(int idTarefa)
+        {
+            return Persistencia.TarefaDD.getTarefasAntecessoras(idTarefa);
+        }
+
         /**
          *  Sempre assumir que a lista de encadeamento do param tarefa (Tarefa), esta com todos os seus antecessores
         **/

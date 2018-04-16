@@ -45,12 +45,12 @@ namespace NFCAtividadeAPI.Controllers
             }
         }
 
-        [HttpPost]
-        public HttpResponseMessage realizarCheck([FromBody] int idTagCheck)
+        [HttpGet]
+        public HttpResponseMessage realizarCheck(int idTagCheck, int idTarefa)
         {
             try
             {
-                bool checkCorreto = Negocio.AtividadeNG.realizarCheck(idTagCheck);
+                bool checkCorreto = Negocio.AtividadeNG.realizarCheck(idTagCheck, idTarefa);
                 return Request.CreateResponse(HttpStatusCode.OK, checkCorreto);
             }
             catch (Exception e)

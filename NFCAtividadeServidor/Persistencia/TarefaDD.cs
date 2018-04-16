@@ -220,7 +220,51 @@ namespace Persistencia
 
             return null;
         }
-                
+
+        public static Tarefa getTarefa(int id_tarefa)
+        {
+            IDbConnection conexao = null;
+            IDataReader dReader = null;
+
+            try
+            {
+
+                string sql = "SELECT * FROM Tarefa " +
+                    "WHERE id_tarefa = @id_tarefa";
+
+                conexao = DataBase.getConection();
+                IDbCommand command = DataBase.getCommand(sql, conexao);
+
+                IDbDataParameter parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@id_tarefa", id_tarefa, tipoDadoBD.Integer);
+                command.Parameters.Add(parametro);
+
+                conexao.Open();
+                dReader = command.ExecuteReader();
+
+                if (dReader != null)
+                {
+                    dReader.Read();
+                    Tarefa tarefa = new Tarefa();
+                    tarefa.IdAtividade = Conversao.FieldToInteger(dReader["id_atividade"]);
+                    tarefa.Nome = Conversao.FieldToString(dReader["nome"]);
+                    tarefa.Id = Conversao.FieldToInteger(dReader["id_tarefa"]);
+
+                    conexao.Close();
+                    dReader.Close();
+                    return tarefa;
+                }
+                else
+                {
+                    throw new Exception("[TarefaDD.getTarefa()]: Não foi possível localizar a Tarefa.");
+                }
+            }
+            catch (Exception exp)
+            {
+                throw new Exception("[TarefaDD.getTarefa()]: " + exp.Message);
+            }
+        }
+
         public static Boolean deleteEncadeamentoTarefa(int id_tarefa_target)
         {
             IDbConnection conexao = null;
