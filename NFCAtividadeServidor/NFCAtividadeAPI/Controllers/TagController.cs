@@ -37,5 +37,20 @@ namespace NFCAtividadeAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest, "Ocorreu um erro: " + e.Message);
             }
         }
+
+        [HttpPost]
+        public HttpResponseMessage getDetalhesTag([FromBody]int idTarefa)
+        {
+            try
+            {
+                Tarefa tarefa = Negocio.TarefaNG.getTarefa(idTarefa);
+                TAG tag = Negocio.TagNG.getTag(tarefa.IdTag);
+                return Request.CreateResponse(HttpStatusCode.OK, tag);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Ocorreu um erro: " + e.Message);
+            }
+        }
     }
 }
