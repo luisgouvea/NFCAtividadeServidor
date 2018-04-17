@@ -63,7 +63,7 @@ namespace Persistencia
             return null;
         }
 
-        public static Tarefa getTarefaByTag(int idTag)
+        public static Tarefa getTarefaByTagAndTarefa(int idTag, int idTarefa)
         {
             IDbConnection conexao = null;
             IDataReader dReader = null;
@@ -71,7 +71,7 @@ namespace Persistencia
             try
             {
 
-                string sql = "select * from Tarefa where id_tag = " + Convert.ToString(idTag);
+                string sql = "select * from Tarefa where id_tag = " + Convert.ToString(idTag) + " AND" + " id_tarefa = " + Convert.ToString(idTarefa);
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
@@ -85,6 +85,7 @@ namespace Persistencia
                     Tarefa tarefa = new Tarefa();
                     tarefa.Nome = Conversao.FieldToString(dReader["nome"]);
                     tarefa.Id = Conversao.FieldToInteger(dReader["id_tarefa"]);
+                    tarefa.IdAtividade = Conversao.FieldToInteger(dReader["id_atividade"]);
 
                     conexao.Close();
                     dReader.Close();
@@ -249,6 +250,7 @@ namespace Persistencia
                     tarefa.IdAtividade = Conversao.FieldToInteger(dReader["id_atividade"]);
                     tarefa.Nome = Conversao.FieldToString(dReader["nome"]);
                     tarefa.Id = Conversao.FieldToInteger(dReader["id_tarefa"]);
+                    tarefa.IdTag = Conversao.FieldToInteger(dReader["id_tag"]);
 
                     conexao.Close();
                     dReader.Close();

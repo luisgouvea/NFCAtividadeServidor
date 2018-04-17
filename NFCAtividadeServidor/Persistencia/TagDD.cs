@@ -117,5 +117,48 @@ namespace Persistencia
 
             return null;
         }
+
+        public static TAG getTagByIdTag(int idTag)
+        {
+            IDbConnection conexao = null;
+            IDataReader dReader = null;
+
+            try
+            {
+
+                string sql = "SELECT * FROM Tag " +
+                    "WHERE id_tag = @id_tag";
+
+                conexao = DataBase.getConection();
+                IDbCommand command = DataBase.getCommand(sql, conexao);
+
+                IDbDataParameter parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@id_tag", idTag, tipoDadoBD.Integer);
+                command.Parameters.Add(parametro);
+
+                conexao.Open();
+                dReader = command.ExecuteReader();
+
+                if (dReader != null)
+                {
+                    dReader.Read();
+                    TAG tag = new TAG();
+                    tag.Id = Conversao.FieldToInteger(dReader["id_tag"]);
+                    tag.Nome = Conversao.FieldToString(dReader["nome"]);
+
+                    conexao.Close();
+                    dReader.Close();
+                    return tag;
+                }
+                else
+                {
+                    throw new Exception("[TagDD.getTagByIdTag()]: Não foi possível localizar a TAG.");
+                }
+            }
+            catch (Exception exp)
+            {
+                throw new Exception("[TagDD.getTagByIdTag()]: " + exp.Message);
+            }
+        }        
     }
 }

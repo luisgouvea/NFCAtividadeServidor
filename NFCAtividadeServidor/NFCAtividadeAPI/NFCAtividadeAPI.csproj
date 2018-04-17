@@ -96,6 +96,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AtividadeController.cs" />
     <Compile Include="Controllers\TagController.cs" />
+    <Compile Include="Controllers\TarefaCheckController.cs" />
     <Compile Include="Controllers\TarefaController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Global.asax.cs">
@@ -133,7 +134,7 @@
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:57016</IISUrl>
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://192.168.0.10:57016/</IISAppRootUrl>
+          <IISAppRootUrl>http://192.168.0.8:57016/</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -43,20 +43,6 @@ namespace NFCAtividadeAPI.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest, "Ocorreu um erro: " + e.Message);
             }
-        }
-
-        [HttpGet]
-        public HttpResponseMessage realizarCheck(int idTagCheck, int idTarefa)
-        {
-            try
-            {
-                bool checkCorreto = Negocio.AtividadeNG.realizarCheck(idTagCheck, idTarefa);
-                return Request.CreateResponse(HttpStatusCode.OK, checkCorreto);
-            }
-            catch (Exception e)
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, "Ocorreu um erro: " + e.Message);
-            }
-        }
+        }        
     }
 }

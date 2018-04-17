@@ -21,6 +21,11 @@ namespace Negocio
             return listTags;
         }
 
+        public static TAG getTag(int idTag)
+        {
+            return Persistencia.TagDD.getTagByIdTag(idTag);
+        }
+
         #region Métodos Privados
         private static long generatedIdTag()
         {

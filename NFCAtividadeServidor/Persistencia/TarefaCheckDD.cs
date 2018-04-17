@@ -20,8 +20,8 @@ namespace Persistencia
             {
 
                 string sql = "INSERT INTO TarefaCheck " +
-                    "(id_tarefa, id_atividade, data_execucao) " +
-                    "VALUES (@id_tarefa, @id_atividade, @data_execucao)";
+                    "(id_tarefa, nome_tarefa, data_execucao) " +
+                    "VALUES (@id_tarefa, @nome_tarefa, @data_execucao)";
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
@@ -31,7 +31,7 @@ namespace Persistencia
                 command.Parameters.Add(parametro);
 
                 parametro = command.CreateParameter();
-                DataBase.getParametroCampo(ref parametro, "@id_atividade", tarefaCheck.IdAtividade, tipoDadoBD.Integer);
+                DataBase.getParametroCampo(ref parametro, "@nome_tarefa", tarefaCheck.NomeTarefa, tipoDadoBD.VarChar);
                 command.Parameters.Add(parametro);
 
                 parametro = command.CreateParameter();
@@ -56,30 +56,26 @@ namespace Persistencia
             }
         }
 
-        public static List<TarefaCheck> getHistoricoCheckNFCByIdAtividade(int idAtividade, int idTarefa)
+        public static List<TarefaCheck> getHistoricoCheckNFCByIdsTarefa(List<string> listaIdsTarefaSearch)
         {
             IDbConnection conexao = null;
             IDataReader dReader = null;
 
             try
             {
-
-                string sql = "select * from TarefaCheck" +
-                    " where id_atividade = @id_atividade" +
-                    " AND" +
-                    " id_tarefa != @id_tarefa";
-
+                string sql = null;
+                if (listaIdsTarefaSearch.Count() > 1)
+                {
+                    sql = string.Format("select * from TarefaCheck where id_tarefa in ({0})", string.Join(",", listaIdsTarefaSearch));
+                }
+                else
+                {
+                    sql = string.Format("select * from TarefaCheck where id_tarefa = {0}", listaIdsTarefaSearch[0]);
+                }
+                
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
-
-                IDbDataParameter parametro = command.CreateParameter();
-                DataBase.getParametroCampo(ref parametro, "@id_atividade", idAtividade, tipoDadoBD.Integer);
-                command.Parameters.Add(parametro);
-
-                parametro = command.CreateParameter();
-                DataBase.getParametroCampo(ref parametro, "@id_tarefa", idTarefa, tipoDadoBD.Integer);
-                command.Parameters.Add(parametro);
-
+                
                 conexao.Open();
                 dReader = command.ExecuteReader();
             
@@ -90,9 +86,9 @@ namespace Persistencia
                         List<TarefaCheck> listaHistoricoCheck = new List<TarefaCheck>();
                         while (dReader.Read())
                         {
-                            int idPk = Conversao.FieldToInteger(dReader["id_tarefa"]);
                             TarefaCheck tarefaCheck = new TarefaCheck();
-                            tarefaCheck.IdTarefa = idPk;
+                            tarefaCheck.IdTarefa = Conversao.FieldToInteger(dReader["id_tarefa"]);
+                            tarefaCheck.NomeTarefa = Conversao.FieldToString(dReader["nome_tarefa"]);
                             listaHistoricoCheck.Add(tarefaCheck);
                         }
 
@@ -108,7 +104,7 @@ namespace Persistencia
             }
             catch (Exception exp)
             {
-                throw new Exception("[TarefaCheckDD.getHistoricoCheckNFCByIdAtividade()]: " + exp.Message);
+                throw new Exception("[TarefaCheckDD.getHistoricoCheckNFCByIdsTarefa()]: " + exp.Message);
             }
             finally
             {
