@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Persistencia
 {
-    public class TarefaPrecedenteDD
+    public class TarefaSucedenteDD
     {
-        public static Boolean deletePrecedenciaTarefa(int id_tarefa_target)
+        public static Boolean deleteSucessaoTarefa(int id_tarefa_target)
         {
             IDbConnection conexao = null;
             IDbTransaction transacao = null;
@@ -18,7 +18,7 @@ namespace Persistencia
             try
             {
 
-                string sql = "DELETE FROM TarefaPrecedente " +
+                string sql = "DELETE FROM TarefaSucessora " +
                     "WHERE id_tarefa_target = @id_tarefa_target";
 
                 conexao = DataBase.getConection();
@@ -42,11 +42,11 @@ namespace Persistencia
             }
             catch (Exception exp)
             {
-                throw new Exception("[TarefaPrecedenteDD.deletePrecedenciaTarefa()]: " + exp.Message);
+                throw new Exception("[TarefaPrecedenteDD.deleteSucessaoTarefa()]: " + exp.Message);
             }
         }
 
-        public static Boolean insertPrecedenciaTarefa(int id_tarefa_target, int id_tarefa_antecessora)
+        public static Boolean insertSucessaoTarefa(int id_tarefa_target, int id_tarefa_proxima)
         {
             IDbConnection conexao = null;
             IDbTransaction transacao = null;
@@ -54,9 +54,9 @@ namespace Persistencia
             try
             {
 
-                string sql = "INSERT INTO TarefaPrecedente " +
-                    "(id_tarefa_target, id_tarefa_antecessora) " +
-                    "VALUES (@id_tarefa_target, @id_tarefa_antecessora)";
+                string sql = "INSERT INTO TarefaSucessora " +
+                    "(id_tarefa_target, id_tarefa_proxima) " +
+                    "VALUES (@id_tarefa_target, @id_tarefa_proxima)";
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
@@ -66,7 +66,7 @@ namespace Persistencia
                 command.Parameters.Add(parametro);
 
                 parametro = command.CreateParameter();
-                DataBase.getParametroCampo(ref parametro, "@id_tarefa_antecessora", id_tarefa_antecessora, tipoDadoBD.Integer);
+                DataBase.getParametroCampo(ref parametro, "@id_tarefa_proxima", id_tarefa_proxima, tipoDadoBD.Integer);
                 command.Parameters.Add(parametro);
 
                 conexao.Open();
@@ -83,7 +83,7 @@ namespace Persistencia
             }
             catch (Exception exp)
             {
-                throw new Exception("[TarefaPrecedenteDD.insertPrecedenciaTarefa()]: " + exp.Message);
+                throw new Exception("[TarefaPrecedenteDD.insertSucessaoTarefa()]: " + exp.Message);
             }
         }
     }

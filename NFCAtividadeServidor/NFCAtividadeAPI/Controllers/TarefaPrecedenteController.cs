@@ -15,9 +15,13 @@ namespace NFCAtividadeAPI.Controllers
         {
             try
             {
-                Boolean persistido = Negocio.TarefaPrecedenteNG.setarPrecedenciaTarefa(tarefa);
-
-                return Request.CreateResponse(HttpStatusCode.OK, persistido);
+                Boolean persistidoPrecedencia = Negocio.TarefaPrecedenteNG.setarPrecedenciaTarefa(tarefa);
+                Boolean persistidoSucessao = Negocio.TarefaSucedenteNG.setarSucessaoTarefa(tarefa);
+                if(persistidoPrecedencia && persistidoSucessao)
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, true);
+                }
+                return Request.CreateResponse(HttpStatusCode.OK, false);
             }
             catch (Exception e)
             {

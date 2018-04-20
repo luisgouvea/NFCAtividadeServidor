@@ -71,7 +71,7 @@ namespace Negocio
             try
             {
                 //verificar se a tarefa que o usuario checkou eh a tarefa correta de acordo com as suas regras
-                List<Tarefa> listaAntecessores = TarefaNG.getTarefasAntecessoras(tarefaDaTag.Id);
+                List<TarefaPrecedente> listaAntecessores = TarefaPrecedenteNG.getTarefasAntecessoras(tarefaDaTag.Id);
                 List<Tarefa> listaTarefasDaAtividade = TarefaNG.getAllTarefasByIdAtividade(tarefaDaTag.IdAtividade);
                 List<string> listaIds = getIdsTarefaRegistroCheckNFC(listaTarefasDaAtividade, tarefaDaTag.Id);
                 List<TarefaCheck> listaChecksDaAtividade = Persistencia.TarefaCheckDD.getHistoricoCheckNFCByIdsTarefa(listaIds);

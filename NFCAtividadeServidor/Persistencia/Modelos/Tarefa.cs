@@ -15,5 +15,6 @@ namespace Persistencia.Modelos
         public DateTime DataCheck { get; set; }
         public string Comentario { get; set; }
         public List<TarefaPrecedente> listaAntecessores { get; set; }
+        public List<TarefaSucedente> listaSucessores { get; set; }
     }
 }
