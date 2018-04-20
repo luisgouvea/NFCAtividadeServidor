@@ -159,7 +159,7 @@ namespace Persistencia
             }
         }
 
-        public static List<Tarefa> getTarefasAntecessoras(int idTarefa)
+        public static List<TarefaPrecedente> getTarefasAntecessoras(int idTarefa)
         {
             IDbConnection conexao = null;
             IDataReader dReader = null;
@@ -170,7 +170,7 @@ namespace Persistencia
                 string sql = "select * from Tarefa where id_tarefa in " +
                     "(" +
                         "select te.id_tarefa_antecessora from Tarefa t " +
-                        "inner join TarefaEncadeamento te " +
+                        "inner join TarefaPrecedente te " +
                         "on t.id_tarefa = te.id_tarefa_target " +
                         "where te.id_tarefa_target = " + idTarefa
                         +
@@ -186,7 +186,7 @@ namespace Persistencia
                 {
                     try
                     {
-                        List<Tarefa> listAntecessoras = new List<Tarefa>();
+                        List<TarefaPrecedente> listAntecessoras = new List<TarefaPrecedente>();
                         while (dReader.Read())
                         {
                             int idPk = Conversao.FieldToInteger(dReader["id_tarefa"]);
@@ -196,7 +196,8 @@ namespace Persistencia
                             tarefa.Id = idPk;
                             tarefa.Nome = nome;
                             tarefa.IdAtividade = idAtividade;
-                            listAntecessoras.Add(tarefa);
+                            TarefaPrecedente tarefaPrec = new TarefaPrecedente { Id = idPk, Nome = nome, IdAtividade = idAtividade };
+                            listAntecessoras.Add(tarefaPrec);
                         }
 
                         conexao.Close();
@@ -266,82 +267,5 @@ namespace Persistencia
                 throw new Exception("[TarefaDD.getTarefa()]: " + exp.Message);
             }
         }
-
-        public static Boolean deleteEncadeamentoTarefa(int id_tarefa_target)
-        {
-            IDbConnection conexao = null;
-            IDbTransaction transacao = null;
-
-            try
-            {
-
-                string sql = "DELETE FROM TarefaEncadeamento " +
-                    "WHERE id_tarefa_target = @id_tarefa_target";
-
-                conexao = DataBase.getConection();
-                IDbCommand command = DataBase.getCommand(sql, conexao);
-
-                IDbDataParameter parametro = command.CreateParameter();
-                DataBase.getParametroCampo(ref parametro, "@id_tarefa_target", id_tarefa_target, tipoDadoBD.Integer);
-                command.Parameters.Add(parametro);
-                
-                conexao.Open();
-                transacao = conexao.BeginTransaction();
-                command.Transaction = transacao;
-
-                command.ExecuteNonQuery();
-
-                if (transacao != null) transacao.Commit();
-                if (transacao != null) transacao.Dispose();
-                if (conexao != null) conexao.Close();
-
-                return true;
-            }
-            catch (Exception exp)
-            {
-                throw new Exception("[TarefaDD.deleteEncadeamentoTarefa()]: " + exp.Message);
-            }
-        }
-
-        public static Boolean insertEncadeamentoTarefa(int id_tarefa_target, int id_tarefa_antecessora)
-        {
-            IDbConnection conexao = null;
-            IDbTransaction transacao = null;
-
-            try
-            {
-
-                string sql = "INSERT INTO TarefaEncadeamento " +
-                    "(id_tarefa_target, id_tarefa_antecessora) " +
-                    "VALUES (@id_tarefa_target, @id_tarefa_antecessora)";
-
-                conexao = DataBase.getConection();
-                IDbCommand command = DataBase.getCommand(sql, conexao);
-
-                IDbDataParameter parametro = command.CreateParameter();
-                DataBase.getParametroCampo(ref parametro, "@id_tarefa_target", id_tarefa_target, tipoDadoBD.Integer);
-                command.Parameters.Add(parametro);
-
-                parametro = command.CreateParameter();
-                DataBase.getParametroCampo(ref parametro, "@id_tarefa_antecessora", id_tarefa_antecessora, tipoDadoBD.Integer);
-                command.Parameters.Add(parametro);
-
-                conexao.Open();
-                transacao = conexao.BeginTransaction();
-                command.Transaction = transacao;
-
-                command.ExecuteNonQuery();
-
-                if (transacao != null) transacao.Commit();
-                if (transacao != null) transacao.Dispose();
-                if (conexao != null) conexao.Close();
-
-                return true;
-            }
-            catch (Exception exp)
-            {
-                throw new Exception("[TarefaDD.insertEncadeamentoTarefa()]: " + exp.Message);
-            }
-        }        
     }
 }

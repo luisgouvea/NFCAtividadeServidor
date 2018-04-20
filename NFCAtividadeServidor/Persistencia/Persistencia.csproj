@@ -49,12 +49,13 @@
     <Compile Include="Modelos\TAG.cs" />
     <Compile Include="Modelos\Tarefa.cs" />
     <Compile Include="Modelos\TarefaCheck.cs" />
-    <Compile Include="Modelos\TarefaEncadeamento.cs" />
+    <Compile Include="Modelos\TarefaPrecedente.cs" />
     <Compile Include="Modelos\Usuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TagDD.cs" />
     <Compile Include="TarefaCheckDD.cs" />
     <Compile Include="TarefaDD.cs" />
+    <Compile Include="TarefaPrecedenteDD.cs" />
     <Compile Include="UsuarioDD.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

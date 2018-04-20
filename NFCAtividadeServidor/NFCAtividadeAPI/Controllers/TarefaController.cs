@@ -39,20 +39,5 @@ namespace NFCAtividadeAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest, "Ocorreu um erro: " + e.Message);
             }
         }
-
-        [HttpPost]
-        public HttpResponseMessage setarEncadeamentoTarefa([FromBody] Tarefa tarefa)
-        {
-            try
-            {
-                Boolean persistido = Negocio.TarefaNG.setarEncadeamentoTarefa(tarefa);
-
-                return Request.CreateResponse(HttpStatusCode.OK, persistido);
-            }
-            catch (Exception e)
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, "Ocorreu um erro: " + e.Message);
-            }
-        }
     }
 }

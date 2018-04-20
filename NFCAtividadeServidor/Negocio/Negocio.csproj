@@ -48,6 +48,7 @@
     <Compile Include="TarefaCheckNG.cs" />
     <Compile Include="TagNG.cs" />
     <Compile Include="TarefaNG.cs" />
+    <Compile Include="TarefaPrecedenteNG.cs" />
     <Compile Include="UsuarioNG.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

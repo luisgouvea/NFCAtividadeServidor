@@ -20,8 +20,8 @@ namespace Negocio
             foreach (Tarefa tarefa in listTarefas)
             {
                 int id = tarefa.Id;
-                List<Tarefa> listAntecessoras = Persistencia.TarefaDD.getTarefasAntecessoras(id);
-                tarefa.listaEncadeamento = listAntecessoras;
+                List<TarefaPrecedente> listAntecessoras = Persistencia.TarefaDD.getTarefasAntecessoras(id);
+                tarefa.listaAntecessores = listAntecessoras;
             }
             return listTarefas;
         }
@@ -36,25 +36,6 @@ namespace Negocio
         {
             Tarefa tarefa = Persistencia.TarefaDD.getTarefa(idTarefa);
             return tarefa;
-        }
-
-        public static List<Tarefa> getTarefasAntecessoras(int idTarefa)
-        {
-            return Persistencia.TarefaDD.getTarefasAntecessoras(idTarefa);
-        }
-
-        /**
-         *  Sempre assumir que a lista de encadeamento do param tarefa (Tarefa), esta com todos os seus antecessores
-        **/
-        public static Boolean setarEncadeamentoTarefa(Tarefa tarefa)
-        {
-            int idTarefaTarget = tarefa.Id;
-            Persistencia.TarefaDD.deleteEncadeamentoTarefa(idTarefaTarget); // delete all encadeamento
-            foreach (Tarefa tarefaAnte in tarefa.listaEncadeamento)
-            {
-                Persistencia.TarefaDD.insertEncadeamentoTarefa(idTarefaTarget, tarefaAnte.Id); // cria novamente
-            }
-            return true;
         }        
     }
 }

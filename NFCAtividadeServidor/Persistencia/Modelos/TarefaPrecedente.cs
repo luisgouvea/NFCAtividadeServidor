@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Persistencia.Modelos
 {
-    public class TarefaEncadeamento
+    public class TarefaPrecedente : Tarefa
     {
-        public int Id { get; set; }
+        //public int Id { get; set; }
         public int IdTarefaTarget { get; set; }
         public int IdTarefaAntecessora { get; set; }
     }
