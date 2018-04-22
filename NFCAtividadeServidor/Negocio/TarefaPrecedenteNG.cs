@@ -22,7 +22,7 @@ namespace Negocio
         {
             int idTarefaTarget = tarefa.Id;           
             Persistencia.TarefaPrecedenteDD.deletePrecedenciaTarefa(idTarefaTarget); // delete all encadeamento precedente
-            foreach (TarefaPrecedente tarefaAnte in tarefa.listaAntecessores)
+            foreach (TarefaPrecedente tarefaAnte in tarefa.listaAntecessoras)
             {
                 Persistencia.TarefaPrecedenteDD.insertPrecedenciaTarefa(idTarefaTarget, tarefaAnte.Id); // cria novamente
             }

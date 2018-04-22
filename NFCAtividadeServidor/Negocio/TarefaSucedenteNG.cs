@@ -22,7 +22,7 @@ namespace Negocio
             //idTarefaSucessao
             int idTarefaSucessao = tarefa.Id;
             Persistencia.TarefaSucedenteDD.deleteSucessaoTarefa(idTarefaSucessao); // delete all encadeamento sucessor
-            foreach (TarefaSucedente tarefaSucessao in tarefa.listaSucessores)
+            foreach (TarefaSucedente tarefaSucessao in tarefa.listaSucessoras)
             {
                 //TODO: PEGAR O tarefaAnte e a tarefa target e inserir na tabela
                 Persistencia.TarefaSucedenteDD.insertSucessaoTarefa(tarefaSucessao.Id, idTarefaSucessao); // cria novamente

@@ -21,7 +21,7 @@ namespace Negocio
             {
                 int id = tarefa.Id;
                 List<TarefaPrecedente> listAntecessoras = Persistencia.TarefaPrecedenteDD.getTarefasAntecessoras(id);
-                tarefa.listaAntecessores = listAntecessoras;
+                tarefa.listaAntecessoras = listAntecessoras;
             }
             return listTarefas;
         }
