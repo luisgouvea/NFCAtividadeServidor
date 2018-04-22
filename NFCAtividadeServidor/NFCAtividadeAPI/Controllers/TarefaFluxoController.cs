@@ -8,10 +8,10 @@ using System.Web.Http;
 
 namespace NFCAtividadeAPI.Controllers
 {
-    public class TarefaPrecedenteController : ApiController
+    public class TarefaFluxoController : ApiController
     {
         [HttpPost]
-        public HttpResponseMessage setarPrecedenciaTarefa([FromBody] Tarefa tarefa)
+        public HttpResponseMessage setarFluxoTarefa([FromBody] Tarefa tarefa)
         {
             try
             {

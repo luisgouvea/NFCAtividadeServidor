@@ -20,7 +20,7 @@ namespace Negocio
             foreach (Tarefa tarefa in listTarefas)
             {
                 int id = tarefa.Id;
-                List<TarefaPrecedente> listAntecessoras = Persistencia.TarefaDD.getTarefasAntecessoras(id);
+                List<TarefaPrecedente> listAntecessoras = Persistencia.TarefaPrecedenteDD.getTarefasAntecessoras(id);
                 tarefa.listaAntecessores = listAntecessoras;
             }
             return listTarefas;

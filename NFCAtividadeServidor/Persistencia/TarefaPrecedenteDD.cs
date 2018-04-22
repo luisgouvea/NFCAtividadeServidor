@@ -1,4 +1,5 @@
 ﻿using LibraryDB;
+using Persistencia.Modelos;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,6 +11,70 @@ namespace Persistencia
 {
     public class TarefaPrecedenteDD
     {
+        public static List<TarefaPrecedente> getTarefasAntecessoras(int idTarefa)
+        {
+            IDbConnection conexao = null;
+            IDataReader dReader = null;
+
+            try
+            {
+
+                string sql = "select * from Tarefa where id_tarefa in " +
+                    "(" +
+                        "select te.id_tarefa_antecessora from Tarefa t " +
+                        "inner join TarefaPrecedente te " +
+                        "on t.id_tarefa = te.id_tarefa_target " +
+                        "where te.id_tarefa_target = " + idTarefa
+                        +
+                    ")";
+
+                conexao = DataBase.getConection();
+                IDbCommand command = DataBase.getCommand(sql, conexao);
+
+                conexao.Open();
+                dReader = command.ExecuteReader();
+
+                if (dReader != null)
+                {
+                    try
+                    {
+                        List<TarefaPrecedente> listAntecessoras = new List<TarefaPrecedente>();
+                        while (dReader.Read())
+                        {
+                            int idPk = Conversao.FieldToInteger(dReader["id_tarefa"]);
+                            string nome = Conversao.FieldToString(dReader["nome"]);
+                            int idAtividade = Conversao.FieldToInteger(dReader["id_atividade"]);
+                            Tarefa tarefa = new Tarefa();
+                            tarefa.Id = idPk;
+                            tarefa.Nome = nome;
+                            tarefa.IdAtividade = idAtividade;
+                            TarefaPrecedente tarefaPrec = new TarefaPrecedente { Id = idPk, Nome = nome, IdAtividade = idAtividade };
+                            listAntecessoras.Add(tarefaPrec);
+                        }
+
+                        conexao.Close();
+                        dReader.Close();
+                        return listAntecessoras;
+                    }
+                    catch (Exception exp)
+                    {
+                        throw new Exception("Ocorreu um erro: " + exp.Message);
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                throw new Exception("[TarefaPrecedenteDD.getTarefasAntecessoras()]: " + exp.Message);
+            }
+            finally
+            {
+                if (dReader != null) dReader.Close();
+                if (conexao != null) conexao.Close();
+            }
+
+            return null;
+        }
+
         public static Boolean deletePrecedenciaTarefa(int id_tarefa_target)
         {
             IDbConnection conexao = null;

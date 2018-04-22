@@ -12,7 +12,7 @@ namespace Negocio
 
         public static List<TarefaPrecedente> getTarefasAntecessoras(int idTarefa)
         {
-            return Persistencia.TarefaDD.getTarefasAntecessoras(idTarefa);
+            return Persistencia.TarefaPrecedenteDD.getTarefasAntecessoras(idTarefa);
         }
 
         /**

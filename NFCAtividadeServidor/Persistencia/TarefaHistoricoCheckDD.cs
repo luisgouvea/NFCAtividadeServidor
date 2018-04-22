@@ -9,9 +9,9 @@ using System.Data;
 
 namespace Persistencia
 {
-    public class TarefaCheckDD
+    public class TarefaHistoricoCheckDD
     {
-        public static bool addRegistroCheckNFC(TarefaCheck tarefaCheck)
+        public static bool addRegistroCheckNFC(TarefaHistoricoCheck tarefaCheck)
         {
             IDbConnection conexao = null;
             IDbTransaction transacao = null;
@@ -19,7 +19,7 @@ namespace Persistencia
             try
             {
 
-                string sql = "INSERT INTO TarefaCheck " +
+                string sql = "INSERT INTO TarefaHistoricoCheck " +
                     "(id_tarefa, nome_tarefa, data_execucao) " +
                     "VALUES (@id_tarefa, @nome_tarefa, @data_execucao)";
 
@@ -52,11 +52,11 @@ namespace Persistencia
             }
             catch (Exception exp)
             {
-                throw new Exception("[TarefaCheckDD.addRegistroCheckNFC()]: " + exp.Message);
+                throw new Exception("[TarefaHistoricoCheckDD.addRegistroCheckNFC()]: " + exp.Message);
             }
         }
 
-        public static List<TarefaCheck> getHistoricoCheckNFCByIdsTarefa(List<string> listaIdsTarefaSearch)
+        public static List<TarefaHistoricoCheck> getHistoricoCheckNFCByIdsTarefa(List<string> listaIdsTarefaSearch)
         {
             IDbConnection conexao = null;
             IDataReader dReader = null;
@@ -66,11 +66,11 @@ namespace Persistencia
                 string sql = null;
                 if (listaIdsTarefaSearch.Count() > 1)
                 {
-                    sql = string.Format("select * from TarefaCheck where id_tarefa in ({0})", string.Join(",", listaIdsTarefaSearch));
+                    sql = string.Format("select * from TarefaHistoricoCheck where id_tarefa in ({0})", string.Join(",", listaIdsTarefaSearch));
                 }
                 else
                 {
-                    sql = string.Format("select * from TarefaCheck where id_tarefa = {0}", listaIdsTarefaSearch[0]);
+                    sql = string.Format("select * from TarefaHistoricoCheck where id_tarefa = {0}", listaIdsTarefaSearch[0]);
                 }
                 
                 conexao = DataBase.getConection();
@@ -83,10 +83,10 @@ namespace Persistencia
                 {
                     try
                     {
-                        List<TarefaCheck> listaHistoricoCheck = new List<TarefaCheck>();
+                        List<TarefaHistoricoCheck> listaHistoricoCheck = new List<TarefaHistoricoCheck>();
                         while (dReader.Read())
                         {
-                            TarefaCheck tarefaCheck = new TarefaCheck();
+                            TarefaHistoricoCheck tarefaCheck = new TarefaHistoricoCheck();
                             tarefaCheck.IdTarefa = Conversao.FieldToInteger(dReader["id_tarefa"]);
                             tarefaCheck.NomeTarefa = Conversao.FieldToString(dReader["nome_tarefa"]);
                             listaHistoricoCheck.Add(tarefaCheck);
@@ -104,7 +104,7 @@ namespace Persistencia
             }
             catch (Exception exp)
             {
-                throw new Exception("[TarefaCheckDD.getHistoricoCheckNFCByIdsTarefa()]: " + exp.Message);
+                throw new Exception("[TarefaHistoricoCheckDD.getHistoricoCheckNFCByIdsTarefa()]: " + exp.Message);
             }
             finally
             {

@@ -1,4 +1,5 @@
 ﻿using LibraryDB;
+using Persistencia.Modelos;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,6 +11,70 @@ namespace Persistencia
 {
     public class TarefaSucedenteDD
     {
+        public static List<TarefaSucedente> getTarefasSucessoras(int idTarefa)
+        {
+            IDbConnection conexao = null;
+            IDataReader dReader = null;
+
+            try
+            {
+
+                string sql = "select * from Tarefa where id_tarefa in " +
+                    "(" +
+                        "select te.id_tarefa_antecessora from Tarefa t " +
+                        "inner join TarefaSucessora te " +
+                        "on t.id_tarefa = te.id_tarefa_target " +
+                        "where te.id_tarefa_target = " + idTarefa
+                        +
+                    ")";
+
+                conexao = DataBase.getConection();
+                IDbCommand command = DataBase.getCommand(sql, conexao);
+
+                conexao.Open();
+                dReader = command.ExecuteReader();
+
+                if (dReader != null)
+                {
+                    try
+                    {
+                        List<TarefaSucedente> listSucessoras = new List<TarefaSucedente>();
+                        while (dReader.Read())
+                        {
+                            int idPk = Conversao.FieldToInteger(dReader["id_tarefa"]);
+                            string nome = Conversao.FieldToString(dReader["nome"]);
+                            int idAtividade = Conversao.FieldToInteger(dReader["id_atividade"]);
+                            Tarefa tarefa = new Tarefa();
+                            tarefa.Id = idPk;
+                            tarefa.Nome = nome;
+                            tarefa.IdAtividade = idAtividade;
+                            TarefaSucedente tarefaPrec = new TarefaSucedente { Id = idPk, Nome = nome, IdAtividade = idAtividade };
+                            listSucessoras.Add(tarefaPrec);
+                        }
+
+                        conexao.Close();
+                        dReader.Close();
+                        return listSucessoras;
+                    }
+                    catch (Exception exp)
+                    {
+                        throw new Exception("Ocorreu um erro: " + exp.Message);
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                throw new Exception("[TarefaSucedenteDD.getTarefasAntecessoras()]: " + exp.Message);
+            }
+            finally
+            {
+                if (dReader != null) dReader.Close();
+                if (conexao != null) conexao.Close();
+            }
+
+            return null;
+        }
+
         public static Boolean deleteSucessaoTarefa(int id_tarefa_target)
         {
             IDbConnection conexao = null;
@@ -42,7 +107,7 @@ namespace Persistencia
             }
             catch (Exception exp)
             {
-                throw new Exception("[TarefaPrecedenteDD.deleteSucessaoTarefa()]: " + exp.Message);
+                throw new Exception("[TarefaSucedenteDD.deleteSucessaoTarefa()]: " + exp.Message);
             }
         }
 
@@ -83,7 +148,7 @@ namespace Persistencia
             }
             catch (Exception exp)
             {
-                throw new Exception("[TarefaPrecedenteDD.insertSucessaoTarefa()]: " + exp.Message);
+                throw new Exception("[TarefaSucedenteDD.insertSucessaoTarefa()]: " + exp.Message);
             }
         }
     }

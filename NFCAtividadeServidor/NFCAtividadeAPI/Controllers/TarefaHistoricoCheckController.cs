@@ -8,7 +8,7 @@ using System.Web.Http;
 
 namespace NFCAtividadeAPI.Controllers
 {
-    public class TarefaCheckController : ApiController
+    public class TarefaHistoricoCheckController : ApiController
     {
 
         [HttpGet]
@@ -16,7 +16,7 @@ namespace NFCAtividadeAPI.Controllers
         {
             try
             {
-                bool checkCorreto = Negocio.TarefaCheckNG.realizarCheck(idTagCheck, idTarefa);
+                bool checkCorreto = Negocio.TarefaHistoricoCheckNG.realizarCheck(idTagCheck, idTarefa);
                 return Request.CreateResponse(HttpStatusCode.OK, checkCorreto);
             }
             catch (Exception e)
@@ -30,7 +30,7 @@ namespace NFCAtividadeAPI.Controllers
         {
             try
             {
-                List<TarefaCheck> listaCheck = Negocio.TarefaCheckNG.getAllRegistroCheckNFCByIdsTarefa(idAtividade);
+                List<TarefaHistoricoCheck> listaCheck = Negocio.TarefaHistoricoCheckNG.getAllRegistroCheckNFCByIdsTarefa(idAtividade);
                 return Request.CreateResponse(HttpStatusCode.OK, listaCheck);
             }
             catch (Exception e)
