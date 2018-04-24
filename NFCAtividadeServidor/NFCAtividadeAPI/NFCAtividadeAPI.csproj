@@ -96,7 +96,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AtividadeController.cs" />
     <Compile Include="Controllers\TagController.cs" />
-    <Compile Include="Controllers\TarefaHistoricoCheckController.cs" />
+    <Compile Include="Controllers\TarefaCheckController.cs" />
     <Compile Include="Controllers\TarefaController.cs" />
     <Compile Include="Controllers\TarefaFluxoController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />

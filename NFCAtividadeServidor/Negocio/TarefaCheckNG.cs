@@ -7,22 +7,22 @@ using System.Threading.Tasks;
 
 namespace Negocio
 {
-    public class TarefaHistoricoCheckNG
+    public class TarefaCheckNG
     {
         public static bool addRegistroCheckNFC(Tarefa tarefa)
         {
-            TarefaHistoricoCheck tarefaCheck = new TarefaHistoricoCheck();
+            TarefaCheck tarefaCheck = new TarefaCheck();
             tarefaCheck.IdTarefa = tarefa.Id;
             tarefaCheck.DataExecucao = DateTime.Now;
             tarefaCheck.NomeTarefa = tarefa.Nome;
-            return Persistencia.TarefaHistoricoCheckDD.addRegistroCheckNFC(tarefaCheck);
+            return Persistencia.TarefaCheckDD.addRegistroCheckNFC(tarefaCheck);
         }
         
-        public static List<TarefaHistoricoCheck> getAllRegistroCheckNFCByIdsTarefa(int idAtividade)
+        public static List<TarefaCheck> getAllRegistroCheckNFCByIdsTarefa(int idAtividade)
         {
             List<Tarefa> listaTarefasDaAtividade = TarefaNG.getAllTarefasByIdAtividade(idAtividade);
             List<string> listaIds = getIdsTarefaRegistroCheckNFC(listaTarefasDaAtividade);
-            return Persistencia.TarefaHistoricoCheckDD.getHistoricoCheckNFCByIdsTarefa(listaIds);
+            return Persistencia.TarefaCheckDD.getHistoricoCheckNFCByIdsTarefa(listaIds);
         }
 
         public static bool realizarCheck(int idTagCheck, int idTarefa)
@@ -74,7 +74,7 @@ namespace Negocio
                 List<TarefaPrecedente> listaAntecessores = TarefaPrecedenteNG.getTarefasAntecessoras(tarefaDaTag.Id);
                 List<Tarefa> listaTarefasDaAtividade = TarefaNG.getAllTarefasByIdAtividade(tarefaDaTag.IdAtividade);
                 List<string> listaIds = getIdsTarefaRegistroCheckNFC(listaTarefasDaAtividade, tarefaDaTag.Id);
-                List<TarefaHistoricoCheck> listaChecksDaAtividade = Persistencia.TarefaHistoricoCheckDD.getHistoricoCheckNFCByIdsTarefa(listaIds);
+                List<TarefaCheck> listaChecksDaAtividade = Persistencia.TarefaCheckDD.getHistoricoCheckNFCByIdsTarefa(listaIds);
                 if (listaChecksDaAtividade.Count() == 0)
                 {
                     // nunca foi realizado check
@@ -85,7 +85,7 @@ namespace Negocio
                 }
                 else
                 {
-                    foreach (TarefaHistoricoCheck tarefaCheck in listaChecksDaAtividade)
+                    foreach (TarefaCheck tarefaCheck in listaChecksDaAtividade)
                     {
                         foreach (Tarefa tarefa in listaAntecessores)
                         {
