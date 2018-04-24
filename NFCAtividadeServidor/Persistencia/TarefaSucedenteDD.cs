@@ -21,7 +21,7 @@ namespace Persistencia
 
                 string sql = "select * from Tarefa where id_tarefa in " +
                     "(" +
-                        "select te.id_tarefa_antecessora from Tarefa t " +
+                        "select te.id_tarefa_proxima from Tarefa t " +
                         "inner join TarefaSucessora te " +
                         "on t.id_tarefa = te.id_tarefa_target " +
                         "where te.id_tarefa_target = " + idTarefa
@@ -44,12 +44,8 @@ namespace Persistencia
                             int idPk = Conversao.FieldToInteger(dReader["id_tarefa"]);
                             string nome = Conversao.FieldToString(dReader["nome"]);
                             int idAtividade = Conversao.FieldToInteger(dReader["id_atividade"]);
-                            Tarefa tarefa = new Tarefa();
-                            tarefa.Id = idPk;
-                            tarefa.Nome = nome;
-                            tarefa.IdAtividade = idAtividade;
-                            TarefaSucedente tarefaPrec = new TarefaSucedente { Id = idPk, Nome = nome, IdAtividade = idAtividade };
-                            listSucessoras.Add(tarefaPrec);
+                            TarefaSucedente tarefaSuced = new TarefaSucedente { Id = idPk, Nome = nome, IdAtividade = idAtividade };
+                            listSucessoras.Add(tarefaSuced);
                         }
 
                         conexao.Close();
@@ -64,7 +60,7 @@ namespace Persistencia
             }
             catch (Exception exp)
             {
-                throw new Exception("[TarefaSucedenteDD.getTarefasAntecessoras()]: " + exp.Message);
+                throw new Exception("[TarefaSucedenteDD.getTarefasSucessoras()]: " + exp.Message);
             }
             finally
             {

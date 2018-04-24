@@ -188,8 +188,8 @@ namespace Persistencia
             {
 
                 string sql = "INSERT INTO Atividade " +
-                    "(id_status, id_usuario_executor, id_usuario_criador, nome) " +
-                    "VALUES (@id_status, @id_usuario_executor, @id_usuario_criador, @nome)";
+                    "(id_status, id_usuario_executor, id_usuario_criador, nome, repetir_tarefa) " +
+                    "VALUES (@id_status, @id_usuario_executor, @id_usuario_criador, @nome, @repetir_tarefa)";
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
@@ -208,6 +208,10 @@ namespace Persistencia
 
                 parametro = command.CreateParameter();
                 DataBase.getParametroCampo(ref parametro, "@nome", ativ.Nome, tipoDadoBD.VarChar);
+                command.Parameters.Add(parametro);
+
+                parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@repetir_tarefa", ativ.RepetirTarefa, tipoDadoBD.Boolean);
                 command.Parameters.Add(parametro);
 
                 conexao.Open();

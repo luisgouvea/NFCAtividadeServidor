@@ -119,8 +119,8 @@ namespace Persistencia
             {
 
                 string sql = "INSERT INTO Tarefa " +
-                    "(id_atividade, id_tag, nome) " +
-                    "VALUES (@id_atividade, @id_tag, @nome)";
+                    "(id_atividade, id_tag, nome, inicia_fluxo, finaliza_fluxo) " +
+                    "VALUES (@id_atividade, @id_tag, @nome, @inicia_fluxo, @finaliza_fluxo)";
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
@@ -139,6 +139,14 @@ namespace Persistencia
 
                 parametro = command.CreateParameter();
                 DataBase.getParametroCampo(ref parametro, "@nome", tarefa.Nome, tipoDadoBD.VarChar);
+                command.Parameters.Add(parametro);
+
+                parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@inicia_fluxo", tarefa.IniciaFluxo, tipoDadoBD.Boolean);
+                command.Parameters.Add(parametro);
+
+                parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@finaliza_fluxo", tarefa.FinalizaFluxo, tipoDadoBD.Boolean);
                 command.Parameters.Add(parametro);
 
                 conexao.Open();
