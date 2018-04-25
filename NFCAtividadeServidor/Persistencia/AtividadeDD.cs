@@ -68,6 +68,137 @@ namespace Persistencia
             return null;
         }
 
+        public static bool updateCicloAtualAtividade(int novo_ciclo, int id_atividade)
+        {
+            IDbConnection conexao = null;
+            IDbTransaction transacao = null;
+
+            try
+            {
+                string sql = "UPDATE Atividade " +
+                    "SET ciclo_atual = @ciclo_atual " +
+                    "WHERE id_atividade = @id_atividade";
+
+                conexao = DataBase.getConection();
+                IDbCommand command = DataBase.getCommand(sql, conexao);
+
+                IDbDataParameter parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@ciclo_atual", novo_ciclo, tipoDadoBD.Integer);
+                command.Parameters.Add(parametro);
+
+                parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@id_atividade", id_atividade, tipoDadoBD.Integer);
+                command.Parameters.Add(parametro);
+
+                conexao.Open();
+                transacao = conexao.BeginTransaction();
+                command.Transaction = transacao;
+
+                command.ExecuteNonQuery();
+
+                if (transacao != null) transacao.Commit();
+
+
+                return true;
+            }
+            catch (Exception exp)
+            {
+                throw new Exception("[AtividadeDD.updateCicloAtualAtividade()]: " + exp.Message);
+            }
+            finally
+            {
+                if (transacao != null) transacao.Dispose();
+                if (conexao != null) conexao.Close();
+            }
+        }
+
+        public static int getCicloAtualAtividade(int idAtividade)
+        {
+            IDbConnection conexao = null;
+            IDataReader dReader = null;
+
+            try
+            {
+
+                string sql = "SELECT ciclo_atual FROM Atividade " +
+                    "WHERE id_atividade = @id_atividade";
+
+                conexao = DataBase.getConection();
+                IDbCommand command = DataBase.getCommand(sql, conexao);
+
+                IDbDataParameter parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@id_atividade", idAtividade, tipoDadoBD.Integer);
+                command.Parameters.Add(parametro);
+
+                conexao.Open();
+                dReader = command.ExecuteReader();
+
+                if (dReader != null)
+                {
+                    dReader.Read();
+                    int cicloAtual = Conversao.FieldToInteger(dReader["ciclo_atual"]);
+                    return cicloAtual;
+                }
+                else
+                {
+                    throw new Exception("[AtividadeDD.getCicloAtualAtividade()]: Não foi possível localizar o ciclo da Atividade.");
+                }
+            }
+            catch (Exception exp)
+            {
+                throw new Exception("[AtividadeDD.getCicloAtualAtividade()]: " + exp.Message);
+            }
+            finally
+            {
+                if (dReader != null) dReader.Close();
+                if (conexao != null) conexao.Close();
+            }
+        }
+
+        public static Atividade getAtividadeByIdAtividade(int idAtividade)
+        {
+            IDbConnection conexao = null;
+            IDataReader dReader = null;
+
+            try
+            {
+
+                string sql = "SELECT * FROM Atividade " +
+                    "WHERE id_atividade = @id_atividade";
+
+                conexao = DataBase.getConection();
+                IDbCommand command = DataBase.getCommand(sql, conexao);
+
+                IDbDataParameter parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@id_atividade", idAtividade, tipoDadoBD.Integer);
+                command.Parameters.Add(parametro);
+
+                conexao.Open();
+                dReader = command.ExecuteReader();
+
+                if (dReader != null)
+                {
+                    dReader.Read();
+                    Atividade ativ = new Atividade();
+                    ativ.Id = Conversao.FieldToInteger(dReader["id_atividade"]);
+                    ativ.Nome = Conversao.FieldToString(dReader["nome"]);
+                    ativ.RepetirTarefa = Conversao.FieldToBoolean(dReader["repetir_tarefa"]);
+
+                    conexao.Close();
+                    dReader.Close();
+                    return ativ;
+                }
+                else
+                {
+                    throw new Exception("[AtividadeDD.getAtividadeByIdAtividade()]: Não foi possível localizar a Atividade.");
+                }
+            }
+            catch (Exception exp)
+            {
+                throw new Exception("[AtividadeDD.getAtividadeByIdAtividade()]: " + exp.Message);
+            }
+        }
+
         public static List<Atividade> getAllAtivExecutarByUsuario(int idUsuario)
         {
             IDbConnection conexao = null;
@@ -186,10 +317,9 @@ namespace Persistencia
 
             try
             {
-
                 string sql = "INSERT INTO Atividade " +
-                    "(id_status, id_usuario_executor, id_usuario_criador, nome, repetir_tarefa) " +
-                    "VALUES (@id_status, @id_usuario_executor, @id_usuario_criador, @nome, @repetir_tarefa)";
+                    "(id_status, id_usuario_executor, id_usuario_criador, nome, repetir_tarefa, ciclo_atual) " +
+                    "VALUES (@id_status, @id_usuario_executor, @id_usuario_criador, @nome, @repetir_tarefa, ciclo_atual)";
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
@@ -212,6 +342,10 @@ namespace Persistencia
 
                 parametro = command.CreateParameter();
                 DataBase.getParametroCampo(ref parametro, "@repetir_tarefa", ativ.RepetirTarefa, tipoDadoBD.Boolean);
+                command.Parameters.Add(parametro);
+
+                parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@ciclo_atual", ativ.CicloAtual, tipoDadoBD.Integer);
                 command.Parameters.Add(parametro);
 
                 conexao.Open();

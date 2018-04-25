@@ -15,6 +15,10 @@ namespace Negocio
             return Persistencia.TarefaPrecedenteDD.getTarefasAntecessoras(idTarefa);
         }
 
+        public static List<TarefaPrecedente> getTarefasAntecessorasCheck(int idTarefa)
+        {
+            return Persistencia.TarefaPrecedenteDD.getTarefasAntecessorasCheck(idTarefa);
+        }
         /**
          *  Sempre assumir que a lista de precedente do param tarefa (Tarefa), esta com todos os seus antecessores
         **/

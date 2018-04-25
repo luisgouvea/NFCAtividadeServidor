@@ -17,7 +17,7 @@ namespace Negocio
             tarefaCheck.NomeTarefa = tarefa.Nome;
             return Persistencia.TarefaCheckDD.addRegistroCheckNFC(tarefaCheck);
         }
-        
+
         public static List<TarefaCheck> getAllRegistroCheckNFCByIdsTarefa(int idAtividade)
         {
             List<Tarefa> listaTarefasDaAtividade = TarefaNG.getAllTarefasByIdAtividade(idAtividade);
@@ -71,36 +71,121 @@ namespace Negocio
             try
             {
                 //verificar se a tarefa que o usuario checkou eh a tarefa correta de acordo com as suas regras
-                List<TarefaPrecedente> listaAntecessores = TarefaPrecedenteNG.getTarefasAntecessoras(tarefaDaTag.Id);
-                List<Tarefa> listaTarefasDaAtividade = TarefaNG.getAllTarefasByIdAtividade(tarefaDaTag.IdAtividade);
-                List<string> listaIds = getIdsTarefaRegistroCheckNFC(listaTarefasDaAtividade, tarefaDaTag.Id);
-                List<TarefaCheck> listaChecksDaAtividade = Persistencia.TarefaCheckDD.getHistoricoCheckNFCByIdsTarefa(listaIds);
-                if (listaChecksDaAtividade.Count() == 0)
+
+                Atividade ativ = AtividadeNG.getAtividadeByIdAtividade(tarefaDaTag.IdAtividade);
+
+                if (ativ.RepetirTarefa)
                 {
-                    // nunca foi realizado check
-                    if(listaAntecessores.Count() > 0)
+                    // TEM CICLO
+                    int cicloAtual = AtividadeNG.getCicloAtualAtividade(ativ.Id);
+                    List<AtividadeFluxoCorreto> listFluxos = AtividadeFluxoCorretoNG.getAllCheckByCicloAndIdAtividade(cicloAtual, ativ.Id);
+
+                    if (listFluxos == null || listFluxos.Count == 0) // nao tem nenhum registro de CHECK
                     {
-                        checkCorreto = false;
+                        if (tarefaDaTag.IniciaFluxo == false)
+                        {
+                            return false;
+                        }
+                        //add na tabela de fluxo correto
+                        AtividadeFluxoCorreto fluxoCorreto = new AtividadeFluxoCorreto();
+                        fluxoCorreto.Ciclo = cicloAtual;
+                        fluxoCorreto.IdTarefa = tarefaDaTag.Id;
+                        fluxoCorreto.IdAtividade = ativ.Id;
+                        AtividadeFluxoCorretoNG.addFluxoCorreto(fluxoCorreto);
+                    }
+                    else // ja foi realizado algum check ...
+                    {
+                        AtividadeFluxoCorreto ultimoCheck = AtividadeFluxoCorretoNG.getUltimoCheckCorretoByIdAtividade(ativ.Id);
+                        
+                        #region Logica de precedencia
+                        List<TarefaPrecedente> listaAnte = TarefaPrecedenteNG.getTarefasAntecessorasCheck(tarefaDaTag.Id);
+                        int tamanhoListaAnte = listaAnte.Count();
+                        int count = 0;
+                        foreach (AtividadeFluxoCorreto fluxo in listFluxos)
+                        {
+                            foreach (TarefaPrecedente tarefaPrece in listaAnte)
+                            {
+                                if (tarefaPrece.IdTarefaAntecessora == fluxo.IdTarefa)
+                                {
+                                    count++;
+                                }
+                            }
+                        }
+
+                        if(count != tamanhoListaAnte)
+                        {
+                            return false;
+                        }
+
+                        #endregion
+
+                        #region Logica de sucessao
+
+                        int ultiIdTarefaExecutado = ultimoCheck.IdTarefa;
+                        List<TarefaSucedente> listaSucedentes = TarefaSucedenteNG.getTarefasSucessorasCheck(ultiIdTarefaExecutado);
+                        foreach (TarefaSucedente proximaTarefa in listaSucedentes)
+                        {
+                            if (proximaTarefa.IdTarefaProxima != tarefaDaTag.Id)
+                            {
+                                // a tarefa do check eh uma sucessora da ultima tarefa checada
+                                //break;
+                                return false;
+                            }
+                        }
+
+                        #endregion
+
+                        //add na tabela de fluxo correto
+                        AtividadeFluxoCorreto fluxoCorreto = new AtividadeFluxoCorreto();
+                        fluxoCorreto.Ciclo = cicloAtual;
+                        fluxoCorreto.IdTarefa = tarefaDaTag.Id;
+                        fluxoCorreto.IdAtividade = ativ.Id;
+                        AtividadeFluxoCorretoNG.addFluxoCorreto(fluxoCorreto);
+
+                        if (tarefaDaTag.FinalizaFluxo)
+                        {
+                            int novoCiclo = cicloAtual + 1;
+                            //update na atividade coluna cicloAtual com o novo valor
+                            AtividadeNG.updateCicloAtualAtividade(novoCiclo, ativ.Id);
+                        }
+                        
                     }
                 }
                 else
                 {
-                    foreach (TarefaCheck tarefaCheck in listaChecksDaAtividade)
-                    {
-                        foreach (Tarefa tarefa in listaAntecessores)
-                        {
-                            if (tarefa.Id == tarefaCheck.IdTarefa)
-                            {
-                                checkCorreto = true;
-                            }
-                            else
-                            {
-                                checkCorreto = false;
-                            }
-                        }
-                    }
+                    // TODO: NAO TEM CICLO                    
                 }
-                return checkCorreto;
+                return true;
+                //List<TarefaPrecedente> listaAntecessores = TarefaPrecedenteNG.getTarefasAntecessoras(tarefaDaTag.Id);
+                //List<Tarefa> listaTarefasDaAtividade = TarefaNG.getAllTarefasByIdAtividade(tarefaDaTag.IdAtividade);
+                //List<string> listaIds = getIdsTarefaRegistroCheckNFC(listaTarefasDaAtividade, tarefaDaTag.Id);
+                //List<TarefaCheck> listaChecksDaAtividade = Persistencia.TarefaCheckDD.getHistoricoCheckNFCByIdsTarefa(listaIds);
+                //if (listaChecksDaAtividade.Count() == 0)
+                //{
+                //    // nunca foi realizado check
+                //    if (listaAntecessores.Count() > 0)
+                //    {
+                //        checkCorreto = false;
+                //    }
+                //}
+                //else
+                //{
+                //    foreach (TarefaCheck tarefaCheck in listaChecksDaAtividade)
+                //    {
+                //        foreach (Tarefa tarefa in listaAntecessores)
+                //        {
+                //            if (tarefa.Id == tarefaCheck.IdTarefa)
+                //            {
+                //                checkCorreto = true;
+                //            }
+                //            else
+                //            {
+                //                checkCorreto = false;
+                //            }
+                //        }
+                //    }
+                //}
+                //return checkCorreto;
             }
             catch (Exception e)
             {

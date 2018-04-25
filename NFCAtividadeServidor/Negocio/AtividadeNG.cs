@@ -27,6 +27,21 @@ namespace Negocio
         public static bool adicionarAtividade(Atividade atividade)
         {
             return Persistencia.AtividadeDD.addAtividade(atividade);
-        }       
+        }
+
+        public static Atividade getAtividadeByIdAtividade(int idAtividade)
+        {
+            return Persistencia.AtividadeDD.getAtividadeByIdAtividade(idAtividade);
+        }
+
+        public static int getCicloAtualAtividade(int idAtividade)
+        {
+            return Persistencia.AtividadeDD.getCicloAtualAtividade(idAtividade);
+        }
+
+        public static bool updateCicloAtualAtividade(int novoCiclo, int id_atividade)
+        {
+            return Persistencia.AtividadeDD.updateCicloAtualAtividade(novoCiclo, id_atividade);
+        }
     }
 }

@@ -14,6 +14,11 @@ namespace Negocio
             return Persistencia.TarefaSucedenteDD.getTarefasSucessoras(idTarefa);
         }
 
+        public static List<TarefaSucedente> getTarefasSucessorasCheck(int idTarefa)
+        {
+            return Persistencia.TarefaSucedenteDD.getTarefasSucessorasCheck(idTarefa);
+        }
+
         /**
          *  Sempre assumir que a lista de precedencia do param tarefa (Tarefa), esta com todos os seus antecessores
         **/

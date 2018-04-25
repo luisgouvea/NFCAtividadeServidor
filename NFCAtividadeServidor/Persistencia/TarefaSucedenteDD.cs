@@ -71,6 +71,59 @@ namespace Persistencia
             return null;
         }
 
+        public static List<TarefaSucedente> getTarefasSucessorasCheck(int idTarefa)
+        {
+            IDbConnection conexao = null;
+            IDataReader dReader = null;
+
+            try
+            {
+
+                string sql = "SELECT * FROM TarefaSucessora where id_tarefa_target = " + idTarefa;
+               
+                conexao = DataBase.getConection();
+                IDbCommand command = DataBase.getCommand(sql, conexao);
+
+                conexao.Open();
+                dReader = command.ExecuteReader();
+
+                if (dReader != null)
+                {
+                    try
+                    {
+                        List<TarefaSucedente> listSucessoras = new List<TarefaSucedente>();
+                        while (dReader.Read())
+                        {
+                            int idPk = Conversao.FieldToInteger(dReader["id_tarefa_sucessora"]);
+                            int idTarefaTarget = Conversao.FieldToInteger(dReader["id_tarefa_target"]);
+                            int idTarefaProxima = Conversao.FieldToInteger(dReader["id_tarefa_proxima"]);
+                            TarefaSucedente tarefaSuced = new TarefaSucedente { Id = idPk, IdTarefaTarget = idTarefaTarget, IdTarefaProxima = idTarefaProxima};
+                            listSucessoras.Add(tarefaSuced);
+                        }
+
+                        conexao.Close();
+                        dReader.Close();
+                        return listSucessoras;
+                    }
+                    catch (Exception exp)
+                    {
+                        throw new Exception("Ocorreu um erro: " + exp.Message);
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                throw new Exception("[TarefaSucedenteDD.getTarefasSucessorasCheck()]: " + exp.Message);
+            }
+            finally
+            {
+                if (dReader != null) dReader.Close();
+                if (conexao != null) conexao.Close();
+            }
+
+            return null;
+        }
+
         public static Boolean deleteSucessaoTarefa(int id_tarefa_target)
         {
             IDbConnection conexao = null;

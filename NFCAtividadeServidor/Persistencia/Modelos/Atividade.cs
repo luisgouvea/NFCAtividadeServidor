@@ -17,6 +17,7 @@ namespace Persistencia.Modelos
         public DateTime DataFinalizacao { get; set; }
         public DateTime DataCriacao { get; set; }
         public bool RepetirTarefa { get; set; }
+        public int CicloAtual { get; set; }
         public List<Tarefa> listTarefa { get; set; }
     }
 }

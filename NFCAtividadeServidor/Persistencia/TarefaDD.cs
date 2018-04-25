@@ -37,6 +37,8 @@ namespace Persistencia
                             Tarefa tarefa = new Tarefa();
                             tarefa.Nome = Conversao.FieldToString(dReader["nome"]);
                             tarefa.Id = Conversao.FieldToInteger(dReader["id_tarefa"]);
+                            tarefa.IniciaFluxo = Conversao.FieldToBoolean(dReader["inicia_fluxo"]);
+                            tarefa.FinalizaFluxo = Conversao.FieldToBoolean(dReader["finaliza_fluxo"]);
                             listTarefas.Add(tarefa);
                         }
 
@@ -86,6 +88,8 @@ namespace Persistencia
                     tarefa.Nome = Conversao.FieldToString(dReader["nome"]);
                     tarefa.Id = Conversao.FieldToInteger(dReader["id_tarefa"]);
                     tarefa.IdAtividade = Conversao.FieldToInteger(dReader["id_atividade"]);
+                    tarefa.IniciaFluxo = Conversao.FieldToBoolean(dReader["inicia_fluxo"]);
+                    tarefa.FinalizaFluxo = Conversao.FieldToBoolean(dReader["finaliza_fluxo"]);
 
                     conexao.Close();
                     dReader.Close();
@@ -196,6 +200,8 @@ namespace Persistencia
                     tarefa.Nome = Conversao.FieldToString(dReader["nome"]);
                     tarefa.Id = Conversao.FieldToInteger(dReader["id_tarefa"]);
                     tarefa.IdTag = Conversao.FieldToInteger(dReader["id_tag"]);
+                    tarefa.IniciaFluxo = Conversao.FieldToBoolean(dReader["inicia_fluxo"]);
+                    tarefa.FinalizaFluxo = Conversao.FieldToBoolean(dReader["finaliza_fluxo"]);
 
                     conexao.Close();
                     dReader.Close();

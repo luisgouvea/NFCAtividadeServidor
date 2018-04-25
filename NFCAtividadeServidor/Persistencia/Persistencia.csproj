@@ -44,7 +44,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AtividadeDD.cs" />
+    <Compile Include="AtividadeFluxoCorretoDD.cs" />
     <Compile Include="Modelos\Atividade.cs" />
+    <Compile Include="Modelos\AtividadeFluxoCorreto.cs" />
     <Compile Include="Modelos\StatusAtividade.cs" />
     <Compile Include="Modelos\TAG.cs" />
     <Compile Include="Modelos\Tarefa.cs" />
