@@ -75,7 +75,7 @@ namespace Persistencia
                 {
                     sql = string.Format("select * from TarefaCheck where id_tarefa = {0}", listaIdsTarefaSearch[0]);
                 }
-                
+
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
                 

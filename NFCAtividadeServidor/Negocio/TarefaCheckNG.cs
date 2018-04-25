@@ -25,12 +25,11 @@ namespace Negocio
             return Persistencia.TarefaCheckDD.getHistoricoCheckNFCByIdsTarefa(listaIds);
         }
 
-        public static bool realizarCheck(int idTagCheck, int idTarefa)
+        public static string [] realizarCheck(int idTagCheck, int idTarefa)
         {
-
+            string[] result = new string[3];
             Tarefa tarefaSelecionadaUsuario = null;
             Tarefa tarefaDaTag = null;
-            bool checkCorreto = true;
             try
             {
                 //get da tarefa da listagem do front
@@ -63,7 +62,11 @@ namespace Negocio
             }
             catch
             {
-                return false;
+                result[0] = "invalido";
+                result[1] = "A TAG que você realizou o check, não está vinculada com a tarefa escolhida."; // causa do erro
+                result[2] = "Realize o check da tarefa de acordo com a TAG vinculada no momento de criação da Tarefa."; // solucao do erro
+                return result;
+                //return false;
                 //TODO: TRATAR
                 //throw new Exception("A TAG que você realizou o check, não está com vinculada com a tarefa escolhida");
             }
@@ -84,7 +87,11 @@ namespace Negocio
                     {
                         if (tarefaDaTag.IniciaFluxo == false)
                         {
-                            return false;
+                            result[0] = "invalido";
+                            result[1] = "A tarefa escolhida, não Inicia a sua atividade."; // causa do erro
+                            result[2] = "Realize o check de uma Tarefa que Inicie o fluxo da sua atividade."; // solucao do erro
+                            return result;
+                            //return false;
                         }
                         //add na tabela de fluxo correto
                         AtividadeFluxoCorreto fluxoCorreto = new AtividadeFluxoCorreto();
@@ -96,7 +103,7 @@ namespace Negocio
                     else // ja foi realizado algum check ...
                     {
                         AtividadeFluxoCorreto ultimoCheck = AtividadeFluxoCorretoNG.getUltimoCheckCorretoByIdAtividade(ativ.Id);
-                        
+
                         #region Logica de precedencia
                         List<TarefaPrecedente> listaAnte = TarefaPrecedenteNG.getTarefasAntecessorasCheck(tarefaDaTag.Id);
                         int tamanhoListaAnte = listaAnte.Count();
@@ -112,9 +119,13 @@ namespace Negocio
                             }
                         }
 
-                        if(count != tamanhoListaAnte)
+                        if (count != tamanhoListaAnte)
                         {
-                            return false;
+                            result[0] = "invalido";
+                            result[1] = "Existe alguma tarefa que deve ser executada antes da tarefa escolhida."; // causa do erro
+                            result[2] = "Realize o check de todas as tarefas precedentes desta tarefa escolhida."; // solucao do erro
+                            return result;
+                            //return false;
                         }
 
                         #endregion
@@ -123,13 +134,18 @@ namespace Negocio
 
                         int ultiIdTarefaExecutado = ultimoCheck.IdTarefa;
                         List<TarefaSucedente> listaSucedentes = TarefaSucedenteNG.getTarefasSucessorasCheck(ultiIdTarefaExecutado);
+                        string nomeTarefasSucessoras = getNomeTarefasSucedentes(listaSucedentes);
                         foreach (TarefaSucedente proximaTarefa in listaSucedentes)
                         {
                             if (proximaTarefa.IdTarefaProxima != tarefaDaTag.Id)
                             {
                                 // a tarefa do check eh uma sucessora da ultima tarefa checada
                                 //break;
-                                return false;
+                                result[0] = "invalido";
+                                result[1] = "Não é a vez da tarefa escolhida."; // causa do erro
+                                result[2] = "Você deve escolher alguma(s) dessa(s) tarefa(s): " + nomeTarefasSucessoras; // solucao do erro
+                                return result;
+                                //return false;
                             }
                         }
 
@@ -148,14 +164,19 @@ namespace Negocio
                             //update na atividade coluna cicloAtual com o novo valor
                             AtividadeNG.updateCicloAtualAtividade(novoCiclo, ativ.Id);
                         }
-                        
+
                     }
+                    result[0] = "valido";
+                    result[1] = ""; // causa do erro
+                    result[2] = ""; // solucao do erro
                 }
                 else
                 {
                     // TODO: NAO TEM CICLO                    
                 }
-                return true;
+                //return true;
+                return result;
+
                 //List<TarefaPrecedente> listaAntecessores = TarefaPrecedenteNG.getTarefasAntecessoras(tarefaDaTag.Id);
                 //List<Tarefa> listaTarefasDaAtividade = TarefaNG.getAllTarefasByIdAtividade(tarefaDaTag.IdAtividade);
                 //List<string> listaIds = getIdsTarefaRegistroCheckNFC(listaTarefasDaAtividade, tarefaDaTag.Id);
@@ -191,6 +212,25 @@ namespace Negocio
             {
                 throw new Exception("Ocorreu um erro ao verificar o Check realizado: " + e.Message);
             }
+        }
+
+        private static string getNomeTarefasSucedentes(List<TarefaSucedente> listaSucedentes)
+        {
+            string result = "";
+            for( int i = 0; i < listaSucedentes.Count - 1; i++)
+            {
+                TarefaSucedente tarefaSucedente =  listaSucedentes[i];
+                Tarefa tarefa = TarefaNG.getTarefa(tarefaSucedente.IdTarefaProxima);
+                if(i != listaSucedentes.Count)
+                {
+                    result += tarefa.Nome + ", ";
+                }
+                else
+                {
+                    result += tarefa.Nome;
+                }
+            }
+            return result;
         }
 
         #region Metodos privados da classe

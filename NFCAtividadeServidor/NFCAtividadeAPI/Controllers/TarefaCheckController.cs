@@ -16,8 +16,8 @@ namespace NFCAtividadeAPI.Controllers
         {
             try
             {
-                bool checkCorreto = Negocio.TarefaCheckNG.realizarCheck(idTagCheck, idTarefa);
-                return Request.CreateResponse(HttpStatusCode.OK, checkCorreto);
+                string [] resultCheck = Negocio.TarefaCheckNG.realizarCheck(idTagCheck, idTarefa);
+                return Request.CreateResponse(HttpStatusCode.OK, resultCheck);
             }
             catch (Exception e)
             {
