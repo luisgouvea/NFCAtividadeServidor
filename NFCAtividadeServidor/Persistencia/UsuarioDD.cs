@@ -108,6 +108,11 @@ namespace Persistencia
             {
                 throw new Exception("[UsuarioDD.listAllUsuarioAddAtivVincExecutor()]: " + exp.Message);
             }
+            finally
+            {
+                if (dReader != null) dReader.Close();
+                if (conexao != null) conexao.Close();
+            }
         }
     }
 }

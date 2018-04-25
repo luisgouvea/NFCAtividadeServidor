@@ -149,14 +149,17 @@ namespace Persistencia
                 command.ExecuteNonQuery();
 
                 if (transacao != null) transacao.Commit();
-                if (transacao != null) transacao.Dispose();
-                if (conexao != null) conexao.Close();
 
                 return true;
             }
             catch (Exception exp)
             {
                 throw new Exception("[TarefaSucedenteDD.deleteSucessaoTarefa()]: " + exp.Message);
+            }
+            finally
+            {
+                if (transacao != null) transacao.Dispose();
+                if (conexao != null) conexao.Close();
             }
         }
 
@@ -190,14 +193,17 @@ namespace Persistencia
                 command.ExecuteNonQuery();
 
                 if (transacao != null) transacao.Commit();
-                if (transacao != null) transacao.Dispose();
-                if (conexao != null) conexao.Close();
 
                 return true;
             }
             catch (Exception exp)
             {
                 throw new Exception("[TarefaSucedenteDD.insertSucessaoTarefa()]: " + exp.Message);
+            }
+            finally
+            {
+                if (transacao != null) transacao.Dispose();
+                if (conexao != null) conexao.Close();
             }
         }
     }

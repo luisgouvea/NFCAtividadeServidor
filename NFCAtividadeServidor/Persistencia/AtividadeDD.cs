@@ -197,6 +197,11 @@ namespace Persistencia
             {
                 throw new Exception("[AtividadeDD.getAtividadeByIdAtividade()]: " + exp.Message);
             }
+            finally
+            {
+                if (dReader != null) dReader.Close();
+                if (conexao != null) conexao.Close();
+            }
         }
 
         public static List<Atividade> getAllAtivExecutarByUsuario(int idUsuario)
@@ -355,8 +360,6 @@ namespace Persistencia
                 command.ExecuteNonQuery();
 
                 if (transacao != null) transacao.Commit();
-                if (transacao != null) transacao.Dispose();
-                if (conexao != null) conexao.Close();
 
 
                 return true;
@@ -364,6 +367,11 @@ namespace Persistencia
             catch (Exception exp)
             {
                 throw new Exception("[AtividadeDD.addAtividade()]: " + exp.Message);
+            }
+            finally
+            {
+                if (transacao != null) transacao.Dispose();
+                if (conexao != null) conexao.Close();
             }
         }
     }

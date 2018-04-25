@@ -160,14 +160,17 @@ namespace Persistencia
                 command.ExecuteNonQuery();
 
                 if (transacao != null) transacao.Commit();
-                if (transacao != null) transacao.Dispose();
-                if (conexao != null) conexao.Close();
                 
                 return true;
             }
             catch (Exception exp)
             {
                 throw new Exception("[TarefaDD.addTarefa()]: " + exp.Message);
+            }
+            finally
+            {
+                if (transacao != null) transacao.Dispose();
+                if (conexao != null) conexao.Close();
             }
         }
 
@@ -215,6 +218,11 @@ namespace Persistencia
             catch (Exception exp)
             {
                 throw new Exception("[TarefaDD.getTarefa()]: " + exp.Message);
+            }
+            finally
+            {
+                if (dReader != null) dReader.Close();
+                if (conexao != null) conexao.Close();
             }
         }
     }

@@ -45,14 +45,17 @@ namespace Persistencia
                 command.ExecuteNonQuery();
 
                 if (transacao != null) transacao.Commit();
-                if (transacao != null) transacao.Dispose();
-                if (conexao != null) conexao.Close();
 
                 return true;
             }
             catch (Exception exp)
             {
                 throw new Exception("[TarefaCheckDD.addRegistroCheckNFC()]: " + exp.Message);
+            }
+            finally
+            {
+                if (transacao != null) transacao.Dispose();
+                if (conexao != null) conexao.Close();
             }
         }
 
