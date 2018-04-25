@@ -19,13 +19,13 @@ namespace Negocio
         **/
         public static Boolean setarSucessaoTarefa(Tarefa tarefa)
         {
-            //idTarefaSucessao
+            //id_tarefa_proxima
             int idTarefaSucessao = tarefa.Id;
-            Persistencia.TarefaSucedenteDD.deleteSucessaoTarefa(idTarefaSucessao); // delete all encadeamento sucessor
-            foreach (TarefaSucedente tarefaSucessao in tarefa.listaSucessoras)
+            //Persistencia.TarefaSucedenteDD.deleteSucessaoTarefa(idTarefaSucessao); // delete all encadeamento sucessor
+            foreach (TarefaPrecedente tarefaSucessao in tarefa.listaAntecessoras)
             {
-                //TODO: PEGAR O tarefaAnte e a tarefa target e inserir na tabela
-                Persistencia.TarefaSucedenteDD.insertSucessaoTarefa(tarefaSucessao.Id, idTarefaSucessao); // cria novamente
+                Persistencia.TarefaSucedenteDD.deleteSucessaoTarefa(idTarefaSucessao); // delete all encadeamento sucessor
+                Persistencia.TarefaSucedenteDD.insertSucessaoTarefa(tarefaSucessao.IdTarefaAntecessora, idTarefaSucessao); // cria novamente
             }
             return true;
         }

@@ -24,7 +24,7 @@ namespace Negocio
             Persistencia.TarefaPrecedenteDD.deletePrecedenciaTarefa(idTarefaTarget); // delete all encadeamento precedente
             foreach (TarefaPrecedente tarefaAnte in tarefa.listaAntecessoras)
             {
-                Persistencia.TarefaPrecedenteDD.insertPrecedenciaTarefa(idTarefaTarget, tarefaAnte.Id); // cria novamente
+                Persistencia.TarefaPrecedenteDD.insertPrecedenciaTarefa(idTarefaTarget, tarefaAnte.IdTarefaAntecessora); // cria novamente
             }
             return true;
         }
