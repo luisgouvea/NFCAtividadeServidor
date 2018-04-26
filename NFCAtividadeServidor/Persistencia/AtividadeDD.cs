@@ -324,7 +324,7 @@ namespace Persistencia
             {
                 string sql = "INSERT INTO Atividade " +
                     "(id_status, id_usuario_executor, id_usuario_criador, nome, repetir_tarefa, ciclo_atual) " +
-                    "VALUES (@id_status, @id_usuario_executor, @id_usuario_criador, @nome, @repetir_tarefa, ciclo_atual)";
+                    "VALUES (@id_status, @id_usuario_executor, @id_usuario_criador, @nome, @repetir_tarefa, @ciclo_atual)";
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
