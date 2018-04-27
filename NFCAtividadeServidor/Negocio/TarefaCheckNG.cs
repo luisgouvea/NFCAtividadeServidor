@@ -220,11 +220,11 @@ namespace Negocio
         private static string getNomeTarefasSucedentes(List<TarefaSucedente> listaSucedentes)
         {
             string result = "";
-            for( int i = 0; i < listaSucedentes.Count - 1; i++)
+            for( int i = 0; i <= listaSucedentes.Count - 1; i++)
             {
                 TarefaSucedente tarefaSucedente =  listaSucedentes[i];
                 Tarefa tarefa = TarefaNG.getTarefa(tarefaSucedente.IdTarefaProxima);
-                if(i != listaSucedentes.Count)
+                if(i != (listaSucedentes.Count -1))
                 {
                     result += tarefa.Nome + ", ";
                 }

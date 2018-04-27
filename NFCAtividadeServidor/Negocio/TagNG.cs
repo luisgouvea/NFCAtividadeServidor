@@ -12,7 +12,22 @@ namespace Negocio
         public static Boolean addTag(TAG tag)
         {
             //tag.Id = Convert.ToInt32(generatedIdTag());
-            return Persistencia.TagDD.addTag(tag);
+            try
+            {
+                Persistencia.TagDD.addTag(tag);
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.Contains("Unique_TagNome"))
+                {
+                    throw new Exception("Você já possui uma TAG com esse nome. Informe outro nome!");
+                }
+                else
+                {
+                    throw ex;
+                }
+            }
+            return true;
         }
 
         public static List<TAG> getAllTagsByIdUsuario(int idUsuario)
