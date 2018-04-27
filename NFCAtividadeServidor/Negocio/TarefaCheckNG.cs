@@ -144,7 +144,7 @@ namespace Negocio
                                 //break;
                                 result[0] = "invalido";
                                 result[1] = "Não é a vez da tarefa escolhida."; // causa do erro
-                                result[2] = "Você deve escolher alguma(s) dessa(s) tarefa(s): " + nomeTarefasSucessoras; // solucao do erro
+                                result[2] = "Você deve escolher alguma(s) dessa(s) tarefa(s): " + nomeTarefasSucessoras + "."; // solucao do erro
                                 return result;
                                 //return false;
                             }
@@ -160,18 +160,22 @@ namespace Negocio
                         AtividadeFluxoCorretoNG.addFluxoCorreto(fluxoCorreto);
                         TarefaNG.updateStatusExecucao(2, tarefaDaTag.Id);
 
+                        result[0] = "valido";
+                        result[1] = "Ok! Pode executar a proxima tarefa!"; // proximoPasso
+                        result[2] = ""; 
+
                         if (tarefaDaTag.FinalizaFluxo)
                         {
                             int novoCiclo = cicloAtual + 1;
                             //update na atividade coluna cicloAtual com o novo valor
                             AtividadeNG.updateCicloAtualAtividade(novoCiclo, ativ.Id);
                             TarefaNG.updateStatusExecucaoByIdAtividade(1, ativ.Id);
-                        }
 
+                            result[0] = "valido";
+                            result[1] = "Muito bem! Você finalizou o fluxo, será iniciado um novo ciclo de execução da atividade."; // proximoPasso
+                            result[2] = "";
+                        }
                     }
-                    result[0] = "valido";
-                    result[1] = ""; // causa do erro
-                    result[2] = ""; // solucao do erro
                 }
                 else
                 {

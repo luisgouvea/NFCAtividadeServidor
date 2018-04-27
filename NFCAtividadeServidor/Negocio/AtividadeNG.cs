@@ -26,7 +26,21 @@ namespace Negocio
 
         public static bool adicionarAtividade(Atividade atividade)
         {
-            return Persistencia.AtividadeDD.addAtividade(atividade);
+            try
+            {
+                return Persistencia.AtividadeDD.addAtividade(atividade);
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.Contains("Unique_AtividadeNome"))
+                {
+                    throw new Exception("Você já possui uma Atividade com esse nome. Informe outro nome!");
+                }
+                else
+                {
+                    throw ex;
+                }
+            }
         }
 
         public static Atividade getAtividadeByIdAtividade(int idAtividade)

@@ -11,8 +11,22 @@ namespace Negocio
     {
         public static Boolean addTarefa(Tarefa tarefa)
         {
-            tarefa.IdStatusExecucao = 1;
-            return Persistencia.TarefaDD.addTarefa(tarefa);
+            try
+            {
+                tarefa.IdStatusExecucao = 1;
+                return Persistencia.TarefaDD.addTarefa(tarefa);
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.Contains("Unique_TarefaNome"))
+                {
+                    throw new Exception("Você já possui uma Tarefa com esse nome. Informe outro nome!");
+                }
+                else
+                {
+                    throw ex;
+                }
+            }
         }
 
         public static List<Tarefa> getAllTarefasByIdAtividade(int idAtividade)
