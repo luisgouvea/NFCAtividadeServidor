@@ -34,16 +34,9 @@ namespace Persistencia
                         List<Tarefa> listTarefas = new List<Tarefa>();
                         while (dReader.Read())
                         {
-                            Tarefa tarefa = new Tarefa();
-                            tarefa.Nome = Conversao.FieldToString(dReader["nome"]);
-                            tarefa.Id = Conversao.FieldToInteger(dReader["id_tarefa"]);
-                            tarefa.IniciaFluxo = Conversao.FieldToBoolean(dReader["inicia_fluxo"]);
-                            tarefa.FinalizaFluxo = Conversao.FieldToBoolean(dReader["finaliza_fluxo"]);
+                            Tarefa tarefa = getDadosTarefa(dReader);
                             listTarefas.Add(tarefa);
                         }
-
-                        conexao.Close();
-                        dReader.Close();
                         return listTarefas;
                     }
                     catch (Exception exp)
@@ -65,6 +58,94 @@ namespace Persistencia
             return null;
         }
 
+        public static bool updateStatusExecucaoByIdAtividade(int idStatusExecucao, int idAtividade)
+        {
+            IDbConnection conexao = null;
+            IDbTransaction transacao = null;
+
+            try
+            {
+                string sql = "UPDATE Tarefa " +
+                    "SET id_status_execucao = @id_status_execucao " +
+                    "WHERE id_atividade = @id_atividade";
+
+                conexao = DataBase.getConection();
+                IDbCommand command = DataBase.getCommand(sql, conexao);
+
+                IDbDataParameter parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@id_status_execucao", idStatusExecucao, tipoDadoBD.Integer);
+                command.Parameters.Add(parametro);
+
+                parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@id_atividade", idAtividade, tipoDadoBD.Integer);
+                command.Parameters.Add(parametro);
+
+                conexao.Open();
+                transacao = conexao.BeginTransaction();
+                command.Transaction = transacao;
+
+                command.ExecuteNonQuery();
+
+                if (transacao != null) transacao.Commit();
+
+
+                return true;
+            }
+            catch (Exception exp)
+            {
+                throw new Exception("[TarefaDD.updateStatusExecucaoByIdAtividade()]: " + exp.Message);
+            }
+            finally
+            {
+                if (transacao != null) transacao.Dispose();
+                if (conexao != null) conexao.Close();
+            }
+        }
+
+        public static bool updateStatusExecucao(int idStatusExecucao, int idTarefa)
+        {
+            IDbConnection conexao = null;
+            IDbTransaction transacao = null;
+
+            try
+            {
+                string sql = "UPDATE Tarefa " +
+                    "SET id_status_execucao = @id_status_execucao " +
+                    "WHERE id_tarefa = @id_tarefa";
+
+                conexao = DataBase.getConection();
+                IDbCommand command = DataBase.getCommand(sql, conexao);
+
+                IDbDataParameter parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@id_tarefa", idTarefa, tipoDadoBD.Integer);
+                command.Parameters.Add(parametro);
+
+                parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@id_status_execucao", idStatusExecucao, tipoDadoBD.Integer);
+                command.Parameters.Add(parametro);
+
+                conexao.Open();
+                transacao = conexao.BeginTransaction();
+                command.Transaction = transacao;
+
+                command.ExecuteNonQuery();
+
+                if (transacao != null) transacao.Commit();
+
+
+                return true;
+            }
+            catch (Exception exp)
+            {
+                throw new Exception("[TarefaDD.updateStatusExecucao()]: " + exp.Message);
+            }
+            finally
+            {
+                if (transacao != null) transacao.Dispose();
+                if (conexao != null) conexao.Close();
+            }
+        }
+
         public static Tarefa getTarefaByTagAndTarefa(int idTag, int idTarefa)
         {
             IDbConnection conexao = null;
@@ -84,15 +165,7 @@ namespace Persistencia
                 if (dReader != null)
                 {
                     dReader.Read();
-                    Tarefa tarefa = new Tarefa();
-                    tarefa.Nome = Conversao.FieldToString(dReader["nome"]);
-                    tarefa.Id = Conversao.FieldToInteger(dReader["id_tarefa"]);
-                    tarefa.IdAtividade = Conversao.FieldToInteger(dReader["id_atividade"]);
-                    tarefa.IniciaFluxo = Conversao.FieldToBoolean(dReader["inicia_fluxo"]);
-                    tarefa.FinalizaFluxo = Conversao.FieldToBoolean(dReader["finaliza_fluxo"]);
-
-                    conexao.Close();
-                    dReader.Close();
+                    Tarefa tarefa = getDadosTarefa(dReader);
                     return tarefa;
                 }
                 else
@@ -123,8 +196,8 @@ namespace Persistencia
             {
 
                 string sql = "INSERT INTO Tarefa " +
-                    "(id_atividade, id_tag, nome, inicia_fluxo, finaliza_fluxo) " +
-                    "VALUES (@id_atividade, @id_tag, @nome, @inicia_fluxo, @finaliza_fluxo)";
+                    "(id_atividade, id_tag, nome, inicia_fluxo, finaliza_fluxo, id_status_execucao) " +
+                    "VALUES (@id_atividade, @id_tag, @nome, @inicia_fluxo, @finaliza_fluxo, @id_status_execucao)";
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
@@ -135,6 +208,10 @@ namespace Persistencia
 
                 parametro = command.CreateParameter();
                 DataBase.getParametroCampo(ref parametro, "@id_tag", tarefa.IdTag, tipoDadoBD.Integer);
+                command.Parameters.Add(parametro);
+
+                parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@id_status_execucao", tarefa.IdStatusExecucao, tipoDadoBD.Integer);
                 command.Parameters.Add(parametro);
 
                 //parametro = command.CreateParameter();
@@ -160,7 +237,7 @@ namespace Persistencia
                 command.ExecuteNonQuery();
 
                 if (transacao != null) transacao.Commit();
-                
+
                 return true;
             }
             catch (Exception exp)
@@ -198,16 +275,7 @@ namespace Persistencia
                 if (dReader != null)
                 {
                     dReader.Read();
-                    Tarefa tarefa = new Tarefa();
-                    tarefa.IdAtividade = Conversao.FieldToInteger(dReader["id_atividade"]);
-                    tarefa.Nome = Conversao.FieldToString(dReader["nome"]);
-                    tarefa.Id = Conversao.FieldToInteger(dReader["id_tarefa"]);
-                    tarefa.IdTag = Conversao.FieldToInteger(dReader["id_tag"]);
-                    tarefa.IniciaFluxo = Conversao.FieldToBoolean(dReader["inicia_fluxo"]);
-                    tarefa.FinalizaFluxo = Conversao.FieldToBoolean(dReader["finaliza_fluxo"]);
-
-                    conexao.Close();
-                    dReader.Close();
+                    Tarefa tarefa = getDadosTarefa(dReader);
                     return tarefa;
                 }
                 else
@@ -224,6 +292,19 @@ namespace Persistencia
                 if (dReader != null) dReader.Close();
                 if (conexao != null) conexao.Close();
             }
+        }
+
+        private static Tarefa getDadosTarefa(IDataReader dReader)
+        {
+            Tarefa tarefa = new Tarefa();
+            tarefa.Nome = Conversao.FieldToString(dReader["nome"]);
+            tarefa.Id = Conversao.FieldToInteger(dReader["id_tarefa"]);
+            tarefa.IdAtividade = Conversao.FieldToInteger(dReader["id_atividade"]);
+            tarefa.IdTag = Conversao.FieldToInteger(dReader["id_tag"]);
+            tarefa.IdStatusExecucao = Conversao.FieldToInteger(dReader["id_status_execucao"]);
+            tarefa.IniciaFluxo = Conversao.FieldToBoolean(dReader["inicia_fluxo"]);
+            tarefa.FinalizaFluxo = Conversao.FieldToBoolean(dReader["finaliza_fluxo"]);
+            return tarefa;
         }
     }
 }

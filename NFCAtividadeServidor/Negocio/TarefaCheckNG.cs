@@ -99,6 +99,7 @@ namespace Negocio
                         fluxoCorreto.IdTarefa = tarefaDaTag.Id;
                         fluxoCorreto.IdAtividade = ativ.Id;
                         AtividadeFluxoCorretoNG.addFluxoCorreto(fluxoCorreto);
+                        TarefaNG.updateStatusExecucao(2, tarefaDaTag.Id);
                     }
                     else // ja foi realizado algum check ...
                     {
@@ -157,12 +158,14 @@ namespace Negocio
                         fluxoCorreto.IdTarefa = tarefaDaTag.Id;
                         fluxoCorreto.IdAtividade = ativ.Id;
                         AtividadeFluxoCorretoNG.addFluxoCorreto(fluxoCorreto);
+                        TarefaNG.updateStatusExecucao(2, tarefaDaTag.Id);
 
                         if (tarefaDaTag.FinalizaFluxo)
                         {
                             int novoCiclo = cicloAtual + 1;
                             //update na atividade coluna cicloAtual com o novo valor
                             AtividadeNG.updateCicloAtualAtividade(novoCiclo, ativ.Id);
+                            TarefaNG.updateStatusExecucaoByIdAtividade(1, ativ.Id);
                         }
 
                     }

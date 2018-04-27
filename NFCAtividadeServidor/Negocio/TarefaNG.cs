@@ -11,6 +11,7 @@ namespace Negocio
     {
         public static Boolean addTarefa(Tarefa tarefa)
         {
+            tarefa.IdStatusExecucao = 1;
             return Persistencia.TarefaDD.addTarefa(tarefa);
         }
 
@@ -36,6 +37,16 @@ namespace Negocio
         {
             Tarefa tarefa = Persistencia.TarefaDD.getTarefa(idTarefa);
             return tarefa;
-        }        
+        }
+
+        public static void updateStatusExecucao(int idStatusExecucao, int idTarefa)
+        {
+            Persistencia.TarefaDD.updateStatusExecucao(idStatusExecucao, idTarefa);
+        }
+
+        public static void updateStatusExecucaoByIdAtividade(int idStatusExecucao, int idAtividade)
+        {
+            Persistencia.TarefaDD.updateStatusExecucaoByIdAtividade(idStatusExecucao, idAtividade);
+        }
     }
 }
