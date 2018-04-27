@@ -100,6 +100,11 @@ namespace Negocio
                         fluxoCorreto.IdAtividade = ativ.Id;
                         AtividadeFluxoCorretoNG.addFluxoCorreto(fluxoCorreto);
                         TarefaNG.updateStatusExecucao(2, tarefaDaTag.Id);
+
+                        result[0] = "valido";
+                        result[1] = "Ok! Pode executar a proxima tarefa!"; // proximoPasso
+                        result[2] = "";
+                        return result;
                     }
                     else // ja foi realizado algum check ...
                     {
