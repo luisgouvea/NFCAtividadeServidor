@@ -44,10 +44,6 @@ namespace Persistencia
                             int idPk = Conversao.FieldToInteger(dReader["id_tarefa"]);
                             string nome = Conversao.FieldToString(dReader["nome"]);
                             int idAtividade = Conversao.FieldToInteger(dReader["id_atividade"]);
-                            Tarefa tarefa = new Tarefa();
-                            tarefa.IdTarefa = idPk;
-                            tarefa.Nome = nome;
-                            tarefa.IdAtividade = idAtividade;
                             TarefaPrecedente tarefaPrec = new TarefaPrecedente { IdTarefa = idPk, Nome = nome, IdAtividade = idAtividade };
                             listAntecessoras.Add(tarefaPrec);
                         }
