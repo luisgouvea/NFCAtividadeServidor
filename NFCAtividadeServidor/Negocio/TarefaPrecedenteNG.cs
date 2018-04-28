@@ -24,7 +24,7 @@ namespace Negocio
         **/
         public static Boolean setarPrecedenciaTarefa(Tarefa tarefa)
         {
-            int idTarefaTarget = tarefa.Id;           
+            int idTarefaTarget = tarefa.IdTarefa;           
             Persistencia.TarefaPrecedenteDD.deletePrecedenciaTarefa(idTarefaTarget); // delete all encadeamento precedente
             foreach (TarefaPrecedente tarefaAnte in tarefa.listaAntecessoras)
             {

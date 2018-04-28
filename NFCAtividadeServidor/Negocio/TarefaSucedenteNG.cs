@@ -25,7 +25,7 @@ namespace Negocio
         public static Boolean setarSucessaoTarefa(Tarefa tarefa)
         {
             //id_tarefa_proxima
-            int idTarefaSucessao = tarefa.Id;
+            int idTarefaSucessao = tarefa.IdTarefa;
             //Persistencia.TarefaSucedenteDD.deleteSucessaoTarefa(idTarefaSucessao); // delete all encadeamento sucessor
             foreach (TarefaPrecedente tarefaSucessao in tarefa.listaAntecessoras)
             {

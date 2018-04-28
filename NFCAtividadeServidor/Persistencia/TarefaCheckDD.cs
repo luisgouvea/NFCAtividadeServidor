@@ -20,14 +20,14 @@ namespace Persistencia
             {
 
                 string sql = "INSERT INTO TarefaCheck " +
-                    "(id_tarefa, nome_tarefa, data_execucao) " +
-                    "VALUES (@id_tarefa, @nome_tarefa, @data_execucao)";
+                    "(id_tarefa, nome_tarefa, data_execucao, id_status_check_nfc) " +
+                    "VALUES (@id_tarefa, @nome_tarefa, @data_execucao, @id_status_check_nfc)";
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
 
                 IDbDataParameter parametro = command.CreateParameter();
-                DataBase.getParametroCampo(ref parametro, "@id_tarefa", tarefaCheck.Id, tipoDadoBD.Integer);
+                DataBase.getParametroCampo(ref parametro, "@id_tarefa", tarefaCheck.IdTarefa, tipoDadoBD.Integer);
                 command.Parameters.Add(parametro);
 
                 parametro = command.CreateParameter();
@@ -36,6 +36,10 @@ namespace Persistencia
 
                 parametro = command.CreateParameter();
                 DataBase.getParametroCampo(ref parametro, "@data_execucao", tarefaCheck.DataExecucao, tipoDadoBD.DateTime);
+                command.Parameters.Add(parametro);
+
+                parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@id_status_check_nfc", tarefaCheck.IdStatusCheckNFC, tipoDadoBD.Integer);
                 command.Parameters.Add(parametro);
 
                 conexao.Open();
@@ -91,9 +95,10 @@ namespace Persistencia
                         {
                             TarefaCheck tarefaCheck = new TarefaCheck();
                             tarefaCheck.IdTarefaCheck = Conversao.FieldToInteger(dReader["id_tarefa_check"]);
-                            tarefaCheck.Id = Conversao.FieldToInteger(dReader["id_tarefa"]);
+                            tarefaCheck.IdTarefa = Conversao.FieldToInteger(dReader["id_tarefa"]);
                             tarefaCheck.Nome = Conversao.FieldToString(dReader["nome_tarefa"]);
                             tarefaCheck.DataExecucao = Conversao.FieldToDateTime(dReader["data_execucao"]);
+                            tarefaCheck.IdStatusCheckNFC = Conversao.FieldToInteger(dReader["id_status_check_nfc"]);
                             listaHistoricoCheck.Add(tarefaCheck);
                         }
 

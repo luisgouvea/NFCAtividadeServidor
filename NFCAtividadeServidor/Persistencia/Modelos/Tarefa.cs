@@ -8,7 +8,7 @@ namespace Persistencia.Modelos
 {
     public class Tarefa
     {
-        public int Id { get; set; }
+        public int IdTarefa { get; set; }
         public int IdAtividade { get; set; }
         public int IdTag { get; set; }
         public int IdStatusExecucao { get; set; }

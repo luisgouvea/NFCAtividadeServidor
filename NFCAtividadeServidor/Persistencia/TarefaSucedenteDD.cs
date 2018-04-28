@@ -44,7 +44,7 @@ namespace Persistencia
                             int idPk = Conversao.FieldToInteger(dReader["id_tarefa"]);
                             string nome = Conversao.FieldToString(dReader["nome"]);
                             int idAtividade = Conversao.FieldToInteger(dReader["id_atividade"]);
-                            TarefaSucedente tarefaSuced = new TarefaSucedente { Id = idPk, Nome = nome, IdAtividade = idAtividade };
+                            TarefaSucedente tarefaSuced = new TarefaSucedente { IdTarefa = idPk, Nome = nome, IdAtividade = idAtividade };
                             listSucessoras.Add(tarefaSuced);
                         }
 
@@ -97,7 +97,7 @@ namespace Persistencia
                             int idPk = Conversao.FieldToInteger(dReader["id_tarefa_sucessora"]);
                             int idTarefaTarget = Conversao.FieldToInteger(dReader["id_tarefa_target"]);
                             int idTarefaProxima = Conversao.FieldToInteger(dReader["id_tarefa_proxima"]);
-                            TarefaSucedente tarefaSuced = new TarefaSucedente { Id = idTarefaTarget, IdTarefaSucedente = idPk, IdTarefaProxima = idTarefaProxima};
+                            TarefaSucedente tarefaSuced = new TarefaSucedente { IdTarefa = idTarefaTarget, IdTarefaSucedente = idPk, IdTarefaProxima = idTarefaProxima};
                             listSucessoras.Add(tarefaSuced);
                         }
 

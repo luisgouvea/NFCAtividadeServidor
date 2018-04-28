@@ -12,7 +12,7 @@ namespace Negocio
         public static bool addRegistroCheckNFC(Tarefa tarefa)
         {
             TarefaCheck tarefaCheck = new TarefaCheck();
-            tarefaCheck.Id = tarefa.Id; // ID da tarefa
+            tarefaCheck.IdTarefa = tarefa.IdTarefa; // ID da tarefa
             tarefaCheck.DataExecucao = DateTime.Now;
             tarefaCheck.Nome = tarefa.Nome;
             return Persistencia.TarefaCheckDD.addRegistroCheckNFC(tarefaCheck);
@@ -96,10 +96,10 @@ namespace Negocio
                         //add na tabela de fluxo correto
                         AtividadeFluxoCorreto fluxoCorreto = new AtividadeFluxoCorreto();
                         fluxoCorreto.Ciclo = cicloAtual;
-                        fluxoCorreto.IdTarefa = tarefaDaTag.Id;
+                        fluxoCorreto.IdTarefa = tarefaDaTag.IdTarefa;
                         fluxoCorreto.IdAtividade = ativ.Id;
                         AtividadeFluxoCorretoNG.addFluxoCorreto(fluxoCorreto);
-                        TarefaNG.updateStatusExecucao(2, tarefaDaTag.Id);
+                        TarefaNG.updateStatusExecucao(2, tarefaDaTag.IdTarefa);
 
                         result[0] = "valido";
                         result[1] = "Ok! Pode executar a proxima tarefa!"; // proximoPasso
@@ -111,7 +111,7 @@ namespace Negocio
                         AtividadeFluxoCorreto ultimoCheck = AtividadeFluxoCorretoNG.getUltimoCheckCorretoByIdAtividade(ativ.Id);
 
                         #region Logica de precedencia
-                        List<TarefaPrecedente> listaAnte = TarefaPrecedenteNG.getTarefasAntecessorasCheck(tarefaDaTag.Id);
+                        List<TarefaPrecedente> listaAnte = TarefaPrecedenteNG.getTarefasAntecessorasCheck(tarefaDaTag.IdTarefa);
                         int tamanhoListaAnte = listaAnte.Count();
                         int count = 0;
                         foreach (AtividadeFluxoCorreto fluxo in listFluxos)
@@ -143,7 +143,7 @@ namespace Negocio
                         string nomeTarefasSucessoras = getNomeTarefasSucedentes(listaSucedentes);
                         foreach (TarefaSucedente proximaTarefa in listaSucedentes)
                         {
-                            if (proximaTarefa.IdTarefaProxima != tarefaDaTag.Id)
+                            if (proximaTarefa.IdTarefaProxima != tarefaDaTag.IdTarefa)
                             {
                                 // a tarefa do check eh uma sucessora da ultima tarefa checada
                                 //break;
@@ -160,10 +160,10 @@ namespace Negocio
                         //add na tabela de fluxo correto
                         AtividadeFluxoCorreto fluxoCorreto = new AtividadeFluxoCorreto();
                         fluxoCorreto.Ciclo = cicloAtual;
-                        fluxoCorreto.IdTarefa = tarefaDaTag.Id;
+                        fluxoCorreto.IdTarefa = tarefaDaTag.IdTarefa;
                         fluxoCorreto.IdAtividade = ativ.Id;
                         AtividadeFluxoCorretoNG.addFluxoCorreto(fluxoCorreto);
-                        TarefaNG.updateStatusExecucao(2, tarefaDaTag.Id);
+                        TarefaNG.updateStatusExecucao(2, tarefaDaTag.IdTarefa);
 
                         result[0] = "valido";
                         result[1] = "Ok! Pode executar a proxima tarefa!"; // proximoPasso
@@ -258,9 +258,9 @@ namespace Negocio
             List<string> listaIds = new List<string>();
             foreach (Tarefa tarefa in listaTarefa)
             {
-                if (tarefa.Id != idTarefaTarget)
+                if (tarefa.IdTarefa != idTarefaTarget)
                 {
-                    listaIds.Add(Convert.ToString(tarefa.Id));
+                    listaIds.Add(Convert.ToString(tarefa.IdTarefa));
                 }
             }
 
@@ -278,7 +278,7 @@ namespace Negocio
             List<string> listaIds = new List<string>();
             foreach (Tarefa tarefa in listaTarefa)
             {
-                listaIds.Add(Convert.ToString(tarefa.Id));
+                listaIds.Add(Convert.ToString(tarefa.IdTarefa));
             }
 
             return listaIds;

@@ -298,7 +298,7 @@ namespace Persistencia
         {
             Tarefa tarefa = new Tarefa();
             tarefa.Nome = Conversao.FieldToString(dReader["nome"]);
-            tarefa.Id = Conversao.FieldToInteger(dReader["id_tarefa"]);
+            tarefa.IdTarefa = Conversao.FieldToInteger(dReader["id_tarefa"]);
             tarefa.IdAtividade = Conversao.FieldToInteger(dReader["id_atividade"]);
             tarefa.IdTag = Conversao.FieldToInteger(dReader["id_tag"]);
             tarefa.IdStatusExecucao = Conversao.FieldToInteger(dReader["id_status_execucao"]);

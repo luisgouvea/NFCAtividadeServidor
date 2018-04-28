@@ -34,7 +34,7 @@ namespace Negocio
             List<Tarefa> listTarefas = Persistencia.TarefaDD.getTarefasByAtividade(idAtividade);
             foreach (Tarefa tarefa in listTarefas)
             {
-                int id = tarefa.Id;
+                int id = tarefa.IdTarefa;
                 List<TarefaPrecedente> listAntecessoras = Persistencia.TarefaPrecedenteDD.getTarefasAntecessoras(id);
                 tarefa.listaAntecessoras = listAntecessoras;
             }
