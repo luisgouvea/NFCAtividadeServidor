@@ -9,10 +9,11 @@ namespace Negocio
 {
     public class TarefaCheckNG
     {
-        public static bool addRegistroCheckNFC(Tarefa tarefa)
+        public static bool addRegistroCheckNFC(Tarefa tarefa, int idStatusCheckNFC)
         {
             TarefaCheck tarefaCheck = new TarefaCheck();
             tarefaCheck.IdTarefa = tarefa.IdTarefa; // ID da tarefa
+            tarefaCheck.IdStatusCheckNFC = idStatusCheckNFC;
             tarefaCheck.DataExecucao = DateTime.Now;
             tarefaCheck.Nome = tarefa.Nome;
             return Persistencia.TarefaCheckDD.addRegistroCheckNFC(tarefaCheck);
@@ -47,21 +48,12 @@ namespace Negocio
 
             try
             {
-                //realizar historico dessa tarefa
-                addRegistroCheckNFC(tarefaSelecionadaUsuario);
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Ocorreu um erro ao inserir o registro de Check: " + e.Message);
-            }
-
-            try
-            {
                 //get tarefa que a partir da TAG que o usuario realizou o check de nfc
                 tarefaDaTag = TarefaNG.getTarefaByTagAndTarefa(idTagCheck, idTarefa);
             }
             catch
             {
+                realizaHistoricoTarefa(tarefaSelecionadaUsuario, 1);
                 result[0] = "invalido";
                 result[1] = "A TAG que você realizou o check, não está vinculada com a tarefa escolhida."; // causa do erro
                 result[2] = "Realize o check da tarefa de acordo com a TAG vinculada no momento de criação da Tarefa."; // solucao do erro
@@ -87,6 +79,7 @@ namespace Negocio
                     {
                         if (tarefaDaTag.IniciaFluxo == false)
                         {
+                            realizaHistoricoTarefa(tarefaSelecionadaUsuario, 1); // 1 = invalido
                             result[0] = "invalido";
                             result[1] = "A tarefa escolhida, não Inicia a sua atividade."; // causa do erro
                             result[2] = "Realize o check de uma Tarefa que Inicie o fluxo da sua atividade."; // solucao do erro
@@ -100,7 +93,8 @@ namespace Negocio
                         fluxoCorreto.IdAtividade = ativ.Id;
                         AtividadeFluxoCorretoNG.addFluxoCorreto(fluxoCorreto);
                         TarefaNG.updateStatusExecucao(2, tarefaDaTag.IdTarefa);
-
+                        realizaHistoricoTarefa(tarefaSelecionadaUsuario, 2);
+                        
                         result[0] = "valido";
                         result[1] = "Ok! Pode executar a proxima tarefa!"; // proximoPasso
                         result[2] = "";
@@ -127,6 +121,7 @@ namespace Negocio
 
                         if (count != tamanhoListaAnte)
                         {
+                            realizaHistoricoTarefa(tarefaSelecionadaUsuario, 1);
                             result[0] = "invalido";
                             result[1] = "Existe alguma tarefa que deve ser executada antes da tarefa escolhida."; // causa do erro
                             result[2] = "Realize o check de todas as tarefas precedentes desta tarefa escolhida."; // solucao do erro
@@ -147,6 +142,7 @@ namespace Negocio
                             {
                                 // a tarefa do check eh uma sucessora da ultima tarefa checada
                                 //break;
+                                realizaHistoricoTarefa(tarefaSelecionadaUsuario, 1);
                                 result[0] = "invalido";
                                 result[1] = "Não é a vez da tarefa escolhida."; // causa do erro
                                 result[2] = "Você deve escolher alguma(s) dessa(s) tarefa(s): " + nomeTarefasSucessoras + "."; // solucao do erro
@@ -180,6 +176,7 @@ namespace Negocio
                             result[1] = "Muito bem! Você finalizou o fluxo, será iniciado um novo ciclo de execução da atividade."; // proximoPasso
                             result[2] = "";
                         }
+                        realizaHistoricoTarefa(tarefaSelecionadaUsuario, 2);
                     }
                 }
                 else
@@ -267,6 +264,18 @@ namespace Negocio
             return listaIds;
         }
 
+        public static void realizaHistoricoTarefa(Tarefa tarefaSelecionadaUsuario, int idStatus)
+        {
+            try
+            {
+                //realizar historico dessa tarefa
+                addRegistroCheckNFC(tarefaSelecionadaUsuario, 2);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Ocorreu um erro ao inserir o registro de Check: " + e.Message);
+            }
+        }
         /// <summary>
         /// Metodo usado de auxilio para PEGAR TODO O REGISTRO DE CHECK NFC
         /// </summary>
