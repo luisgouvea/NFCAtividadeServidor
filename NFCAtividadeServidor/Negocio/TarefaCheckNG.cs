@@ -12,9 +12,9 @@ namespace Negocio
         public static bool addRegistroCheckNFC(Tarefa tarefa)
         {
             TarefaCheck tarefaCheck = new TarefaCheck();
-            tarefaCheck.IdTarefa = tarefa.Id;
+            tarefaCheck.Id = tarefa.Id; // ID da tarefa
             tarefaCheck.DataExecucao = DateTime.Now;
-            tarefaCheck.NomeTarefa = tarefa.Nome;
+            tarefaCheck.Nome = tarefa.Nome;
             return Persistencia.TarefaCheckDD.addRegistroCheckNFC(tarefaCheck);
         }
 

@@ -27,11 +27,11 @@ namespace Persistencia
                 IDbCommand command = DataBase.getCommand(sql, conexao);
 
                 IDbDataParameter parametro = command.CreateParameter();
-                DataBase.getParametroCampo(ref parametro, "@id_tarefa", tarefaCheck.IdTarefa, tipoDadoBD.Integer);
+                DataBase.getParametroCampo(ref parametro, "@id_tarefa", tarefaCheck.Id, tipoDadoBD.Integer);
                 command.Parameters.Add(parametro);
 
                 parametro = command.CreateParameter();
-                DataBase.getParametroCampo(ref parametro, "@nome_tarefa", tarefaCheck.NomeTarefa, tipoDadoBD.VarChar);
+                DataBase.getParametroCampo(ref parametro, "@nome_tarefa", tarefaCheck.Nome, tipoDadoBD.VarChar);
                 command.Parameters.Add(parametro);
 
                 parametro = command.CreateParameter();
@@ -90,8 +90,10 @@ namespace Persistencia
                         while (dReader.Read())
                         {
                             TarefaCheck tarefaCheck = new TarefaCheck();
-                            tarefaCheck.IdTarefa = Conversao.FieldToInteger(dReader["id_tarefa"]);
-                            tarefaCheck.NomeTarefa = Conversao.FieldToString(dReader["nome_tarefa"]);
+                            tarefaCheck.IdTarefaCheck = Conversao.FieldToInteger(dReader["id_tarefa_check"]);
+                            tarefaCheck.Id = Conversao.FieldToInteger(dReader["id_tarefa"]);
+                            tarefaCheck.Nome = Conversao.FieldToString(dReader["nome_tarefa"]);
+                            tarefaCheck.DataExecucao = Conversao.FieldToDateTime(dReader["data_execucao"]);
                             listaHistoricoCheck.Add(tarefaCheck);
                         }
 

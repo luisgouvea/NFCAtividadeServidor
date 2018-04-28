@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Persistencia.Modelos
 {
-    public class TarefaCheck
+    public class TarefaCheck : Tarefa
     {
-        public int Id { get; set; }
-        public int IdTarefa { get; set; }
+        //public int Id { get; set; }
+        public int IdTarefaCheck { get; set; } // PK da tabela TarefaCheck
         public DateTime DataExecucao { get; set; }
-        public string NomeTarefa { get; set; }
+        //public string NomeTarefa { get; set; }
     }
 }
