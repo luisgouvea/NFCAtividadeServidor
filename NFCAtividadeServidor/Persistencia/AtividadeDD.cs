@@ -329,29 +329,7 @@ namespace Persistencia
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
 
-                IDbDataParameter parametro = command.CreateParameter();
-                DataBase.getParametroCampo(ref parametro, "@id_status", ativ.IdStatus, tipoDadoBD.Integer);
-                command.Parameters.Add(parametro);
-
-                parametro = command.CreateParameter();
-                DataBase.getParametroCampo(ref parametro, "@id_usuario_executor", ativ.IdUsuarioExecutor, tipoDadoBD.Integer);
-                command.Parameters.Add(parametro);
-
-                parametro = command.CreateParameter();
-                DataBase.getParametroCampo(ref parametro, "@id_usuario_criador", ativ.IdUsuarioCriador, tipoDadoBD.Integer);
-                command.Parameters.Add(parametro);
-
-                parametro = command.CreateParameter();
-                DataBase.getParametroCampo(ref parametro, "@nome", ativ.Nome, tipoDadoBD.VarChar);
-                command.Parameters.Add(parametro);
-
-                parametro = command.CreateParameter();
-                DataBase.getParametroCampo(ref parametro, "@repetir_tarefa", ativ.RepetirTarefa, tipoDadoBD.Boolean);
-                command.Parameters.Add(parametro);
-
-                parametro = command.CreateParameter();
-                DataBase.getParametroCampo(ref parametro, "@ciclo_atual", ativ.CicloAtual, tipoDadoBD.Integer);
-                command.Parameters.Add(parametro);
+                ExecuteAddAndUpdate(ativ, command);
 
                 conexao.Open();
                 transacao = conexao.BeginTransaction();
@@ -373,6 +351,86 @@ namespace Persistencia
                 if (transacao != null) transacao.Dispose();
                 if (conexao != null) conexao.Close();
             }
+        }
+
+        public static bool updateAtividade(Atividade atividade)
+        {
+            IDbConnection conexao = null;
+            IDbTransaction transacao = null;
+
+            try
+            {
+                string sql = "UPDATE Atividade " +
+                    "SET id_status = @id_status, " +
+                    "nome = @nome, " +
+                    "data_finalizacao = @data_finalizacao, " +
+                    "data_criacao = @data_criacao, " +
+                    "repetir_tarefa = @repetir_tarefa, " +
+                    "descricao = @descricao " +
+                    "WHERE id_atividade = @id_atividade";
+
+                conexao = DataBase.getConection();
+                IDbCommand command = DataBase.getCommand(sql, conexao);
+
+                IDbDataParameter parametro = ExecuteAddAndUpdate(atividade, command);
+
+                parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@id_atividade", atividade.Id, tipoDadoBD.Integer);
+                command.Parameters.Add(parametro);
+
+                parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@data_finalizacao", atividade.DataFinalizacao, tipoDadoBD.DateTime);
+                command.Parameters.Add(parametro);
+
+                conexao.Open();
+                transacao = conexao.BeginTransaction();
+                command.Transaction = transacao;
+
+                command.ExecuteNonQuery();
+
+                if (transacao != null) transacao.Commit();
+
+
+                return true;
+            }
+            catch (Exception exp)
+            {
+                throw new Exception("[AtividadeDD.updateAtividade()]: " + exp.Message);
+            }
+            finally
+            {
+                if (transacao != null) transacao.Dispose();
+                if (conexao != null) conexao.Close();
+            }
+        }
+
+        private static IDbDataParameter ExecuteAddAndUpdate(Atividade atividade, IDbCommand command)
+        {
+            IDbDataParameter parametro = command.CreateParameter();
+            DataBase.getParametroCampo(ref parametro, "@id_status", atividade.IdStatus, tipoDadoBD.Integer);
+            command.Parameters.Add(parametro);
+
+            parametro = command.CreateParameter();
+            DataBase.getParametroCampo(ref parametro, "@id_usuario_executor", atividade.IdUsuarioExecutor, tipoDadoBD.Integer);
+            command.Parameters.Add(parametro);
+
+            parametro = command.CreateParameter();
+            DataBase.getParametroCampo(ref parametro, "@id_usuario_criador", atividade.IdUsuarioCriador, tipoDadoBD.Integer);
+            command.Parameters.Add(parametro);
+
+            parametro = command.CreateParameter();
+            DataBase.getParametroCampo(ref parametro, "@nome", atividade.Nome, tipoDadoBD.VarChar);
+            command.Parameters.Add(parametro);
+
+            parametro = command.CreateParameter();
+            DataBase.getParametroCampo(ref parametro, "@repetir_tarefa", atividade.RepetirTarefa, tipoDadoBD.Boolean);
+            command.Parameters.Add(parametro);
+
+            parametro = command.CreateParameter();
+            DataBase.getParametroCampo(ref parametro, "@ciclo_atual", atividade.CicloAtual, tipoDadoBD.Integer);
+            command.Parameters.Add(parametro);
+
+            return parametro;
         }
     }
 }
