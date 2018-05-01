@@ -38,7 +38,10 @@ namespace NFCAtividadeAPI.Controllers
             }
             catch (Exception e)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, "Ocorreu um erro: " + e.Message);
+                APIError erro = new APIError();
+                erro.statusCode = "400";
+                erro.message = "Ocorreu um erro: " + e.Message;
+                return Request.CreateResponse(HttpStatusCode.BadRequest, erro);
             }
         }
 
@@ -53,7 +56,10 @@ namespace NFCAtividadeAPI.Controllers
             }
             catch (Exception e)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, "Ocorreu um erro: " + e.Message);
+                APIError erro = new APIError();
+                erro.statusCode = "400";
+                erro.message = "Ocorreu um erro: " + e.Message;
+                return Request.CreateResponse(HttpStatusCode.BadRequest, erro);
             }
         }
     }

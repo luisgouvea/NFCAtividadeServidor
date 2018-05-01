@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Newtonsoft.Json;
+using Persistencia.ModelosErro;
 
 namespace NFCAtividadeAPI.Controllers
 {
@@ -41,7 +42,10 @@ namespace NFCAtividadeAPI.Controllers
             }
             catch (Exception e)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, "Ocorreu um erro: " + e.Message);
+                APIError erro = new APIError();
+                erro.statusCode = "400";
+                erro.message = "Ocorreu um erro: " + e.Message;
+                return Request.CreateResponse(HttpStatusCode.BadRequest, erro);
             }
         }        
     }
