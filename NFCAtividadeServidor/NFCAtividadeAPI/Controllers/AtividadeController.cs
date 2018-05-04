@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Newtonsoft.Json;
 using Persistencia.ModelosErro;
+using Persistencia.ModelosUtil;
 
 namespace NFCAtividadeAPI.Controllers
 {
@@ -32,6 +33,42 @@ namespace NFCAtividadeAPI.Controllers
         }
 
         [HttpPost]
+        public HttpResponseMessage filtrarAtividadesAdicionar([FromBody]FiltroPesquisaHome filtro)
+        {
+            try
+            {
+                List<Atividade> listaAtividades = Negocio.AtividadeNG.getAllAtividadeAdicionarByFiltroSearch(filtro);
+
+                return Request.CreateResponse(HttpStatusCode.OK, listaAtividades);
+            }
+            catch (Exception e)
+            {
+                APIError erro = new APIError();
+                erro.statusCode = "400";
+                erro.message = "Ocorreu um erro: " + e.Message;
+                return Request.CreateResponse(HttpStatusCode.BadRequest, erro);
+            }
+        }
+
+        [HttpPost]
+        public HttpResponseMessage filtrarAtividadesExecutar([FromBody]FiltroPesquisaHome filtro)
+        {
+            try
+            {
+                List<Atividade> listaAtividades = Negocio.AtividadeNG.getAllAtividadeExecutarByFiltroSearch(filtro);
+
+                return Request.CreateResponse(HttpStatusCode.OK, listaAtividades);
+            }
+            catch (Exception e)
+            {
+                APIError erro = new APIError();
+                erro.statusCode = "400";
+                erro.message = "Ocorreu um erro: " + e.Message;
+                return Request.CreateResponse(HttpStatusCode.BadRequest, erro);
+            }
+        }
+
+        [HttpPost]
         public HttpResponseMessage criarAtividade([FromBody] Atividade ativ)
         {
             try
@@ -47,6 +84,6 @@ namespace NFCAtividadeAPI.Controllers
                 erro.message = "Ocorreu um erro: " + e.Message;
                 return Request.CreateResponse(HttpStatusCode.BadRequest, erro);
             }
-        }        
+        }
     }
 }

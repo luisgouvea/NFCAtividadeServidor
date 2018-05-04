@@ -1,5 +1,6 @@
 ﻿using LibraryDB;
 using Persistencia.Modelos;
+using Persistencia.ModelosUtil;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -314,7 +315,229 @@ namespace Persistencia
 
             return null;
         }
-        
+
+        public static List<Atividade> getAllAtividadeAdicionarByFiltroSearch(FiltroPesquisaHome filtro)
+        {
+            IDbConnection conexao = null;
+            IDataReader dReader = null;
+
+            try
+            {
+                bool idStatusFilled = false;
+                bool dataCriacaoFilled = false;
+                string sql = "SELECT * FROM Atividade ";
+                sql += "WHERE ";
+                if (filtro.IdStatusAtividade != 0)
+                {
+                    sql += "id_status = @id_status ";
+                    idStatusFilled = true;
+                }
+
+                if (filtro.DataCriacao != DateTime.MinValue)
+                {
+                    if (idStatusFilled)
+                    {
+                        sql += "AND data_criacao = @data_criacao ";
+                    }
+                    else
+                    {
+                        sql += "data_criacao = @data_criacao ";
+                    }
+                    dataCriacaoFilled = true;
+                }
+                if (!string.IsNullOrEmpty(filtro.DescricaoAtividade))
+                {
+                    if (dataCriacaoFilled)
+                    {
+                        sql += "AND descricao = @descricao ";
+                    }
+                    else
+                    {
+                        sql += "descricao = @descricao ";
+                    }
+
+                }
+
+                if (dataCriacaoFilled && idStatusFilled)
+                {
+                    sql += "AND id_usuario_criador = @id_usuario_criador";
+                }
+                else
+                {
+                    sql += "id_usuario_criador = @id_usuario_criador";
+                }
+
+                conexao = DataBase.getConection();
+                IDbCommand command = DataBase.getCommand(sql, conexao);
+
+                IDbDataParameter parametro = command.CreateParameter();
+
+                if (filtro.IdStatusAtividade != 0)
+                {
+                    DataBase.getParametroCampo(ref parametro, "@id_status", filtro.IdStatusAtividade, tipoDadoBD.Integer);
+                    command.Parameters.Add(parametro);
+                }
+
+                if (filtro.DataCriacao != DateTime.MinValue)
+                {
+                    DataBase.getParametroCampo(ref parametro, "@data_criacao", filtro.DataCriacao, tipoDadoBD.DateTime);
+                    command.Parameters.Add(parametro);
+                }
+
+                if (!string.IsNullOrEmpty(filtro.DescricaoAtividade))
+                {
+                    DataBase.getParametroCampo(ref parametro, "@descricao", filtro.DescricaoAtividade, tipoDadoBD.VarChar);
+                    command.Parameters.Add(parametro);
+                }
+
+                parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@id_usuario_criador", filtro.IdUsuario, tipoDadoBD.Integer);
+                command.Parameters.Add(parametro);
+
+                conexao.Open();
+                dReader = command.ExecuteReader();
+
+                if (dReader != null)
+                {
+                    try
+                    {
+                        List<Atividade> listaAtividades = new List<Atividade>();
+                        while (dReader.Read())
+                        {
+                            Atividade atividade = getDadosAtividade(dReader);
+                            listaAtividades.Add(atividade);
+                        }
+
+                        conexao.Close();
+                        dReader.Close();
+                        return listaAtividades;
+                    }
+                    catch (Exception exp)
+                    {
+                        throw new Exception("Ocorreu um erro: " + exp.Message);
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                throw new Exception("[AtividadeDD.getAllAtividadeExecutarByFiltroSearch()]: " + exp.Message);
+            }
+            finally
+            {
+                if (dReader != null) dReader.Close();
+                if (conexao != null) conexao.Close();
+            }
+
+            return null;
+        }
+
+        public static List<Atividade> getAllAtividadeExecutarByFiltroSearch(FiltroPesquisaHome filtro)
+        {
+            IDbConnection conexao = null;
+            IDataReader dReader = null;
+
+            try
+            {
+                bool idStatusFilled = false;
+                bool dataCriacaoFilled = false;
+                string sql = "SELECT * FROM Atividade ";
+                sql += "WHERE ";
+                if (filtro.IdStatusAtividade != 0)
+                {
+                    sql += "id_status = @id_status ";
+                    idStatusFilled = true;
+                }
+
+                if (filtro.DataCriacao != DateTime.MinValue)
+                {
+                    if (idStatusFilled)
+                    {
+                        sql += "AND data_criacao = @data_criacao ";
+                    }
+                    else
+                    {
+                        sql += "data_criacao = @data_criacao ";
+                    }
+                    dataCriacaoFilled = true;
+                }
+                if (!string.IsNullOrEmpty(filtro.DescricaoAtividade))
+                {
+                    if (dataCriacaoFilled)
+                    {
+                        sql += "AND descricao = @descricao ";
+                    }
+                    else
+                    {
+                        sql += "descricao = @descricao ";
+                    }
+
+                }
+                sql += "AND id_usuario_executor = @id_usuario_executor";
+
+                conexao = DataBase.getConection();
+                IDbCommand command = DataBase.getCommand(sql, conexao);
+
+                IDbDataParameter parametro = command.CreateParameter();
+
+                if (filtro.IdStatusAtividade != 0)
+                {
+                    DataBase.getParametroCampo(ref parametro, "@id_status", filtro.IdStatusAtividade, tipoDadoBD.Integer);
+                    command.Parameters.Add(parametro);
+                }
+
+                if (filtro.DataCriacao != DateTime.MinValue)
+                {
+                    DataBase.getParametroCampo(ref parametro, "@data_criacao", filtro.DataCriacao, tipoDadoBD.DateTime);
+                    command.Parameters.Add(parametro);
+                }
+
+                if (!string.IsNullOrEmpty(filtro.DescricaoAtividade))
+                {
+                    DataBase.getParametroCampo(ref parametro, "@descricao", filtro.DescricaoAtividade, tipoDadoBD.VarChar);
+                    command.Parameters.Add(parametro);
+                }
+
+                parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@id_usuario_executor", filtro.IdUsuario, tipoDadoBD.Integer);
+                command.Parameters.Add(parametro);
+
+                conexao.Open();
+                dReader = command.ExecuteReader();
+
+                if (dReader != null)
+                {
+                    try
+                    {
+                        List<Atividade> listaAtividades = new List<Atividade>();
+                        while (dReader.Read())
+                        {
+                            Atividade atividade = getDadosAtividade(dReader);
+                            listaAtividades.Add(atividade);
+                        }
+
+                        conexao.Close();
+                        dReader.Close();
+                        return listaAtividades;
+                    }
+                    catch (Exception exp)
+                    {
+                        throw new Exception("Ocorreu um erro: " + exp.Message);
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                throw new Exception("[AtividadeDD.getAllAtividadeExecutarByFiltroSearch()]: " + exp.Message);
+            }
+            finally
+            {
+                if (dReader != null) dReader.Close();
+                if (conexao != null) conexao.Close();
+            }
+
+            return null;
+        }
+
         public static bool addAtividade(Atividade ativ)
         {
             IDbConnection conexao = null;
@@ -431,6 +654,15 @@ namespace Persistencia
             command.Parameters.Add(parametro);
 
             return parametro;
+        }
+
+        private static Atividade getDadosAtividade(IDataReader dReader)
+        {
+            Atividade atividade = new Atividade();
+            atividade.Nome = Conversao.FieldToString(dReader["nome"]);
+            atividade.Id = Conversao.FieldToInteger(dReader["id_atividade"]);
+            atividade.Descricao = Conversao.FieldToString(dReader["descricao"]);
+            return atividade;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Persistencia.Modelos;
+using Persistencia.ModelosUtil;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,16 @@ namespace Negocio
         public static List<Atividade> getAllAtivAdicionadas(int idUsuario)
         {
             return Persistencia.AtividadeDD.getAllAtivAdicionadasByUsuario(idUsuario);
+        }
+
+        public static List<Atividade> getAllAtividadeAdicionarByFiltroSearch(FiltroPesquisaHome filtro)
+        {
+            return Persistencia.AtividadeDD.getAllAtividadeAdicionarByFiltroSearch(filtro);
+        }
+
+        public static List<Atividade> getAllAtividadeExecutarByFiltroSearch(FiltroPesquisaHome filtro)
+        {
+            return Persistencia.AtividadeDD.getAllAtividadeExecutarByFiltroSearch(filtro);
         }
 
         public static bool adicionarAtividade(Atividade atividade)
@@ -57,5 +68,7 @@ namespace Negocio
         {
             return Persistencia.AtividadeDD.updateCicloAtualAtividade(novoCiclo, id_atividade);
         }
+
+
     }
 }
