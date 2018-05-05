@@ -358,7 +358,7 @@ namespace Persistencia
 
                 }
 
-                if (dataCriacaoFilled && idStatusFilled)
+                if (dataCriacaoFilled || idStatusFilled)
                 {
                     sql += "AND id_usuario_criador = @id_usuario_criador";
                 }
@@ -420,7 +420,7 @@ namespace Persistencia
             }
             catch (Exception exp)
             {
-                throw new Exception("[AtividadeDD.getAllAtividadeExecutarByFiltroSearch()]: " + exp.Message);
+                throw new Exception("[AtividadeDD.getAllAtividadeAdicionarByFiltroSearch()]: " + exp.Message);
             }
             finally
             {
