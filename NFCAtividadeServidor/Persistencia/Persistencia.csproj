@@ -47,8 +47,10 @@
     <Compile Include="AtividadeFluxoCorretoDD.cs" />
     <Compile Include="ModelosErro\APIError.cs" />
     <Compile Include="ModelosUtil\FiltroPesquisaHome.cs" />
+    <Compile Include="Modelos\AmigoUsuario.cs" />
     <Compile Include="Modelos\Atividade.cs" />
     <Compile Include="Modelos\AtividadeFluxoCorreto.cs" />
+    <Compile Include="Modelos\NotificacaoUsuario.cs" />
     <Compile Include="Modelos\StatusAtividade.cs" />
     <Compile Include="Modelos\TAG.cs" />
     <Compile Include="Modelos\Tarefa.cs" />
@@ -56,6 +58,7 @@
     <Compile Include="Modelos\TarefaPrecedente.cs" />
     <Compile Include="Modelos\TarefaSucedente.cs" />
     <Compile Include="Modelos\Usuario.cs" />
+    <Compile Include="NotificacaoUsuarioDD.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TagDD.cs" />
     <Compile Include="TarefaCheckDD.cs" />

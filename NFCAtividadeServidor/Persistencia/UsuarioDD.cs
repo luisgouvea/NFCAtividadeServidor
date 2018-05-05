@@ -42,7 +42,7 @@ namespace Persistencia
                     Usuario usuario = new Usuario();
                     if (dReader["id_usuario"] != DBNull.Value)
                     {                        
-                        usuario.Id = Int32.Parse(dReader["id_usuario"].ToString());
+                        usuario.IdUsuario = Int32.Parse(dReader["id_usuario"].ToString());
                     }
                     conexao.Close();
                     dReader.Close();
@@ -88,7 +88,7 @@ namespace Persistencia
                         while (dReader.Read())
                         {
                             Usuario usuario = new Usuario();
-                            usuario.Id = Conversao.FieldToInteger(dReader["id_usuario"]);
+                            usuario.IdUsuario = Conversao.FieldToInteger(dReader["id_usuario"]);
                             usuario.Nome = Conversao.FieldToString(dReader["nome"]);
                             listUsuario.Add(usuario);
                         }

@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace Persistencia.Modelos
 {
-    public class Usuario
+    public class NotificacaoUsuario
     {
+        public int IdNotificacaoUsuario { get; set; }
         public int IdUsuario { get; set; }
-        public string Nome { get; set; }
+        public string DescricaoNotificacao { get; set; }
+        public bool Visualizada { get; set; }
     }
 }

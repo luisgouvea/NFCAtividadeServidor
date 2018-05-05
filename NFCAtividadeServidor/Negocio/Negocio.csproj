@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="AtividadeFluxoCorretoNG.cs" />
     <Compile Include="AtividadeNG.cs" />
+    <Compile Include="NotificacaoUsuarioNG.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TarefaCheckNG.cs" />
     <Compile Include="TagNG.cs" />
