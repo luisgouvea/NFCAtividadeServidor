@@ -16,7 +16,16 @@ namespace Negocio
 
         public static List<NotificacaoUsuario> getNotificacoesByUsuario(int idUsuario)
         {
-            return Persistencia.NotificacaoUsuarioDD.getNotificacoesByUsuario(idUsuario);
+            List<NotificacaoUsuario> listaNotificacoes = new List<NotificacaoUsuario>();
+
+            List<NotificacaoUsuarioAddAtividade> listNotAddAtividade = NotificacaoUsuarioAddAtividadeNG.getNotificacoesAddAtividadeByUsuario(idUsuario);
+            List<NotificacaoUsuarioProblemaTarefa> listNotProblemaTarefa = NotificacaoUsuarioProblemaTarefaNG.getNotificacoesProblemaTarefaByUsuario(idUsuario);
+
+            var allNotificacoes = listaNotificacoes.Concat(listNotAddAtividade)
+                                    .Concat(listNotProblemaTarefa)
+                                    .ToList();
+            return allNotificacoes;
+            //return Persistencia.NotificacaoUsuarioDD.getNotificacoesByUsuario(idUsuario);
         }
 
         public static bool updateNotificacao(NotificacaoUsuario notificacao)

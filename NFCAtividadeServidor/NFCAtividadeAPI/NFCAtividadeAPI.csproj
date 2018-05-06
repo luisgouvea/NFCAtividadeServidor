@@ -95,7 +95,9 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AtividadeController.cs" />
+    <Compile Include="Controllers\NotificacaoAddAtividadeController.cs" />
     <Compile Include="Controllers\NotificacaoController.cs" />
+    <Compile Include="Controllers\NotificacaoProblemaTarefaController.cs" />
     <Compile Include="Controllers\TagController.cs" />
     <Compile Include="Controllers\TarefaCheckController.cs" />
     <Compile Include="Controllers\TarefaController.cs" />

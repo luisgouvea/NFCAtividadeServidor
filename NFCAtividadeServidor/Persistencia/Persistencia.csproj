@@ -51,6 +51,8 @@
     <Compile Include="Modelos\Atividade.cs" />
     <Compile Include="Modelos\AtividadeFluxoCorreto.cs" />
     <Compile Include="Modelos\NotificacaoUsuario.cs" />
+    <Compile Include="Modelos\NotificacaoUsuarioAddAtividade.cs" />
+    <Compile Include="Modelos\NotificacaoUsuarioProblema.cs" />
     <Compile Include="Modelos\StatusAtividade.cs" />
     <Compile Include="Modelos\TAG.cs" />
     <Compile Include="Modelos\Tarefa.cs" />
@@ -58,7 +60,9 @@
     <Compile Include="Modelos\TarefaPrecedente.cs" />
     <Compile Include="Modelos\TarefaSucedente.cs" />
     <Compile Include="Modelos\Usuario.cs" />
+    <Compile Include="NotificacaoUsuarioAddAtividadeDD.cs" />
     <Compile Include="NotificacaoUsuarioDD.cs" />
+    <Compile Include="NotificacaoUsuarioProblemaTarefaDD.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TagDD.cs" />
     <Compile Include="TarefaCheckDD.cs" />
