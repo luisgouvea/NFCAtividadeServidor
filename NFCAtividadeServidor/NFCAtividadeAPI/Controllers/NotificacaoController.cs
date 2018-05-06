@@ -44,5 +44,39 @@ namespace NFCAtividadeAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest, erro);
             }
         }
+
+        [HttpPost]
+        public HttpResponseMessage updateNotificacao([FromBody] NotificacaoUsuario notificacao)
+        {
+            try
+            {
+                Boolean executado = Negocio.NotificacaoUsuarioNG.updateNotificacao(notificacao);
+                return Request.CreateResponse(HttpStatusCode.OK, executado);
+            }
+            catch (Exception e)
+            {
+                APIError erro = new APIError();
+                erro.statusCode = "400";
+                erro.message = "Ocorreu um erro: " + e.Message;
+                return Request.CreateResponse(HttpStatusCode.BadRequest, erro);
+            }
+        }
+
+        [HttpPost]
+        public HttpResponseMessage getCountNotificacoesParaVisualizarUsuario([FromBody] int idUsuario)
+        {
+            try
+            {
+                int count = Negocio.NotificacaoUsuarioNG.getCountNotificacoesParaVisualizarUsuario(idUsuario);
+                return Request.CreateResponse(HttpStatusCode.OK, count);
+            }
+            catch (Exception e)
+            {
+                APIError erro = new APIError();
+                erro.statusCode = "400";
+                erro.message = "Ocorreu um erro: " + e.Message;
+                return Request.CreateResponse(HttpStatusCode.BadRequest, erro);
+            }
+        }
     }
 }

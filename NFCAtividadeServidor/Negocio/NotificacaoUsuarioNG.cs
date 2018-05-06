@@ -18,5 +18,15 @@ namespace Negocio
         {
             return Persistencia.NotificacaoUsuarioDD.getNotificacoesByUsuario(idUsuario);
         }
+
+        public static bool updateNotificacao(NotificacaoUsuario notificacao)
+        {
+            return Persistencia.NotificacaoUsuarioDD.updateNotificacao(notificacao);
+        }
+
+        public static int getCountNotificacoesParaVisualizarUsuario(int idUsuario)
+        {
+            return Persistencia.NotificacaoUsuarioDD.getCountNotificacoesParaVisualizarUsuario(idUsuario);
+        }
     }
 }
