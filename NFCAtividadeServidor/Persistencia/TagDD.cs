@@ -19,13 +19,9 @@ namespace Persistencia
             try
             {
 
-                //string sql = "INSERT INTO Tag " +
-                //    "(id_usuario, nome, id_tag, palavra_chave) " +
-                //    "VALUES (@id_usuario, @nome, @id_tag, @palavra_chave)";
-
                 string sql = "INSERT INTO Tag " +
-                    "(id_usuario, nome, id_tag) " +
-                    "VALUES (@id_usuario, @nome, @id_tag)";
+                    "(id_usuario, nome, identificador_tag) " +
+                    "VALUES (@id_usuario, @nome, @identificador_tag)";
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
@@ -35,7 +31,7 @@ namespace Persistencia
                 command.Parameters.Add(parametro);
 
                 parametro = command.CreateParameter();
-                DataBase.getParametroCampo(ref parametro, "@id_tag", tag.Id, tipoDadoBD.Integer);
+                DataBase.getParametroCampo(ref parametro, "@identificador_tag", tag.IdentificadorTag, tipoDadoBD.VarChar);
                 command.Parameters.Add(parametro);
 
                 parametro = command.CreateParameter();
@@ -94,7 +90,7 @@ namespace Persistencia
                             tag.Nome = Conversao.FieldToString(dReader["nome"]);
                             tag.IdUsuario = Conversao.FieldToInteger(dReader["id_usuario"]);
                             tag.PalavraChave = Conversao.FieldToString(dReader["palavra_chave"]);
-                            tag.Id = Conversao.FieldToInteger(dReader["id_tag"]);
+                            tag.IdentificadorTag = Conversao.FieldToString(dReader["identificador_tag"]);
                             listTags.Add(tag);
                         }
 
@@ -121,7 +117,7 @@ namespace Persistencia
             return null;
         }
 
-        public static TAG getTagByIdTag(int idTag)
+        public static TAG getTagByIdTag(String identificadorTag)
         {
             IDbConnection conexao = null;
             IDataReader dReader = null;
@@ -130,13 +126,13 @@ namespace Persistencia
             {
 
                 string sql = "SELECT * FROM Tag " +
-                    "WHERE id_tag = @id_tag";
+                    "WHERE identificador_tag = @identificador_tag";
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
 
                 IDbDataParameter parametro = command.CreateParameter();
-                DataBase.getParametroCampo(ref parametro, "@id_tag", idTag, tipoDadoBD.Integer);
+                DataBase.getParametroCampo(ref parametro, "@identificador_tag", identificadorTag, tipoDadoBD.VarChar);
                 command.Parameters.Add(parametro);
 
                 conexao.Open();
@@ -146,7 +142,7 @@ namespace Persistencia
                 {
                     dReader.Read();
                     TAG tag = new TAG();
-                    tag.Id = Conversao.FieldToInteger(dReader["id_tag"]);
+                    tag.IdentificadorTag = Conversao.FieldToString(dReader["identificador_tag"]);
                     tag.Nome = Conversao.FieldToString(dReader["nome"]);
 
                     conexao.Close();

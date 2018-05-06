@@ -51,7 +51,7 @@ namespace NFCAtividadeAPI.Controllers
             try
             {
                 Tarefa tarefa = Negocio.TarefaNG.getTarefa(idTarefa);
-                TAG tag = Negocio.TagNG.getTag(tarefa.IdTag);
+                TAG tag = Negocio.TagNG.getTag(tarefa.IdentificadorTag);
                 return Request.CreateResponse(HttpStatusCode.OK, tag);
             }
             catch (Exception e)

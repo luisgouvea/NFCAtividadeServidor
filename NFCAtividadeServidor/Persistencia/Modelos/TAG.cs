@@ -8,7 +8,7 @@ namespace Persistencia.Modelos
 {
     public class TAG
     {
-        public int Id { get; set; }
+        public string IdentificadorTag { get; set; }
         public int IdUsuario { get; set; }
         public string Nome { get; set; }
         public string PalavraChave { get; set; }

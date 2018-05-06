@@ -146,7 +146,7 @@ namespace Persistencia
             }
         }
 
-        public static Tarefa getTarefaByTagAndTarefa(int idTag, int idTarefa)
+        public static Tarefa getTarefaByTagAndTarefa(String identificadorTag, int idTarefa)
         {
             IDbConnection conexao = null;
             IDataReader dReader = null;
@@ -154,7 +154,7 @@ namespace Persistencia
             try
             {
 
-                string sql = "select * from Tarefa where id_tag = " + Convert.ToString(idTag) + " AND" + " id_tarefa = " + Convert.ToString(idTarefa);
+                string sql = "select * from Tarefa where identificador_tag = " + Convert.ToString(identificadorTag) + " AND" + " id_tarefa = " + Convert.ToString(idTarefa);
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
@@ -196,8 +196,8 @@ namespace Persistencia
             {
 
                 string sql = "INSERT INTO Tarefa " +
-                    "(id_atividade, id_tag, nome, inicia_fluxo, finaliza_fluxo, id_status_execucao) " +
-                    "VALUES (@id_atividade, @id_tag, @nome, @inicia_fluxo, @finaliza_fluxo, @id_status_execucao)";
+                    "(id_atividade, identificador_tag, nome, inicia_fluxo, finaliza_fluxo, id_status_execucao) " +
+                    "VALUES (@id_atividade, @identificador_tag, @nome, @inicia_fluxo, @finaliza_fluxo, @id_status_execucao)";
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
@@ -207,7 +207,7 @@ namespace Persistencia
                 command.Parameters.Add(parametro);
 
                 parametro = command.CreateParameter();
-                DataBase.getParametroCampo(ref parametro, "@id_tag", tarefa.IdTag, tipoDadoBD.Integer);
+                DataBase.getParametroCampo(ref parametro, "@identificador_tag", tarefa.IdentificadorTag, tipoDadoBD.VarChar);
                 command.Parameters.Add(parametro);
 
                 parametro = command.CreateParameter();
@@ -300,7 +300,7 @@ namespace Persistencia
             tarefa.Nome = Conversao.FieldToString(dReader["nome"]);
             tarefa.IdTarefa = Conversao.FieldToInteger(dReader["id_tarefa"]);
             tarefa.IdAtividade = Conversao.FieldToInteger(dReader["id_atividade"]);
-            tarefa.IdTag = Conversao.FieldToInteger(dReader["id_tag"]);
+            tarefa.IdentificadorTag = Conversao.FieldToString(dReader["identificador_tag"]);
             tarefa.IdStatusExecucao = Conversao.FieldToInteger(dReader["id_status_execucao"]);
             tarefa.IniciaFluxo = Conversao.FieldToBoolean(dReader["inicia_fluxo"]);
             tarefa.FinalizaFluxo = Conversao.FieldToBoolean(dReader["finaliza_fluxo"]);

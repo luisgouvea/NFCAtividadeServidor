@@ -13,11 +13,11 @@ namespace NFCAtividadeAPI.Controllers
     {
 
         [HttpGet]
-        public HttpResponseMessage realizarCheck(int idTagCheck, int idTarefa)
+        public HttpResponseMessage realizarCheck(string identificadorTagCheck, int idTarefa)
         {
             try
             {
-                string [] resultCheck = Negocio.TarefaCheckNG.realizarCheck(idTagCheck, idTarefa);
+                string [] resultCheck = Negocio.TarefaCheckNG.realizarCheck(identificadorTagCheck, idTarefa);
                 return Request.CreateResponse(HttpStatusCode.OK, resultCheck);
             }
             catch (Exception e)

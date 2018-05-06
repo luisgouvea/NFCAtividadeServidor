@@ -26,7 +26,7 @@ namespace Negocio
             return Persistencia.TarefaCheckDD.getHistoricoCheckNFCByIdsTarefa(listaIds);
         }
 
-        public static string [] realizarCheck(int idTagCheck, int idTarefa)
+        public static string [] realizarCheck(string identificadorTag, int idTarefa)
         {
             string[] result = new string[3];
             Tarefa tarefaSelecionadaUsuario = null;
@@ -49,7 +49,7 @@ namespace Negocio
             try
             {
                 //get tarefa que a partir da TAG que o usuario realizou o check de nfc
-                tarefaDaTag = TarefaNG.getTarefaByTagAndTarefa(idTagCheck, idTarefa);
+                tarefaDaTag = TarefaNG.getTarefaByTagAndTarefa(identificadorTag, idTarefa);
             }
             catch
             {

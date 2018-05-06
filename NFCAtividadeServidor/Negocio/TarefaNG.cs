@@ -41,9 +41,9 @@ namespace Negocio
             return listTarefas;
         }
 
-        public static Tarefa getTarefaByTagAndTarefa(int idTag, int idTarefa)
+        public static Tarefa getTarefaByTagAndTarefa(string identificadorTag, int idTarefa)
         {
-            Tarefa tarefa = Persistencia.TarefaDD.getTarefaByTagAndTarefa(idTag, idTarefa);
+            Tarefa tarefa = Persistencia.TarefaDD.getTarefaByTagAndTarefa(identificadorTag, idTarefa);
             return tarefa;
         }
 
