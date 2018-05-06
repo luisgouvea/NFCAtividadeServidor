@@ -19,8 +19,8 @@ namespace Persistencia
             try
             {
                 string sql = "INSERT INTO NotificacaoUsuario " +
-                    "(id_usuario, descricao_notificacao, visualizada) " +
-                    "VALUES (@id_usuario, @descricao_notificacao, @visualizada)";
+                    "(id_usuario_notificado, descricao_notificacao, visualizada) " +
+                    "VALUES (@id_usuario_notificado, @descricao_notificacao, @visualizada)";
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
@@ -58,14 +58,14 @@ namespace Persistencia
             {
 
                 string sql = "SELECT * FROM  NotificacaoUsuario " +
-                    "WHERE id_usuario = @id_usuario " +
+                    "WHERE id_usuario_notificado = @id_usuario_notificado " +
                     "AND visualizada = 0";
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
 
                 IDbDataParameter parametro = command.CreateParameter();
-                DataBase.getParametroCampo(ref parametro, "@id_usuario", idUsuario, tipoDadoBD.Integer);
+                DataBase.getParametroCampo(ref parametro, "@id_usuario_notificado", idUsuario, tipoDadoBD.Integer);
                 command.Parameters.Add(parametro);                
 
                 conexao.Open();
@@ -109,7 +109,7 @@ namespace Persistencia
             try
             {
                 string sql = "UPDATE NotificacaoUsuario " +
-                    "SET id_usuario = @id_usuario, " +
+                    "SET id_usuario_notificado = @id_usuario_notificado, " +
                     "descricao_notificacao = @descricao_notificacao, " +
                     "visualizada = @visualizada " +
                     "WHERE id_notificacao_usuario = @id_notificacao_usuario";
@@ -148,13 +148,13 @@ namespace Persistencia
 
             try
             {
-                string sql = "select * from NotificacaoUsuario where id_usuario = @id_usuario";
+                string sql = "select * from NotificacaoUsuario where id_usuario_notificado = @id_usuario_notificado";
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
 
                 IDbDataParameter parametro = command.CreateParameter();
-                DataBase.getParametroCampo(ref parametro, "@id_usuario", idUsuario, tipoDadoBD.Integer);
+                DataBase.getParametroCampo(ref parametro, "@id_usuario_notificado", idUsuario, tipoDadoBD.Integer);
                 command.Parameters.Add(parametro);
 
                 conexao.Open();
@@ -195,7 +195,7 @@ namespace Persistencia
         private static IDbDataParameter ExecuteAddAndUpdate(NotificacaoUsuario notificacao, IDbCommand command)
         {
             IDbDataParameter parametro = command.CreateParameter();
-            DataBase.getParametroCampo(ref parametro, "@id_usuario", notificacao.IdUsuario, tipoDadoBD.Integer);
+            DataBase.getParametroCampo(ref parametro, "@id_usuario_notificado", notificacao.IdUsuarioNotificado, tipoDadoBD.Integer);
             command.Parameters.Add(parametro);
 
             parametro = command.CreateParameter();
@@ -213,7 +213,7 @@ namespace Persistencia
         {
             NotificacaoUsuario notificacao = new NotificacaoUsuario();
             notificacao.IdNotificacaoUsuario = Conversao.FieldToInteger(dReader["id_notificacao_usuario"]);
-            notificacao.IdUsuario = Conversao.FieldToInteger(dReader["id_usuario"]);
+            notificacao.IdUsuarioNotificado = Conversao.FieldToInteger(dReader["id_usuario_notificado"]);
             notificacao.DescricaoNotificacao = Conversao.FieldToString(dReader["descricao_notificacao"]);
             notificacao.Visualizada = Conversao.FieldToBoolean(dReader["visualizada"]);
             return notificacao;
