@@ -9,7 +9,7 @@ namespace Negocio
 {
     public class NotificacaoUsuarioNG
     {
-        public static Boolean addNotificacao(NotificacaoUsuario notificacao)
+        public static int addNotificacao(NotificacaoUsuario notificacao)
         {
             return Persistencia.NotificacaoUsuarioDD.addNotificacao(notificacao);
         }

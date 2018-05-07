@@ -16,8 +16,8 @@ namespace NFCAtividadeAPI.Controllers
         {
             try
             {
-                Boolean adicionado = Negocio.NotificacaoUsuarioNG.addNotificacao(notificacao);
-                return Request.CreateResponse(HttpStatusCode.OK, adicionado);
+                int idAdicionado = Negocio.NotificacaoUsuarioNG.addNotificacao(notificacao);
+                return Request.CreateResponse(HttpStatusCode.OK, idAdicionado);
             }
             catch (Exception e)
             {

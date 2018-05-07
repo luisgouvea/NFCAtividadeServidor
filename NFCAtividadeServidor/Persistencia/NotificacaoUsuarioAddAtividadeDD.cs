@@ -56,7 +56,7 @@ namespace Persistencia
 
             try
             {
-                string sql = "SELECT nu.descricao_notificacao, nu.visualizada, nuaddAtiv.id_atividade FROM NotificacaoUsuario nu " +
+                string sql = "SELECT nu.id_notificacao_usuario, nu.descricao_notificacao, nu.visualizada, nu.id_usuario_notificado, nuaddAtiv.id_atividade FROM NotificacaoUsuario nu " +
                     "INNER JOIN NotificacaoUsuarioAddAtividade nuaddAtiv " +
                     "ON nu.id_notificacao_usuario = nuaddAtiv.id_notificacao_usuario " +
                     "WHERE nu.id_usuario_notificado = @id_usuario_notificado";
@@ -86,13 +86,13 @@ namespace Persistencia
                     }
                     catch (Exception exp)
                     {
-                        throw new Exception("Ocorreu um erro: " + exp.Message);
+                        throw new Exception(exp.Message);
                     }
                 }
             }
             catch (Exception exp)
             {
-                throw new Exception("[NotificacaoUsuarioDD.getNotificacoesByUsuario()]: " + exp.Message);
+                throw new Exception("[NotificacaoUsuarioDD.getNotificacoesAddAtividadeByUsuario()]: " + exp.Message);
             }
             finally
             {

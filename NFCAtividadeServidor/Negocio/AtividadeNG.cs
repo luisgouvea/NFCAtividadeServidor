@@ -39,7 +39,17 @@ namespace Negocio
         {
             try
             {
-                return Persistencia.AtividadeDD.addAtividade(atividade);
+                int idAtividadeAdicionada = Persistencia.AtividadeDD.addAtividade(atividade);
+
+                NotificacaoUsuarioAddAtividade noti = new NotificacaoUsuarioAddAtividade();
+
+                //TODO: gravar nome do usuario no shared preferences para usar aqui
+                noti.DescricaoNotificacao = "O usuario X criou uma atividade e vinculou voce a ela";
+                noti.Visualizada = false;
+                noti.IdUsuarioNotificado = atividade.IdUsuarioExecutor;
+                noti.IdAtividade = idAtividadeAdicionada;
+                NotificacaoUsuarioAddAtividadeNG.addNotificacaoAddAtividade(noti);
+                return true;
             }
             catch (Exception ex)
             {

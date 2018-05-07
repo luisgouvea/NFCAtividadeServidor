@@ -15,7 +15,10 @@ namespace Negocio
             notificacao.IdUsuarioNotificado = notificacaoAddAtividade.IdUsuarioNotificado;
             notificacao.DescricaoNotificacao = notificacaoAddAtividade.DescricaoNotificacao;
             notificacao.Visualizada = notificacaoAddAtividade.Visualizada;
-            bool adicionado = NotificacaoUsuarioNG.addNotificacao(notificacao);
+
+            int idNotificacaoUsuario = NotificacaoUsuarioNG.addNotificacao(notificacao);
+
+            notificacaoAddAtividade.IdNotificacaoUsuario = idNotificacaoUsuario;
 
             return Persistencia.NotificacaoUsuarioAddAtividadeDD.addNotificacaoAddAtividade(notificacaoAddAtividade);
         }

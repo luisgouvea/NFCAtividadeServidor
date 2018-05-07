@@ -538,7 +538,7 @@ namespace Persistencia
             return null;
         }
 
-        public static bool addAtividade(Atividade ativ)
+        public static int addAtividade(Atividade ativ)
         {
             IDbConnection conexao = null;
             IDbTransaction transacao = null;
@@ -547,7 +547,7 @@ namespace Persistencia
             {
                 string sql = "INSERT INTO Atividade " +
                     "(id_status, id_usuario_executor, id_usuario_criador, nome, repetir_tarefa, ciclo_atual) " +
-                    "VALUES (@id_status, @id_usuario_executor, @id_usuario_criador, @nome, @repetir_tarefa, @ciclo_atual)";
+                    "VALUES (@id_status, @id_usuario_executor, @id_usuario_criador, @nome, @repetir_tarefa, @ciclo_atual); SELECT SCOPE_IDENTITY();";
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
@@ -558,12 +558,11 @@ namespace Persistencia
                 transacao = conexao.BeginTransaction();
                 command.Transaction = transacao;
 
-                command.ExecuteNonQuery();
-
+                //command.ExecuteNonQuery();
+                int lastId = Convert.ToInt32(command.ExecuteScalar());
                 if (transacao != null) transacao.Commit();
-
-
-                return true;
+                
+                return lastId;
             }
             catch (Exception exp)
             {

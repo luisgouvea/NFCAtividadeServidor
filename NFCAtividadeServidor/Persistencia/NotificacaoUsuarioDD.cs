@@ -11,7 +11,7 @@ namespace Persistencia
 {
     public class NotificacaoUsuarioDD
     {
-        public static bool addNotificacao(NotificacaoUsuario notificacao)
+        public static int addNotificacao(NotificacaoUsuario notificacao)
         {
             IDbConnection conexao = null;
             IDbTransaction transacao = null;
@@ -20,7 +20,7 @@ namespace Persistencia
             {
                 string sql = "INSERT INTO NotificacaoUsuario " +
                     "(id_usuario_notificado, descricao_notificacao, visualizada) " +
-                    "VALUES (@id_usuario_notificado, @descricao_notificacao, @visualizada)";
+                    "VALUES (@id_usuario_notificado, @descricao_notificacao, @visualizada); SELECT SCOPE_IDENTITY();";
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
@@ -31,12 +31,12 @@ namespace Persistencia
                 transacao = conexao.BeginTransaction();
                 command.Transaction = transacao;
 
-                command.ExecuteNonQuery();
+                //command.ExecuteNonQuery();
+                int lastId = Convert.ToInt32(command.ExecuteScalar());
 
                 if (transacao != null) transacao.Commit();
 
-
-                return true;
+                return lastId;
             }
             catch (Exception exp)
             {

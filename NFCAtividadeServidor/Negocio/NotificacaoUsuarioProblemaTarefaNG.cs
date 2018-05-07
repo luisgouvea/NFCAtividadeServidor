@@ -9,15 +9,16 @@ namespace Negocio
 {
     public class NotificacaoUsuarioProblemaTarefaNG
     {
-        public static Boolean addNotificacaoProblemaTarefa(NotificacaoUsuarioProblemaTarefa notificacaoAddAtividade)
+        public static Boolean addNotificacaoProblemaTarefa(NotificacaoUsuarioProblemaTarefa notificacaoProblemaTarefa)
         {
             NotificacaoUsuarioProblemaTarefa notificacao = new NotificacaoUsuarioProblemaTarefa();
-            notificacao.IdUsuarioNotificado = notificacaoAddAtividade.IdUsuarioNotificado;
-            notificacao.DescricaoNotificacao = notificacaoAddAtividade.DescricaoNotificacao;
-            notificacao.Visualizada = notificacaoAddAtividade.Visualizada;
-            bool adicionado = NotificacaoUsuarioNG.addNotificacao(notificacao);
+            notificacao.IdUsuarioNotificado = notificacaoProblemaTarefa.IdUsuarioNotificado;
+            notificacao.DescricaoNotificacao = notificacaoProblemaTarefa.DescricaoNotificacao;
+            notificacao.Visualizada = notificacaoProblemaTarefa.Visualizada;
+            int adicionado = NotificacaoUsuarioNG.addNotificacao(notificacao);
 
-            return Persistencia.NotificacaoUsuarioProblemaTarefaDD.addNotificacaoProblemaTarefa(notificacaoAddAtividade);
+            notificacaoProblemaTarefa.IdNotificacaoUsuario = adicionado;
+            return Persistencia.NotificacaoUsuarioProblemaTarefaDD.addNotificacaoProblemaTarefa(notificacaoProblemaTarefa);
         }
 
         public static List<NotificacaoUsuarioProblemaTarefa> getNotificacoesProblemaTarefaByUsuario(int idUsuario)
