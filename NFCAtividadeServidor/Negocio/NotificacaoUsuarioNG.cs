@@ -14,9 +14,9 @@ namespace Negocio
             return Persistencia.NotificacaoUsuarioDD.addNotificacao(notificacao);
         }
 
-        public static List<NotificacaoUsuario> getNotificacoesByUsuario(int idUsuario)
+        public static List<Object> getNotificacoesByUsuario(int idUsuario)
         {
-            List<NotificacaoUsuario> listaNotificacoes = new List<NotificacaoUsuario>();
+            List<Object> listaNotificacoes = new List<Object>();
 
             List<NotificacaoUsuarioAddAtividade> listNotAddAtividade = NotificacaoUsuarioAddAtividadeNG.getNotificacoesAddAtividadeByUsuario(idUsuario);
             List<NotificacaoUsuarioProblemaTarefa> listNotProblemaTarefa = NotificacaoUsuarioProblemaTarefaNG.getNotificacoesProblemaTarefaByUsuario(idUsuario);

@@ -33,7 +33,7 @@ namespace NFCAtividadeAPI.Controllers
         {
             try
             {
-                List<NotificacaoUsuario> listaNotificacoes = Negocio.NotificacaoUsuarioNG.getNotificacoesByUsuario(idUsuario);
+                List<Object> listaNotificacoes = Negocio.NotificacaoUsuarioNG.getNotificacoesByUsuario(idUsuario);
                 return Request.CreateResponse(HttpStatusCode.OK, listaNotificacoes);
             }
             catch (Exception e)
