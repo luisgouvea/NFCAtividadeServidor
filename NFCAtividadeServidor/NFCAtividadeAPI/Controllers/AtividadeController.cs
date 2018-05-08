@@ -85,5 +85,22 @@ namespace NFCAtividadeAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest, erro);
             }
         }
+
+        [HttpPost]
+        public HttpResponseMessage getAtividadeById([FromBody] int idAtividade)
+        {
+            try
+            {
+                Atividade atividade = Negocio.AtividadeNG.getAtividadeByIdAtividade(idAtividade);
+                return Request.CreateResponse(HttpStatusCode.OK, atividade);
+            }
+            catch (Exception e)
+            {
+                APIError erro = new APIError();
+                erro.statusCode = "400";
+                erro.message = "Ocorreu um erro: " + e.Message;
+                return Request.CreateResponse(HttpStatusCode.BadRequest, erro);
+            }
+        }
     }
 }

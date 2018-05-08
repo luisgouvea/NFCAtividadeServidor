@@ -117,7 +117,11 @@ namespace Persistencia
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
 
-                ExecuteAddAndUpdate(notificacao, command);
+                IDbDataParameter parametro = ExecuteAddAndUpdate(notificacao, command);
+
+                parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@id_notificacao_usuario", notificacao.IdNotificacaoUsuario, tipoDadoBD.Integer);
+                command.Parameters.Add(parametro);
 
                 conexao.Open();
                 transacao = conexao.BeginTransaction();

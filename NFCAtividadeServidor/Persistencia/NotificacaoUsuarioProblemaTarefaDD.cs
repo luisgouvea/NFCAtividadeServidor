@@ -19,9 +19,9 @@ namespace Persistencia
             try
             {
                 string sql = "INSERT INTO NotificacaoUsuarioProblemaTarefa " +
-                    "(id_notificacao_usuario_problema_tarefa, id_tarefa) " +
-                    "VALUES (@id_notificacao_usuario_problema_tarefa, @id_tarefa)";
-
+                    "(id_notificacao_usuario_problema_tarefa, id_tarefa, descricao_problema, check_realizado) " +
+                    "VALUES (@id_notificacao_usuario_problema_tarefa, @id_tarefa, @descricao_problema, @check_realizado)";
+             
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
 
@@ -56,7 +56,7 @@ namespace Persistencia
 
             try
             {
-                string sql = "SELECT nu.descricao_notificacao, nu.visualizada, nupt.id_tarefa FROM NotificacaoUsuario nu " +
+                string sql = "SELECT nu.descricao_notificacao, nu.visualizada, nupt.id_tarefa, nupt.descricao_problema, nupt.check_realizado FROM NotificacaoUsuario nu " +
                     "INNER JOIN NotificacaoUsuarioProblemaTarefa nupt " +
                     "ON nu.id_notificacao_usuario = nupt.id_notificacao_usuario " +
                     "WHERE nu.id_usuario_notificado = @id_usuario_notificado";
@@ -110,6 +110,8 @@ namespace Persistencia
             notificacao.IdUsuarioNotificado = Conversao.FieldToInteger(dReader["id_usuario_notificado"]);
             notificacao.IdTarefa = Conversao.FieldToInteger(dReader["id_tarefa"]);
             notificacao.DescricaoNotificacao = Conversao.FieldToString(dReader["descricao_notificacao"]);
+            notificacao.DescricaoProblema = Conversao.FieldToString(dReader["descricao_problema"]);
+            notificacao.CheckRealizado = Conversao.FieldToBoolean(dReader["check_realizado"]);
             notificacao.Visualizada = Conversao.FieldToBoolean(dReader["visualizada"]);
             return notificacao;
         }
@@ -122,6 +124,14 @@ namespace Persistencia
 
             parametro = command.CreateParameter();
             DataBase.getParametroCampo(ref parametro, "@id_tarefa", notificacaoProblemaTarefa.IdTarefa, tipoDadoBD.Integer);
+            command.Parameters.Add(parametro);
+
+            parametro = command.CreateParameter();
+            DataBase.getParametroCampo(ref parametro, "@descricao_problema", notificacaoProblemaTarefa.DescricaoProblema, tipoDadoBD.VarChar);
+            command.Parameters.Add(parametro);
+
+            parametro = command.CreateParameter();
+            DataBase.getParametroCampo(ref parametro, "@check_realizado", notificacaoProblemaTarefa.CheckRealizado, tipoDadoBD.Boolean);
             command.Parameters.Add(parametro);
 
             return parametro;

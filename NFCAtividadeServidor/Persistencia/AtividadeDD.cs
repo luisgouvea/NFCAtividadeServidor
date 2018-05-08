@@ -180,10 +180,7 @@ namespace Persistencia
                 if (dReader != null)
                 {
                     dReader.Read();
-                    Atividade ativ = new Atividade();
-                    ativ.Id = Conversao.FieldToInteger(dReader["id_atividade"]);
-                    ativ.Nome = Conversao.FieldToString(dReader["nome"]);
-                    ativ.RepetirTarefa = Conversao.FieldToBoolean(dReader["repetir_tarefa"]);
+                    Atividade ativ = getDadosAtividade(dReader);
 
                     conexao.Close();
                     dReader.Close();
@@ -661,6 +658,9 @@ namespace Persistencia
             atividade.Nome = Conversao.FieldToString(dReader["nome"]);
             atividade.Id = Conversao.FieldToInteger(dReader["id_atividade"]);
             atividade.Descricao = Conversao.FieldToString(dReader["descricao"]);
+            atividade.RepetirTarefa = Conversao.FieldToBoolean(dReader["repetir_tarefa"]);
+            atividade.DataCriacao = Conversao.FieldToDateTime(dReader["data_criacao"]);
+            atividade.IdStatus = Conversao.FieldToInteger(dReader["id_status"]);
             return atividade;
         }
     }

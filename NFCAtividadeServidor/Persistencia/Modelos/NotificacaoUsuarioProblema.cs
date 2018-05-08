@@ -10,5 +10,7 @@ namespace Persistencia.Modelos
     {
         public int IdNotificacaoUsuarioProblemaTarefa { get; set; }
         public int IdTarefa { get; set; }
+        public string DescricaoProblema { get; set; }
+        public bool CheckRealizado { get; set; }
     }
 }
