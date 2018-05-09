@@ -36,7 +36,7 @@ namespace Negocio
             return listTags;
         }
 
-        public static TAG getTag(string identificadorTag)
+        public static TAG getTag(int identificadorTag)
         {
             return Persistencia.TagDD.getTagByIdTag(identificadorTag);
         }

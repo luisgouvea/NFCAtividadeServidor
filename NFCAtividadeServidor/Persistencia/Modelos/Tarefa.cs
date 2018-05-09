@@ -10,7 +10,7 @@ namespace Persistencia.Modelos
     {
         public int IdTarefa { get; set; }
         public int IdAtividade { get; set; }
-        public string IdentificadorTag { get; set; }
+        public int IdentificadorTag { get; set; }
         public int IdStatusExecucao { get; set; }
         public string Nome { get; set; }
         public DateTime DataCheck { get; set; }

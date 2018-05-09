@@ -31,7 +31,7 @@ namespace Persistencia
                 command.Parameters.Add(parametro);
 
                 parametro = command.CreateParameter();
-                DataBase.getParametroCampo(ref parametro, "@identificador_tag", tag.IdentificadorTag, tipoDadoBD.VarChar);
+                DataBase.getParametroCampo(ref parametro, "@identificador_tag", tag.IdentificadorTag, tipoDadoBD.Integer);
                 command.Parameters.Add(parametro);
 
                 parametro = command.CreateParameter();
@@ -90,7 +90,7 @@ namespace Persistencia
                             tag.Nome = Conversao.FieldToString(dReader["nome"]);
                             tag.IdUsuario = Conversao.FieldToInteger(dReader["id_usuario"]);
                             tag.PalavraChave = Conversao.FieldToString(dReader["palavra_chave"]);
-                            tag.IdentificadorTag = Conversao.FieldToString(dReader["identificador_tag"]);
+                            tag.IdentificadorTag = Conversao.FieldToInteger(dReader["identificador_tag"]);
                             listTags.Add(tag);
                         }
 
@@ -117,7 +117,7 @@ namespace Persistencia
             return null;
         }
 
-        public static TAG getTagByIdTag(String identificadorTag)
+        public static TAG getTagByIdTag(int identificadorTag)
         {
             IDbConnection conexao = null;
             IDataReader dReader = null;
@@ -132,7 +132,7 @@ namespace Persistencia
                 IDbCommand command = DataBase.getCommand(sql, conexao);
 
                 IDbDataParameter parametro = command.CreateParameter();
-                DataBase.getParametroCampo(ref parametro, "@identificador_tag", identificadorTag, tipoDadoBD.VarChar);
+                DataBase.getParametroCampo(ref parametro, "@identificador_tag", identificadorTag, tipoDadoBD.Integer);
                 command.Parameters.Add(parametro);
 
                 conexao.Open();
@@ -142,7 +142,7 @@ namespace Persistencia
                 {
                     dReader.Read();
                     TAG tag = new TAG();
-                    tag.IdentificadorTag = Conversao.FieldToString(dReader["identificador_tag"]);
+                    tag.IdentificadorTag = Conversao.FieldToInteger(dReader["identificador_tag"]);
                     tag.Nome = Conversao.FieldToString(dReader["nome"]);
 
                     conexao.Close();

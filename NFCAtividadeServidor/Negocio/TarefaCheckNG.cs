@@ -26,7 +26,7 @@ namespace Negocio
             return Persistencia.TarefaCheckDD.getHistoricoCheckNFCByIdsTarefa(listaIds);
         }
 
-        public static string [] realizarCheck(string identificadorTag, int idTarefa)
+        public static string [] realizarCheck(int identificadorTag, int idTarefa)
         {
             string[] result = new string[3];
             Tarefa tarefaSelecionadaUsuario = null;

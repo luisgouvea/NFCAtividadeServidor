@@ -146,7 +146,7 @@ namespace Persistencia
             }
         }
 
-        public static Tarefa getTarefaByTagAndTarefa(String identificadorTag, int idTarefa)
+        public static Tarefa getTarefaByTagAndTarefa(int identificadorTag, int idTarefa)
         {
             IDbConnection conexao = null;
             IDataReader dReader = null;
@@ -207,7 +207,7 @@ namespace Persistencia
                 command.Parameters.Add(parametro);
 
                 parametro = command.CreateParameter();
-                DataBase.getParametroCampo(ref parametro, "@identificador_tag", tarefa.IdentificadorTag, tipoDadoBD.VarChar);
+                DataBase.getParametroCampo(ref parametro, "@identificador_tag", tarefa.IdentificadorTag, tipoDadoBD.Integer);
                 command.Parameters.Add(parametro);
 
                 parametro = command.CreateParameter();
@@ -300,7 +300,7 @@ namespace Persistencia
             tarefa.Nome = Conversao.FieldToString(dReader["nome"]);
             tarefa.IdTarefa = Conversao.FieldToInteger(dReader["id_tarefa"]);
             tarefa.IdAtividade = Conversao.FieldToInteger(dReader["id_atividade"]);
-            tarefa.IdentificadorTag = Conversao.FieldToString(dReader["identificador_tag"]);
+            tarefa.IdentificadorTag = Conversao.FieldToInteger(dReader["identificador_tag"]);
             tarefa.IdStatusExecucao = Conversao.FieldToInteger(dReader["id_status_execucao"]);
             tarefa.IniciaFluxo = Conversao.FieldToBoolean(dReader["inicia_fluxo"]);
             tarefa.FinalizaFluxo = Conversao.FieldToBoolean(dReader["finaliza_fluxo"]);

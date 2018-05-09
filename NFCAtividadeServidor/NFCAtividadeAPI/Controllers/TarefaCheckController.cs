@@ -13,7 +13,7 @@ namespace NFCAtividadeAPI.Controllers
     {
 
         [HttpGet]
-        public HttpResponseMessage realizarCheck(string identificadorTagCheck, int idTarefa)
+        public HttpResponseMessage realizarCheck(int identificadorTagCheck, int idTarefa)
         {
             try
             {
