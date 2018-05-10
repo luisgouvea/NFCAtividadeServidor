@@ -14,6 +14,11 @@ namespace Negocio
             return Persistencia.UsuarioDD.getUsuario(login, senha);
         }
 
+        public static Usuario getUsuarioById(int idUsuario)
+        {
+            return Persistencia.UsuarioDD.getUsuarioById(idUsuario);
+        }
+
         public static List<Usuario> listAllUsuarioAddAtivVincExecutor(int idUsuarioTarget)
         {
             return Persistencia.UsuarioDD.listAllUsuarioAddAtivVincExecutor(idUsuarioTarget);

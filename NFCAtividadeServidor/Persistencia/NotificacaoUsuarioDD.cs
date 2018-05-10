@@ -19,8 +19,8 @@ namespace Persistencia
             try
             {
                 string sql = "INSERT INTO NotificacaoUsuario " +
-                    "(id_usuario_notificado, descricao_notificacao, visualizada) " +
-                    "VALUES (@id_usuario_notificado, @descricao_notificacao, @visualizada); SELECT SCOPE_IDENTITY();";
+                    "(id_usuario_notificado, descricao_notificacao, visualizada, data_notificacao) " +
+                    "VALUES (@id_usuario_notificado, @descricao_notificacao, @visualizada, @data_notificacao); SELECT SCOPE_IDENTITY();";
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
@@ -112,6 +112,7 @@ namespace Persistencia
                     "SET id_usuario_notificado = @id_usuario_notificado, " +
                     "descricao_notificacao = @descricao_notificacao, " +
                     "visualizada = @visualizada " +
+                    "data_notificacao = @data_notificacao" +
                     "WHERE id_notificacao_usuario = @id_notificacao_usuario";
 
                 conexao = DataBase.getConection();
@@ -210,6 +211,10 @@ namespace Persistencia
             DataBase.getParametroCampo(ref parametro, "@visualizada", notificacao.Visualizada, tipoDadoBD.Boolean);
             command.Parameters.Add(parametro);
 
+            parametro = command.CreateParameter();
+            DataBase.getParametroCampo(ref parametro, "@data_notificacao", notificacao.DataNotificacao, tipoDadoBD.DateTime);
+            command.Parameters.Add(parametro);
+
             return parametro;
         }
 
@@ -219,6 +224,7 @@ namespace Persistencia
             notificacao.IdNotificacaoUsuario = Conversao.FieldToInteger(dReader["id_notificacao_usuario"]);
             notificacao.IdUsuarioNotificado = Conversao.FieldToInteger(dReader["id_usuario_notificado"]);
             notificacao.DescricaoNotificacao = Conversao.FieldToString(dReader["descricao_notificacao"]);
+            notificacao.DataNotificacao = Conversao.FieldToDateTime(dReader["data_notificacao"]);
             notificacao.Visualizada = Conversao.FieldToBoolean(dReader["visualizada"]);
             return notificacao;
         }

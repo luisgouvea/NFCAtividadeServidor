@@ -15,6 +15,7 @@ namespace Negocio
             notificacao.IdUsuarioNotificado = notificacaoProblemaTarefa.IdUsuarioNotificado;
             notificacao.DescricaoNotificacao = notificacaoProblemaTarefa.DescricaoNotificacao;
             notificacao.Visualizada = notificacaoProblemaTarefa.Visualizada;
+            notificacao.DataNotificacao = DateTime.Now;
             int adicionado = NotificacaoUsuarioNG.addNotificacao(notificacao);
 
             notificacaoProblemaTarefa.IdNotificacaoUsuario = adicionado;

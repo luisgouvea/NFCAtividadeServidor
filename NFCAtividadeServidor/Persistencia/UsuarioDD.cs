@@ -64,6 +64,48 @@ namespace Persistencia
             }
         }
 
+        public static Usuario getUsuarioById(int idUsuario)
+        {
+            IDbConnection conexao = null;
+            IDataReader dReader = null;
+
+            try
+            {
+
+                string sql = "select * from Usuario where id_usuario = @id_usuario";
+
+                conexao = DataBase.getConection();
+                IDbCommand command = DataBase.getCommand(sql, conexao);
+
+                IDbDataParameter parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@id_usuario", idUsuario, tipoDadoBD.Integer);
+                command.Parameters.Add(parametro);
+
+                conexao.Open();
+                dReader = command.ExecuteReader();
+
+                if (dReader != null)
+                {
+                    dReader.Read();
+                    Usuario usuario = getDadosUsuario(dReader);
+                    return usuario;
+                }
+                else
+                {
+                    throw new Exception("[UsuarioDD.getUsuarioById()]: Não foi possível localizar o usuário pelo identificado.");
+                }
+            }
+            catch (Exception exp)
+            {
+                throw new Exception("[UsuarioDD.getUsuarioById()]: " + exp.Message);
+            }
+            finally
+            {
+                if (dReader != null) dReader.Close();
+                if (conexao != null) conexao.Close();
+            }
+        }
+
         public static List<Usuario> listAllUsuarioAddAtivVincExecutor(int idUsuarioTarget)
         {
             IDbConnection conexao = null;
@@ -113,6 +155,13 @@ namespace Persistencia
                 if (dReader != null) dReader.Close();
                 if (conexao != null) conexao.Close();
             }
+        }
+
+        private static Usuario getDadosUsuario(IDataReader dReader)
+        {
+            Usuario usuario = new Usuario();
+            usuario.Nome = Conversao.FieldToString(dReader["nome"]);
+            return usuario;
         }
     }
 }

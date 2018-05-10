@@ -40,14 +40,8 @@ namespace Negocio
             try
             {
                 int idAtividadeAdicionada = Persistencia.AtividadeDD.addAtividade(atividade);
-
-                NotificacaoUsuarioAddAtividade noti = new NotificacaoUsuarioAddAtividade();
-
-                //TODO: gravar nome do usuario no shared preferences para usar aqui
-                noti.DescricaoNotificacao = "O usuario X criou uma atividade e vinculou voce a ela";
-                noti.Visualizada = false;
-                noti.IdUsuarioNotificado = atividade.IdUsuarioExecutor;
-                noti.IdAtividade = idAtividadeAdicionada;
+                Usuario usuarioCriador = UsuarioNG.getUsuarioById(atividade.IdUsuarioCriador);                
+                NotificacaoUsuarioAddAtividade noti = NotificacaoUsuarioAddAtividade.newInstance(usuarioCriador.Nome, atividade.Nome, atividade.IdUsuarioExecutor, idAtividadeAdicionada);
                 NotificacaoUsuarioAddAtividadeNG.addNotificacaoAddAtividade(noti);
                 return true;
             }
