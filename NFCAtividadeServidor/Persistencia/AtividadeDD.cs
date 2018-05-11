@@ -213,12 +213,7 @@ namespace Persistencia
                 string sql = "select * from Atividade where id_usuario_executor = " + Convert.ToString(idUsuario);
 
                 conexao = DataBase.getConection();
-                IDbCommand command = DataBase.getCommand(sql, conexao);
-
-                //IDbDataParameter parametro = command.CreateParameter();
-                //DataBase.getParametroCampo(ref parametro, "@campo", campo.Trim(), tipoDadoBD.VarChar, clienteWeb.BancoCliente.Provider, campo.Trim().Length);
-                //DataBase.getParametroCampo(ref parametro, "@campo", "gg", tipoDadoBD.VarChar, "ff".Length);
-                //command.Parameters.Add(parametro);
+                IDbCommand command = DataBase.getCommand(sql, conexao);               
 
                 conexao.Open();
                 dReader = command.ExecuteReader();
@@ -230,10 +225,7 @@ namespace Persistencia
                         List<Atividade> listAtividades = new List<Atividade>();
                         while (dReader.Read())
                         {
-                            Atividade atividade = new Atividade();
-                            atividade.Nome = Conversao.FieldToString(dReader["nome"]);
-                            atividade.Id = Conversao.FieldToInteger(dReader["id_atividade"]);
-                            atividade.Descricao = Conversao.FieldToString(dReader["descricao"]);
+                            Atividade atividade = getDadosAtividade(dReader);
                             listAtividades.Add(atividade);
                         }
 
@@ -283,10 +275,7 @@ namespace Persistencia
                         List<Atividade> listAtividades = new List<Atividade>();
                         while (dReader.Read())
                         {
-                            Atividade atividade = new Atividade();
-                            atividade.Nome = Conversao.FieldToString(dReader["nome"]);
-                            atividade.Id = Conversao.FieldToInteger(dReader["id_atividade"]);
-                            atividade.Descricao = Conversao.FieldToString(dReader["descricao"]);
+                            Atividade atividade = getDadosAtividade(dReader);
                             listAtividades.Add(atividade);
                         }
 
@@ -543,8 +532,8 @@ namespace Persistencia
             try
             {
                 string sql = "INSERT INTO Atividade " +
-                    "(id_status, id_usuario_executor, id_usuario_criador, nome, ciclo_atual) " +
-                    "VALUES (@id_status, @id_usuario_executor, @id_usuario_criador, @nome, @ciclo_atual); SELECT SCOPE_IDENTITY();";
+                    "(id_status, id_usuario_executor, id_usuario_criador, nome, id_modo_execucao, num_maximo_ciclo, dia_execucao, ciclo_atual) " +
+                    "VALUES (@id_status, @id_usuario_executor, @id_usuario_criador, @nome,  @id_modo_execucao, @num_maximo_ciclo, @dia_execucao, @ciclo_atual); SELECT SCOPE_IDENTITY();";
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
@@ -584,7 +573,11 @@ namespace Persistencia
                     "nome = @nome, " +
                     "data_finalizacao = @data_finalizacao, " +
                     "data_criacao = @data_criacao, " +
+                    "num_maximo_ciclo = @num_maximo_ciclo, " +
+                    "dia_execucao = @dia_execucao, " +
+                    "id_modo_execucao = @id_modo_execucao, " +
                     "descricao = @descricao " +
+                    "data_finalizacao = @data_finalizacao " +
                     "WHERE id_atividade = @id_atividade";
 
                 conexao = DataBase.getConection();
@@ -595,11 +588,7 @@ namespace Persistencia
                 parametro = command.CreateParameter();
                 DataBase.getParametroCampo(ref parametro, "@id_atividade", atividade.Id, tipoDadoBD.Integer);
                 command.Parameters.Add(parametro);
-
-                parametro = command.CreateParameter();
-                DataBase.getParametroCampo(ref parametro, "@data_finalizacao", atividade.DataFinalizacao, tipoDadoBD.DateTime);
-                command.Parameters.Add(parametro);
-
+                
                 conexao.Open();
                 transacao = conexao.BeginTransaction();
                 command.Transaction = transacao;
@@ -641,7 +630,23 @@ namespace Persistencia
             command.Parameters.Add(parametro);
 
             parametro = command.CreateParameter();
+            DataBase.getParametroCampo(ref parametro, "@dia_execucao", atividade.DiaExecucao, tipoDadoBD.VarChar);
+            command.Parameters.Add(parametro);
+
+            parametro = command.CreateParameter();
+            DataBase.getParametroCampo(ref parametro, "@num_maximo_ciclo", atividade.NumMaximoCiclo, tipoDadoBD.Integer);
+            command.Parameters.Add(parametro);
+
+            parametro = command.CreateParameter();
+            DataBase.getParametroCampo(ref parametro, "@id_modo_execucao", atividade.IdModoExecucao, tipoDadoBD.Integer);
+            command.Parameters.Add(parametro);
+
+            parametro = command.CreateParameter();
             DataBase.getParametroCampo(ref parametro, "@ciclo_atual", atividade.CicloAtual, tipoDadoBD.Integer);
+            command.Parameters.Add(parametro);
+
+            parametro = command.CreateParameter();
+            DataBase.getParametroCampo(ref parametro, "@data_finalizacao", atividade.DataFinalizacao, tipoDadoBD.DateTime);
             command.Parameters.Add(parametro);
 
             return parametro;
@@ -654,6 +659,9 @@ namespace Persistencia
             atividade.Id = Conversao.FieldToInteger(dReader["id_atividade"]);
             atividade.Descricao = Conversao.FieldToString(dReader["descricao"]);
             atividade.DataCriacao = Conversao.FieldToDateTime(dReader["data_criacao"]);
+            atividade.DiaExecucao = Conversao.FieldToString(dReader["dia_execucao"]);
+            atividade.IdModoExecucao = Conversao.FieldToInteger(dReader["id_modo_execucao"]);
+            atividade.NumMaximoCiclo = Conversao.FieldToInteger(dReader["num_maximo_ciclo"]);
             atividade.IdStatus = Conversao.FieldToInteger(dReader["id_status"]);
             return atividade;
         }
