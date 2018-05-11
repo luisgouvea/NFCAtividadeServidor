@@ -69,7 +69,8 @@ namespace Negocio
 
                 Atividade ativ = AtividadeNG.getAtividadeByIdAtividade(tarefaDaTag.IdAtividade);
 
-                if (ativ.RepetirTarefa)
+                //if (ativ.RepetirTarefa)
+                if (true)
                 {
                     // TEM CICLO
                     int cicloAtual = AtividadeNG.getCicloAtualAtividade(ativ.Id);

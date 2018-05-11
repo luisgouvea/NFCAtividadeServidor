@@ -543,8 +543,8 @@ namespace Persistencia
             try
             {
                 string sql = "INSERT INTO Atividade " +
-                    "(id_status, id_usuario_executor, id_usuario_criador, nome, repetir_tarefa, ciclo_atual) " +
-                    "VALUES (@id_status, @id_usuario_executor, @id_usuario_criador, @nome, @repetir_tarefa, @ciclo_atual); SELECT SCOPE_IDENTITY();";
+                    "(id_status, id_usuario_executor, id_usuario_criador, nome, ciclo_atual) " +
+                    "VALUES (@id_status, @id_usuario_executor, @id_usuario_criador, @nome, @ciclo_atual); SELECT SCOPE_IDENTITY();";
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
@@ -584,7 +584,6 @@ namespace Persistencia
                     "nome = @nome, " +
                     "data_finalizacao = @data_finalizacao, " +
                     "data_criacao = @data_criacao, " +
-                    "repetir_tarefa = @repetir_tarefa, " +
                     "descricao = @descricao " +
                     "WHERE id_atividade = @id_atividade";
 
@@ -642,10 +641,6 @@ namespace Persistencia
             command.Parameters.Add(parametro);
 
             parametro = command.CreateParameter();
-            DataBase.getParametroCampo(ref parametro, "@repetir_tarefa", atividade.RepetirTarefa, tipoDadoBD.Boolean);
-            command.Parameters.Add(parametro);
-
-            parametro = command.CreateParameter();
             DataBase.getParametroCampo(ref parametro, "@ciclo_atual", atividade.CicloAtual, tipoDadoBD.Integer);
             command.Parameters.Add(parametro);
 
@@ -658,7 +653,6 @@ namespace Persistencia
             atividade.Nome = Conversao.FieldToString(dReader["nome"]);
             atividade.Id = Conversao.FieldToInteger(dReader["id_atividade"]);
             atividade.Descricao = Conversao.FieldToString(dReader["descricao"]);
-            atividade.RepetirTarefa = Conversao.FieldToBoolean(dReader["repetir_tarefa"]);
             atividade.DataCriacao = Conversao.FieldToDateTime(dReader["data_criacao"]);
             atividade.IdStatus = Conversao.FieldToInteger(dReader["id_status"]);
             return atividade;
