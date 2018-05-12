@@ -161,6 +161,7 @@ namespace Persistencia
         {
             Usuario usuario = new Usuario();
             usuario.Nome = Conversao.FieldToString(dReader["nome"]);
+            usuario.IdUsuario = Conversao.FieldToInteger(dReader["id_usuario"]);
             return usuario;
         }
     }

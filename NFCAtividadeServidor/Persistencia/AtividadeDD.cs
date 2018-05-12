@@ -576,7 +576,7 @@ namespace Persistencia
                     "num_maximo_ciclo = @num_maximo_ciclo, " +
                     "dia_execucao = @dia_execucao, " +
                     "id_modo_execucao = @id_modo_execucao, " +
-                    "descricao = @descricao " +
+                    "descricao = @descricao, " +
                     "data_finalizacao = @data_finalizacao " +
                     "WHERE id_atividade = @id_atividade";
 
@@ -661,6 +661,8 @@ namespace Persistencia
             Atividade atividade = new Atividade();
             atividade.Nome = Conversao.FieldToString(dReader["nome"]);
             atividade.Id = Conversao.FieldToInteger(dReader["id_atividade"]);
+            atividade.IdUsuarioExecutor = Conversao.FieldToInteger(dReader["id_usuario_executor"]);
+            atividade.IdUsuarioCriador = Conversao.FieldToInteger(dReader["id_usuario_criador"]);
             atividade.Descricao = Conversao.FieldToString(dReader["descricao"]);
             atividade.DataCriacao = Conversao.FieldToDateTime(dReader["data_criacao"]);
             atividade.DataFinalizacao = Conversao.FieldToDateTime(dReader["data_finalizacao"]);

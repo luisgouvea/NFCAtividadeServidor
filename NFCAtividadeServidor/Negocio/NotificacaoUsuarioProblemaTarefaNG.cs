@@ -11,15 +11,42 @@ namespace Negocio
     {
         public static Boolean addNotificacaoProblemaTarefa(NotificacaoUsuarioProblemaTarefa notificacaoProblemaTarefa)
         {
-            NotificacaoUsuarioProblemaTarefa notificacao = new NotificacaoUsuarioProblemaTarefa();
-            notificacao.IdUsuarioNotificado = notificacaoProblemaTarefa.IdUsuarioNotificado;
-            notificacao.DescricaoNotificacao = notificacaoProblemaTarefa.DescricaoNotificacao;
-            notificacao.Visualizada = notificacaoProblemaTarefa.Visualizada;
-            notificacao.DataNotificacao = DateTime.Now;
-            int adicionado = NotificacaoUsuarioNG.addNotificacao(notificacao);
+            
+            NotificacaoUsuarioProblemaTarefa notificacaoInstance = getNewInstanceNotificacaoProblemaTarefa(notificacaoProblemaTarefa.IdTarefa);
+            
+            int idAdicionado = addNotificaoUsuario(notificacaoInstance);
+            
+            notificacaoInstance.IdNotificacaoUsuario = idAdicionado;
+            notificacaoInstance.IdTarefa = notificacaoProblemaTarefa.IdTarefa;
+            notificacaoInstance.DescricaoProblema = notificacaoProblemaTarefa.DescricaoProblema;
+            notificacaoInstance.CheckRealizado = notificacaoProblemaTarefa.CheckRealizado;
 
-            notificacaoProblemaTarefa.IdNotificacaoUsuario = adicionado;
-            return Persistencia.NotificacaoUsuarioProblemaTarefaDD.addNotificacaoProblemaTarefa(notificacaoProblemaTarefa);
+            return Persistencia.NotificacaoUsuarioProblemaTarefaDD.addNotificacaoProblemaTarefa(notificacaoInstance);
+        }
+
+        private static int addNotificaoUsuario(NotificacaoUsuarioProblemaTarefa notificacaoInstance)
+        {
+            NotificacaoUsuario notificacao = new NotificacaoUsuario();
+            notificacao.IdUsuarioNotificado = notificacaoInstance.IdUsuarioNotificado;
+            notificacao.DescricaoNotificacao = notificacaoInstance.DescricaoNotificacao;
+            notificacao.Visualizada = notificacaoInstance.Visualizada;
+
+            int idAdicionado = NotificacaoUsuarioNG.addNotificacao(notificacao);
+            return idAdicionado;
+        }
+
+        private static NotificacaoUsuarioProblemaTarefa getNewInstanceNotificacaoProblemaTarefa(int idTarefa)
+        {
+            Tarefa tarefa = TarefaNG.getTarefa(idTarefa);
+            Atividade atividade = AtividadeNG.getAtividadeByIdAtividade(tarefa.IdAtividade);
+
+            Usuario usuarioExecutor = UsuarioNG.getUsuarioById(atividade.IdUsuarioExecutor);
+
+            Usuario usuarioCriador = UsuarioNG.getUsuarioById(atividade.IdUsuarioCriador);
+
+            NotificacaoUsuarioProblemaTarefa notificacaoInstance = NotificacaoUsuarioProblemaTarefa.newInstance(usuarioExecutor.Nome, tarefa.Nome, atividade.Nome, usuarioCriador.IdUsuario, tarefa.IdTarefa);
+
+            return notificacaoInstance;
         }
 
         public static List<NotificacaoUsuarioProblemaTarefa> getNotificacoesProblemaTarefaByUsuario(int idUsuario)

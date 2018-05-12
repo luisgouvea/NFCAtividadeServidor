@@ -19,8 +19,8 @@ namespace Persistencia
             try
             {
                 string sql = "INSERT INTO NotificacaoUsuarioProblemaTarefa " +
-                    "(id_notificacao_usuario_problema_tarefa, id_tarefa, descricao_problema, check_realizado) " +
-                    "VALUES (@id_notificacao_usuario_problema_tarefa, @id_tarefa, @descricao_problema, @check_realizado)";
+                    "(id_notificacao_usuario, id_tarefa, descricao_problema, check_realizado) " +
+                    "VALUES (@id_notificacao_usuario, @id_tarefa, @descricao_problema, @check_realizado)";
              
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
@@ -56,7 +56,7 @@ namespace Persistencia
 
             try
             {
-                string sql = "SELECT nu.descricao_notificacao, nu.visualizada, nu.data_notificacao, nupt.id_tarefa, nupt.descricao_problema, nupt.check_realizado FROM NotificacaoUsuario nu " +
+                string sql = "SELECT nu.descricao_notificacao, nu.visualizada, nu.data_notificacao, nu.id_usuario_notificado, nu.id_notificacao_usuario, nupt.id_tarefa, nupt.descricao_problema, nupt.check_realizado FROM NotificacaoUsuario nu " +
                     "INNER JOIN NotificacaoUsuarioProblemaTarefa nupt " +
                     "ON nu.id_notificacao_usuario = nupt.id_notificacao_usuario " +
                     "WHERE nu.id_usuario_notificado = @id_usuario_notificado";

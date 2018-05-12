@@ -111,8 +111,8 @@ namespace Persistencia
                 string sql = "UPDATE NotificacaoUsuario " +
                     "SET id_usuario_notificado = @id_usuario_notificado, " +
                     "descricao_notificacao = @descricao_notificacao, " +
-                    "visualizada = @visualizada " +
-                    "data_notificacao = @data_notificacao" +
+                    "visualizada = @visualizada, " +
+                    "data_notificacao = @data_notificacao " +
                     "WHERE id_notificacao_usuario = @id_notificacao_usuario";
 
                 conexao = DataBase.getConection();
