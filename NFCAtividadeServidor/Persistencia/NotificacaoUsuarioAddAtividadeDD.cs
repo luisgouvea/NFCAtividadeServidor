@@ -56,7 +56,7 @@ namespace Persistencia
 
             try
             {
-                string sql = "SELECT nu.id_notificacao_usuario, nu.descricao_notificacao, nu.visualizada, nu.id_usuario_notificado, nuaddAtiv.id_atividade FROM NotificacaoUsuario nu " +
+                string sql = "SELECT nu.id_notificacao_usuario, nu.descricao_notificacao, nu.visualizada, nu.id_usuario_notificado, nu.data_notificacao , nuaddAtiv.id_atividade FROM NotificacaoUsuario nu " +
                     "INNER JOIN NotificacaoUsuarioAddAtividade nuaddAtiv " +
                     "ON nu.id_notificacao_usuario = nuaddAtiv.id_notificacao_usuario " +
                     "WHERE nu.id_usuario_notificado = @id_usuario_notificado";
@@ -111,6 +111,7 @@ namespace Persistencia
             notificacao.IdAtividade = Conversao.FieldToInteger(dReader["id_atividade"]);
             notificacao.DescricaoNotificacao = Conversao.FieldToString(dReader["descricao_notificacao"]);
             notificacao.Visualizada = Conversao.FieldToBoolean(dReader["visualizada"]);
+            notificacao.DataNotificacao = Conversao.FieldToDateTime(dReader["data_notificacao"]);
             return notificacao;
         }
 

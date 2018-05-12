@@ -532,8 +532,8 @@ namespace Persistencia
             try
             {
                 string sql = "INSERT INTO Atividade " +
-                    "(id_status, id_usuario_executor, id_usuario_criador, nome, id_modo_execucao, num_maximo_ciclo, dia_execucao, ciclo_atual) " +
-                    "VALUES (@id_status, @id_usuario_executor, @id_usuario_criador, @nome,  @id_modo_execucao, @num_maximo_ciclo, @dia_execucao, @ciclo_atual); SELECT SCOPE_IDENTITY();";
+                    "(id_status, id_usuario_executor, id_usuario_criador, nome, id_modo_execucao, num_maximo_ciclo, dia_execucao, ciclo_atual, data_finalizacao, data_criacao) " +
+                    "VALUES (@id_status, @id_usuario_executor, @id_usuario_criador, @nome,  @id_modo_execucao, @num_maximo_ciclo, @dia_execucao, @ciclo_atual, @data_finalizacao, @data_criacao); SELECT SCOPE_IDENTITY();";
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
@@ -630,11 +630,11 @@ namespace Persistencia
             command.Parameters.Add(parametro);
 
             parametro = command.CreateParameter();
-            DataBase.getParametroCampo(ref parametro, "@dia_execucao", atividade.DiaExecucao, tipoDadoBD.VarChar);
+            DataBase.getParametroCampo(ref parametro, "@dia_execucao", Conversao.StringToField(atividade.DiaExecucao), tipoDadoBD.VarChar);
             command.Parameters.Add(parametro);
 
             parametro = command.CreateParameter();
-            DataBase.getParametroCampo(ref parametro, "@num_maximo_ciclo", atividade.NumMaximoCiclo, tipoDadoBD.Integer);
+            DataBase.getParametroCampo(ref parametro, "@num_maximo_ciclo", Conversao.IntegerToField(atividade.NumMaximoCiclo), tipoDadoBD.Integer);
             command.Parameters.Add(parametro);
 
             parametro = command.CreateParameter();
@@ -646,7 +646,11 @@ namespace Persistencia
             command.Parameters.Add(parametro);
 
             parametro = command.CreateParameter();
-            DataBase.getParametroCampo(ref parametro, "@data_finalizacao", atividade.DataFinalizacao, tipoDadoBD.DateTime);
+            DataBase.getParametroCampo(ref parametro, "@data_finalizacao", Conversao.DateTimeToField(atividade.DataFinalizacao), tipoDadoBD.DateTime);
+            command.Parameters.Add(parametro);
+
+            parametro = command.CreateParameter();
+            DataBase.getParametroCampo(ref parametro, "@data_criacao", Conversao.DateTimeToField(atividade.DataCriacao), tipoDadoBD.DateTime);
             command.Parameters.Add(parametro);
 
             return parametro;
@@ -659,6 +663,7 @@ namespace Persistencia
             atividade.Id = Conversao.FieldToInteger(dReader["id_atividade"]);
             atividade.Descricao = Conversao.FieldToString(dReader["descricao"]);
             atividade.DataCriacao = Conversao.FieldToDateTime(dReader["data_criacao"]);
+            atividade.DataFinalizacao = Conversao.FieldToDateTime(dReader["data_finalizacao"]);
             atividade.DiaExecucao = Conversao.FieldToString(dReader["dia_execucao"]);
             atividade.IdModoExecucao = Conversao.FieldToInteger(dReader["id_modo_execucao"]);
             atividade.NumMaximoCiclo = Conversao.FieldToInteger(dReader["num_maximo_ciclo"]);

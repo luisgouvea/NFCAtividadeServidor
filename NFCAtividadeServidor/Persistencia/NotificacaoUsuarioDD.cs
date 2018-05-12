@@ -212,7 +212,7 @@ namespace Persistencia
             command.Parameters.Add(parametro);
 
             parametro = command.CreateParameter();
-            DataBase.getParametroCampo(ref parametro, "@data_notificacao", notificacao.DataNotificacao, tipoDadoBD.DateTime);
+            DataBase.getParametroCampo(ref parametro, "@data_notificacao", Conversao.DateTimeToField(notificacao.DataNotificacao), tipoDadoBD.DateTime);
             command.Parameters.Add(parametro);
 
             return parametro;

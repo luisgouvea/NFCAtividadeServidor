@@ -39,6 +39,7 @@ namespace Negocio
         {
             try
             {
+                atividade.DataCriacao = DateTime.Now;
                 int idAtividadeAdicionada = Persistencia.AtividadeDD.addAtividade(atividade);
                 Usuario usuarioCriador = UsuarioNG.getUsuarioById(atividade.IdUsuarioCriador);                
                 NotificacaoUsuarioAddAtividade noti = NotificacaoUsuarioAddAtividade.newInstance(usuarioCriador.Nome, atividade.Nome, atividade.IdUsuarioExecutor, idAtividadeAdicionada);

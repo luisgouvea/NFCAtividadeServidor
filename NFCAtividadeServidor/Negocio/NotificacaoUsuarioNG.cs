@@ -11,6 +11,7 @@ namespace Negocio
     {
         public static int addNotificacao(NotificacaoUsuario notificacao)
         {
+            notificacao.DataNotificacao = DateTime.Now;
             return Persistencia.NotificacaoUsuarioDD.addNotificacao(notificacao);
         }
 
