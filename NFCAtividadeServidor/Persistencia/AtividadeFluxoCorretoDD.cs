@@ -67,8 +67,8 @@ namespace Persistencia
             try
             {
                 string sql = "INSERT INTO AtividadeFluxoCorreto " +
-                    "(id_atividade, id_tarefa, ciclo) " +
-                    "VALUES (@id_atividade, @id_tarefa, @ciclo)";
+                    "(id_atividade, id_tarefa, ciclo, data_check) " +
+                    "VALUES (@id_atividade, @id_tarefa, @ciclo, @data_check)";
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
@@ -84,7 +84,11 @@ namespace Persistencia
                 parametro = command.CreateParameter();
                 DataBase.getParametroCampo(ref parametro, "@ciclo", fluxoCorreto.Ciclo, tipoDadoBD.Integer);
                 command.Parameters.Add(parametro);
-                
+
+                parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@data_check", fluxoCorreto.dataCheck, tipoDadoBD.DateTime);
+                command.Parameters.Add(parametro);
+
                 conexao.Open();
                 transacao = conexao.BeginTransaction();
                 command.Transaction = transacao;
@@ -214,6 +218,140 @@ namespace Persistencia
             catch (Exception exp)
             {
                 throw new Exception("[AtividadeFluxoCorretoDD.getAllCheckByIdAtividade()]: " + exp.Message);
+            }
+            finally
+            {
+                if (dReader != null) dReader.Close();
+                if (conexao != null) conexao.Close();
+            }
+
+            return null;
+        }
+
+        public static List<AtividadeFluxoCorreto> getAllCheckByMonthCheckAndIdAtividade(DateTime dataCheck, int idAtividade)
+        {
+            IDbConnection conexao = null;
+            IDataReader dReader = null;
+
+            try
+            {
+
+                string sql = "select * from AtividadeFluxoCorreto " +
+                    "where MONTH(data_check) = MONTH(@data_check) " +
+                    "AND " +
+                    "id_atividade = @id_atividade " +
+                    "ORDER BY id_atividade_fluxo_correto desc";
+
+
+                conexao = DataBase.getConection();
+                IDbCommand command = DataBase.getCommand(sql, conexao);
+
+                IDbDataParameter parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@data_check", dataCheck, tipoDadoBD.DateTime);
+                command.Parameters.Add(parametro);
+
+                parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@id_atividade", idAtividade, tipoDadoBD.Integer);
+                command.Parameters.Add(parametro);
+
+                conexao.Open();
+                dReader = command.ExecuteReader();
+
+                if (dReader != null)
+                {
+                    try
+                    {
+                        List<AtividadeFluxoCorreto> listaFluxos = new List<AtividadeFluxoCorreto>();
+                        while (dReader.Read())
+                        {
+                            AtividadeFluxoCorreto ativFluxoCorreto = new AtividadeFluxoCorreto();
+                            ativFluxoCorreto.Id = Conversao.FieldToInteger(dReader["id_atividade_fluxo_correto"]);
+                            ativFluxoCorreto.dataCheck = Conversao.FieldToDateTime(dReader["data_check"]);
+                            ativFluxoCorreto.IdTarefa = Conversao.FieldToInteger(dReader["id_tarefa"]);
+                            ativFluxoCorreto.Ciclo = Conversao.FieldToInteger(dReader["ciclo"]);
+                            listaFluxos.Add(ativFluxoCorreto);
+                        }
+
+                        conexao.Close();
+                        dReader.Close();
+                        return listaFluxos;
+                    }
+                    catch (Exception exp)
+                    {
+                        throw new Exception("Ocorreu um erro: " + exp.Message);
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                throw new Exception("[AtividadeFluxoCorretoDD.getAllCheckByDataCheck()]: " + exp.Message);
+            }
+            finally
+            {
+                if (dReader != null) dReader.Close();
+                if (conexao != null) conexao.Close();
+            }
+
+            return null;
+        }
+
+        public static List<AtividadeFluxoCorreto> getAllCheckByDayCheckAndIdAtividade(DateTime dataCheck, int idAtividade)
+        {
+            IDbConnection conexao = null;
+            IDataReader dReader = null;
+
+            try
+            {
+
+                string sql = "select * from AtividadeFluxoCorreto " +
+                    "where DAY(data_check) = DAY(@data_check) " +
+                    "AND " +
+                    "id_atividade = @id_atividade " +
+                    "ORDER BY id_atividade_fluxo_correto desc";
+
+
+                conexao = DataBase.getConection();
+                IDbCommand command = DataBase.getCommand(sql, conexao);
+
+                IDbDataParameter parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@data_check", dataCheck, tipoDadoBD.DateTime);
+                command.Parameters.Add(parametro);
+
+                parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@id_atividade", idAtividade, tipoDadoBD.Integer);
+                command.Parameters.Add(parametro);
+
+                conexao.Open();
+                dReader = command.ExecuteReader();
+
+                if (dReader != null)
+                {
+                    try
+                    {
+                        List<AtividadeFluxoCorreto> listaFluxos = new List<AtividadeFluxoCorreto>();
+                        while (dReader.Read())
+                        {
+                            AtividadeFluxoCorreto ativFluxoCorreto = new AtividadeFluxoCorreto();
+                            ativFluxoCorreto.Id = Conversao.FieldToInteger(dReader["id_atividade_fluxo_correto"]);
+                            ativFluxoCorreto.dataCheck = Conversao.FieldToDateTime(dReader["data_check"]);
+                            ativFluxoCorreto.IdTarefa = Conversao.FieldToInteger(dReader["id_tarefa"]);
+                            ativFluxoCorreto.Ciclo = Conversao.FieldToInteger(dReader["ciclo"]);
+                            listaFluxos.Add(ativFluxoCorreto);
+                        }
+
+                        conexao.Close();
+                        dReader.Close();
+                        return listaFluxos;
+                    }
+                    catch (Exception exp)
+                    {
+                        throw new Exception("Ocorreu um erro: " + exp.Message);
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                throw new Exception("[AtividadeFluxoCorretoDD.getAllCheckByDataCheck()]: " + exp.Message);
             }
             finally
             {

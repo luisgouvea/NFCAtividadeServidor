@@ -112,6 +112,50 @@ namespace Persistencia
                 if (conexao != null) conexao.Close();
             }
         }
+        
+        public static bool updateStatusAtividade(int idAtividade, int idStatusAtividade)
+        {
+            IDbConnection conexao = null;
+            IDbTransaction transacao = null;
+
+            try
+            {
+                string sql = "UPDATE Atividade " +
+                    "SET id_status = @id_status " +
+                    "WHERE id_atividade = @id_atividade";
+
+                conexao = DataBase.getConection();
+                IDbCommand command = DataBase.getCommand(sql, conexao);
+
+                IDbDataParameter parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@id_status", idStatusAtividade, tipoDadoBD.Integer);
+                command.Parameters.Add(parametro);
+
+                parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@id_atividade", idAtividade, tipoDadoBD.Integer);
+                command.Parameters.Add(parametro);
+
+                conexao.Open();
+                transacao = conexao.BeginTransaction();
+                command.Transaction = transacao;
+
+                command.ExecuteNonQuery();
+
+                if (transacao != null) transacao.Commit();
+
+
+                return true;
+            }
+            catch (Exception exp)
+            {
+                throw new Exception("[AtividadeDD.updateStatusAtividade()]: " + exp.Message);
+            }
+            finally
+            {
+                if (transacao != null) transacao.Dispose();
+                if (conexao != null) conexao.Close();
+            }
+        }
 
         public static int getCicloAtualAtividade(int idAtividade)
         {

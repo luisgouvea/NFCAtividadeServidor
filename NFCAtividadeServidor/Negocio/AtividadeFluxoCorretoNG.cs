@@ -19,6 +19,16 @@ namespace Negocio
             return Persistencia.AtividadeFluxoCorretoDD.getAllCheckByIdAtividade(idAtividade);
         }
 
+        public static List<AtividadeFluxoCorreto> getAllCheckByDayCheckAndIdAtividade(DateTime dataCheck, int idAtividade)
+        {
+            return Persistencia.AtividadeFluxoCorretoDD.getAllCheckByDayCheckAndIdAtividade(dataCheck, idAtividade);
+        }
+
+        public static List<AtividadeFluxoCorreto> getAllCheckByMonthCheckAndIdAtividade(DateTime dataCheck, int idAtividade)
+        {
+            return Persistencia.AtividadeFluxoCorretoDD.getAllCheckByMonthCheckAndIdAtividade(dataCheck, idAtividade);
+        }
+
         public static List<AtividadeFluxoCorreto> getAllCheckByCicloAndIdAtividade(int ciclo, int idAtividade)
         {
             return Persistencia.AtividadeFluxoCorretoDD.getAllCheckByCicloAndIdAtividade(ciclo, idAtividade);

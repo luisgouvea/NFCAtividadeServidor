@@ -12,5 +12,6 @@ namespace Persistencia.Modelos
         public int IdAtividade { get; set; }
         public int IdTarefa { get; set; }
         public int Ciclo { get; set; }
+        public DateTime dataCheck { get; set; }
     }
 }

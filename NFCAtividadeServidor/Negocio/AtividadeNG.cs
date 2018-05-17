@@ -74,6 +74,9 @@ namespace Negocio
             return Persistencia.AtividadeDD.updateCicloAtualAtividade(novoCiclo, id_atividade);
         }
 
-
+        public static bool updateStatusAtividade(int idAtividade, int idStatusAtividade)
+        {
+            return Persistencia.AtividadeDD.updateStatusAtividade(idAtividade, idStatusAtividade);
+        }
     }
 }
