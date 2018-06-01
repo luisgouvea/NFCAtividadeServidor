@@ -23,6 +23,10 @@ namespace Negocio
         {
             List<Tarefa> listaTarefasDaAtividade = TarefaNG.getAllTarefasByIdAtividade(idAtividade);
             List<string> listaIds = getIdsTarefaRegistroCheckNFC(listaTarefasDaAtividade);
+            if(listaIds.Count == 0)
+            {
+                return null;
+            }
             return Persistencia.TarefaCheckDD.getHistoricoCheckNFCByIdsTarefa(listaIds);
         }
 
@@ -449,7 +453,7 @@ namespace Negocio
             try
             {
                 //realizar historico dessa tarefa
-                addRegistroCheckNFC(tarefaSelecionadaUsuario, 2);
+                addRegistroCheckNFC(tarefaSelecionadaUsuario, idStatus);
             }
             catch (Exception e)
             {
