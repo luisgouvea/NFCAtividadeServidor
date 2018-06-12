@@ -33,6 +33,25 @@ namespace NFCAtividadeAPI.Controllers
             }
         }
 
+        
+        [HttpPost]
+        public HttpResponseMessage CriarConta(Usuario usuario)
+        {
+            try
+            {
+                int idUsuario = Negocio.UsuarioNG.addUsuario(usuario);
+
+                return Request.CreateResponse(HttpStatusCode.OK, idUsuario);
+            }
+            catch (Exception e)
+            {
+                APIError erro = new APIError();
+                erro.statusCode = "400";
+                erro.message = "Ocorreu um erro: " + e.Message;
+                return Request.CreateResponse(HttpStatusCode.BadRequest, erro);
+            }
+        }
+
         [HttpPost]
         public HttpResponseMessage ListAllUsuarioAddAtivVincExecutor([FromBody]int idUsuarioTarget)
         {

@@ -64,6 +64,55 @@ namespace Persistencia
             }
         }
 
+        public static int addUsuario(Usuario usuario)
+        {
+            IDbConnection conexao = null;
+            IDbTransaction transacao = null;
+
+            try
+            {
+
+                string sql = "INSERT INTO Usuario " +
+                    "(nome, login, senha) " +
+                    "VALUES (@nome, @login, @senha); SELECT SCOPE_IDENTITY();";
+
+                conexao = DataBase.getConection();
+                IDbCommand command = DataBase.getCommand(sql, conexao);
+
+                IDbDataParameter parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@nome", usuario.Nome, tipoDadoBD.VarChar);
+                command.Parameters.Add(parametro);
+
+                parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@login", usuario.Login, tipoDadoBD.VarChar);
+                command.Parameters.Add(parametro);
+
+                parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@senha", usuario.Senha, tipoDadoBD.VarChar);
+                command.Parameters.Add(parametro);
+
+                conexao.Open();
+                transacao = conexao.BeginTransaction();
+                command.Transaction = transacao;
+
+                //command.ExecuteNonQuery();
+                int lastId = Convert.ToInt32(command.ExecuteScalar());
+                
+                if (transacao != null) transacao.Commit();
+
+                return lastId;
+            }
+            catch (Exception exp)
+            {
+                throw new Exception("[UsuarioDD.addUsuario()]: " + exp.Message);
+            }
+            finally
+            {
+                if (transacao != null) transacao.Dispose();
+                if (conexao != null) conexao.Close();
+            }
+        }
+
         public static Usuario getUsuarioById(int idUsuario)
         {
             IDbConnection conexao = null;

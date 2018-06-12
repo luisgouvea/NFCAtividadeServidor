@@ -13,7 +13,7 @@ namespace Persistencia.Modelos
         public int IdentificadorTag { get; set; }
         public int IdStatusExecucao { get; set; }
         public string Nome { get; set; }
-        public DateTime DataCheck { get; set; }
+        //public DateTime DataCheck { get; set; }
         public string Comentario { get; set; }
         public bool IniciaFluxo { get; set; }
         public bool FinalizaFluxo { get; set; }

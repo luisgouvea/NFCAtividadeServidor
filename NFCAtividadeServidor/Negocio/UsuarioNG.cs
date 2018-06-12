@@ -14,6 +14,11 @@ namespace Negocio
             return Persistencia.UsuarioDD.getUsuario(login, senha);
         }
 
+        public static int addUsuario(Usuario usuario)
+        {
+            return Persistencia.UsuarioDD.addUsuario(usuario);
+        }
+
         public static Usuario getUsuarioById(int idUsuario)
         {
             return Persistencia.UsuarioDD.getUsuarioById(idUsuario);
