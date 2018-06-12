@@ -410,12 +410,14 @@ namespace Persistencia
 
                 if (filtro.DataCriacao != DateTime.MinValue)
                 {
+                    parametro = command.CreateParameter();
                     DataBase.getParametroCampo(ref parametro, "@data_criacao", filtro.DataCriacao, tipoDadoBD.DateTime);
                     command.Parameters.Add(parametro);
                 }
 
                 if (!string.IsNullOrEmpty(filtro.DescricaoAtividade))
                 {
+                    parametro = command.CreateParameter();
                     DataBase.getParametroCampo(ref parametro, "@descricao", filtro.DescricaoAtividade, tipoDadoBD.VarChar);
                     command.Parameters.Add(parametro);
                 }
