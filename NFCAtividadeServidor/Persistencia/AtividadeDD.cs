@@ -367,11 +367,11 @@ namespace Persistencia
                 {
                     if (idStatusFilled)
                     {
-                        sql += "AND data_criacao = @data_criacao ";
+                        sql += "AND data_criacao >= @data_criacao ";
                     }
                     else
                     {
-                        sql += "data_criacao = @data_criacao ";
+                        sql += "data_criacao >= @data_criacao ";
                     }
                     dataCriacaoFilled = true;
                 }
