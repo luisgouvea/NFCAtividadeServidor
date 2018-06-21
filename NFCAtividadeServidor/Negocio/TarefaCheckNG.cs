@@ -16,6 +16,17 @@ namespace Negocio
             tarefaCheck.IdStatusCheckNFC = idStatusCheckNFC;
             tarefaCheck.DataExecucao = DateTime.Now;
             tarefaCheck.Nome = tarefa.Nome;
+
+            Atividade a = AtividadeNG.getAtividadeByIdAtividade(tarefa.IdAtividade);
+            int cicloAtual = a.CicloAtual;
+            if(cicloAtual == 0)
+            {
+                tarefaCheck.Ciclo = 1;
+            }
+            else
+            {
+                tarefaCheck.Ciclo = cicloAtual;
+            }
             return Persistencia.TarefaCheckDD.addRegistroCheckNFC(tarefaCheck);
         }
 

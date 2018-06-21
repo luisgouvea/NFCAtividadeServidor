@@ -50,6 +50,7 @@
     <Compile Include="Modelos\AmigoUsuario.cs" />
     <Compile Include="Modelos\Atividade.cs" />
     <Compile Include="Modelos\AtividadeFluxoCorreto.cs" />
+    <Compile Include="Modelos\DetalhesAtividade.cs" />
     <Compile Include="Modelos\NotificacaoUsuario.cs" />
     <Compile Include="Modelos\NotificacaoUsuarioAddAtividade.cs" />
     <Compile Include="Modelos\NotificacaoUsuarioProblema.cs" />

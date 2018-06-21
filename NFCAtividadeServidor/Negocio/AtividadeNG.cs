@@ -78,5 +78,15 @@ namespace Negocio
         {
             return Persistencia.AtividadeDD.updateStatusAtividade(idAtividade, idStatusAtividade);
         }
+
+        public static bool removerAtividade(int idAtividade)
+        {
+            return Persistencia.AtividadeDD.removerAtividade(idAtividade);
+        }
+
+        public static bool alterarAtividade(Atividade atividade)
+        {
+            return Persistencia.AtividadeDD.updateAtividade(atividade);
+        }
     }
 }

@@ -12,6 +12,7 @@ namespace Persistencia.Modelos
         public int IdTarefaCheck { get; set; } // PK da tabela TarefaCheck
         public int IdStatusCheckNFC { get; set; } 
         public DateTime DataExecucao { get; set; }
+        public int Ciclo { get; set; }
         //public string NomeTarefa { get; set; }
     }
 }

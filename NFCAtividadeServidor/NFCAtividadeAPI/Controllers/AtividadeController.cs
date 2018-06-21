@@ -102,5 +102,60 @@ namespace NFCAtividadeAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest, erro);
             }
         }
+
+        [HttpPost]
+        public HttpResponseMessage removerAtividadeById([FromBody] int idAtividade)
+        {
+            try
+            {
+                bool removido = Negocio.AtividadeNG.removerAtividade(idAtividade);
+                return Request.CreateResponse(HttpStatusCode.OK, removido);
+            }
+            catch (Exception e)
+            {
+                APIError erro = new APIError();
+                erro.statusCode = "400";
+                erro.message = "Ocorreu um erro: " + e.Message;
+                return Request.CreateResponse(HttpStatusCode.BadRequest, erro);
+            }
+        }
+
+        [HttpPost]
+        public HttpResponseMessage alterarAtividade([FromBody] Atividade atividade)
+        {
+            try
+            {
+                bool alterado = Negocio.AtividadeNG.alterarAtividade(atividade);
+                return Request.CreateResponse(HttpStatusCode.OK, alterado);
+            }
+            catch (Exception e)
+            {
+                APIError erro = new APIError();
+                erro.statusCode = "400";
+                erro.message = "Ocorreu um erro: " + e.Message;
+                return Request.CreateResponse(HttpStatusCode.BadRequest, erro);
+            }
+        }
+
+        [HttpPost]
+        public HttpResponseMessage getDetalhesAtividade([FromBody] int idAtividade)
+        {
+            try
+            {
+                Atividade atividade = Negocio.AtividadeNG.getAtividadeByIdAtividade(idAtividade);
+                Usuario usuario = Negocio.UsuarioNG.getUsuarioById(atividade.IdUsuarioExecutor);
+                DetalhesAtividade detalhesAtiv = new DetalhesAtividade();
+                detalhesAtiv.atividade = atividade;
+                detalhesAtiv.nomeExecutor = usuario.Nome;
+                return Request.CreateResponse(HttpStatusCode.OK, detalhesAtiv);
+            }
+            catch (Exception e)
+            {
+                APIError erro = new APIError();
+                erro.statusCode = "400";
+                erro.message = "Ocorreu um erro: " + e.Message;
+                return Request.CreateResponse(HttpStatusCode.BadRequest, erro);
+            }
+        }
     }
 }

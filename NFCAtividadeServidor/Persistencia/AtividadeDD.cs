@@ -157,6 +157,45 @@ namespace Persistencia
             }
         }
 
+        public static bool removerAtividade(int idAtividade)
+        {
+            IDbConnection conexao = null;
+            IDbTransaction transacao = null;
+
+            try
+            {
+                string sql = "DELETE FROM Atividade " +
+                    "WHERE id_atividade = @id_atividade";
+
+                conexao = DataBase.getConection();
+                IDbCommand command = DataBase.getCommand(sql, conexao);
+
+                IDbDataParameter parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@id_atividade", idAtividade, tipoDadoBD.Integer);
+                command.Parameters.Add(parametro);
+
+                conexao.Open();
+                transacao = conexao.BeginTransaction();
+                command.Transaction = transacao;
+
+                command.ExecuteNonQuery();
+
+                if (transacao != null) transacao.Commit();
+
+
+                return true;
+            }
+            catch (Exception exp)
+            {
+                throw new Exception("[AtividadeDD.removerAtividade()]: " + exp.Message);
+            }
+            finally
+            {
+                if (transacao != null) transacao.Dispose();
+                if (conexao != null) conexao.Close();
+            }
+        }
+
         public static int getCicloAtualAtividade(int idAtividade)
         {
             IDbConnection conexao = null;
@@ -367,11 +406,11 @@ namespace Persistencia
                 {
                     if (idStatusFilled)
                     {
-                        sql += "AND data_criacao >= @data_criacao ";
+                        sql += "AND data_criacao = @data_criacao ";
                     }
                     else
                     {
-                        sql += "data_criacao >= @data_criacao ";
+                        sql += "data_criacao = @data_criacao ";
                     }
                     dataCriacaoFilled = true;
                 }
