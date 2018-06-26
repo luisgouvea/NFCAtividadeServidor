@@ -295,7 +295,7 @@ namespace Persistencia
             return null;
         }
 
-        public static List<AtividadeFluxoCorreto> getAllCheckByDayCheckAndIdAtividade(DateTime dataCheck, int idAtividade)
+        public static List<AtividadeFluxoCorreto> getAllCheckByCicloAndDayCheckAndIdAtividade(DateTime dataCheck, int ciclo, int idAtividade)
         {
             IDbConnection conexao = null;
             IDataReader dReader = null;
@@ -307,6 +307,8 @@ namespace Persistencia
                     "where DAY(data_check) = DAY(@data_check) " +
                     "AND " +
                     "id_atividade = @id_atividade " +
+                    "AND " +
+                    "ciclo = @ciclo " +
                     "ORDER BY id_atividade_fluxo_correto desc";
 
 
@@ -319,6 +321,10 @@ namespace Persistencia
 
                 parametro = command.CreateParameter();
                 DataBase.getParametroCampo(ref parametro, "@id_atividade", idAtividade, tipoDadoBD.Integer);
+                command.Parameters.Add(parametro);
+
+                parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@ciclo", ciclo, tipoDadoBD.Integer);
                 command.Parameters.Add(parametro);
 
                 conexao.Open();
@@ -351,7 +357,7 @@ namespace Persistencia
             }
             catch (Exception exp)
             {
-                throw new Exception("[AtividadeFluxoCorretoDD.getAllCheckByDataCheck()]: " + exp.Message);
+                throw new Exception("[AtividadeFluxoCorretoDD.getAllCheckByCicloAndDayCheckAndIdAtividade()]: " + exp.Message);
             }
             finally
             {

@@ -30,6 +30,24 @@ namespace NFCAtividadeAPI.Controllers
         }
 
         [HttpPost]
+        public HttpResponseMessage getTarefasRoteiroByIdAtividade([FromBody]int idAtividade)
+        {
+            try
+            {
+                List<Tarefa> listaTarefas = Negocio.TarefaNG.getAllTarefasRoteiroByIdAtividade(idAtividade);
+
+                return Request.CreateResponse(HttpStatusCode.OK, listaTarefas);
+            }
+            catch (Exception e)
+            {
+                APIError erro = new APIError();
+                erro.statusCode = "400";
+                erro.message = "Ocorreu um erro: " + e.Message;
+                return Request.CreateResponse(HttpStatusCode.BadRequest, erro);
+            }
+        }
+
+        [HttpPost]
         public HttpResponseMessage addTarefa([FromBody] Tarefa tarefa)
         {
             try

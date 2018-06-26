@@ -19,7 +19,7 @@ namespace Negocio
 
             Atividade a = AtividadeNG.getAtividadeByIdAtividade(tarefa.IdAtividade);
             int cicloAtual = a.CicloAtual;
-            if(cicloAtual == 0)
+            if (cicloAtual == 0)
             {
                 tarefaCheck.Ciclo = 1;
             }
@@ -34,7 +34,7 @@ namespace Negocio
         {
             List<Tarefa> listaTarefasDaAtividade = TarefaNG.getAllTarefasByIdAtividade(idAtividade);
             List<string> listaIds = getIdsTarefaRegistroCheckNFC(listaTarefasDaAtividade);
-            if(listaIds.Count == 0)
+            if (listaIds.Count == 0)
             {
                 return null;
             }
@@ -88,11 +88,11 @@ namespace Negocio
                 if (ativ.IdModoExecucao == 2) // Execucao por dia
                 {
                     // TEM CICLO INFINITO
-                    //int cicloAtual = AtividadeNG.getCicloAtualAtividade(ativ.Id);
+                    int cicloAtual = AtividadeNG.getCicloAtualAtividade(ativ.Id);
                     //listFluxos = AtividadeFluxoCorretoNG.getAllCheckByCicloAndIdAtividade(cicloAtual, ativ.Id);
 
                     List<AtividadeFluxoCorreto> listFluxos = null;
-                    
+
                     if (!string.IsNullOrWhiteSpace(ativ.DiaExecucao) && !string.IsNullOrEmpty(ativ.DiaExecucao))
                     {
                         // GET CHECKS POR DIA ESPECIFICO
@@ -123,7 +123,7 @@ namespace Negocio
                     else
                     {
                         //GET FLUXOS POR DIA DE HOJE (NAO TEM LIMITACAO DE DIA)
-                        listFluxos = AtividadeFluxoCorretoNG.getAllCheckByDayCheckAndIdAtividade(DateTime.Now, ativ.Id);
+                        listFluxos = AtividadeFluxoCorretoNG.getAllCheckByCicloAndDayCheckAndIdAtividade(DateTime.Now, cicloAtual, ativ.Id);
 
                         if (ativ.NumMaximoCiclo != 0)
                         {
@@ -153,7 +153,7 @@ namespace Negocio
                         }
                         //add na tabela de fluxo correto
                         AtividadeFluxoCorreto fluxoCorreto = new AtividadeFluxoCorreto();
-                        //fluxoCorreto.Ciclo = cicloAtual;
+                        fluxoCorreto.Ciclo = cicloAtual;
                         fluxoCorreto.IdTarefa = tarefaDaTag.IdTarefa;
                         fluxoCorreto.IdAtividade = ativ.Id;
                         fluxoCorreto.dataCheck = DateTime.Now;
@@ -175,6 +175,7 @@ namespace Negocio
                         List<TarefaPrecedente> listaAnte = TarefaPrecedenteNG.getTarefasAntecessorasCheck(tarefaDaTag.IdTarefa);
                         int tamanhoListaAnte = listaAnte.Count();
                         int count = 0;
+                        List<int> listaFaltantes = new List<int>();
                         foreach (AtividadeFluxoCorreto fluxo in listFluxos)
                         {
                             foreach (TarefaPrecedente tarefaPrece in listaAnte)
@@ -183,17 +184,33 @@ namespace Negocio
                                 {
                                     count++;
                                 }
+                                else
+                                {
+                                    listaFaltantes.Add(tarefaPrece.IdTarefaAntecessora);
+                                }
                             }
                         }
 
                         if (count != tamanhoListaAnte)
                         {
-                            realizaHistoricoTarefa(tarefaSelecionadaUsuario, 1);
-                            result[0] = "invalido";
-                            result[1] = "Existe alguma tarefa que deve ser executada antes da tarefa escolhida."; // causa do erro
-                            result[2] = "Realize o check de todas as tarefas precedentes desta tarefa escolhida."; // solucao do erro
-                            return result;
-                            //return false;
+                            bool invalido = false;
+                            foreach (int id in listaFaltantes)
+                            {
+                                if (naoChegaNoTarget(tarefaDaTag.IdTarefa, id) == false)
+                                {
+                                    invalido = true;
+                                    break;
+                                }
+                            }
+                            if (invalido)
+                            {
+                                realizaHistoricoTarefa(tarefaSelecionadaUsuario, 1);
+                                result[0] = "invalido";
+                                result[1] = "Existe alguma tarefa que deve ser executada antes da tarefa escolhida."; // causa do erro
+                                result[2] = "Realize o check de todas as tarefas precedentes desta tarefa escolhida."; // solucao do erro
+                                return result;
+                                //return false;
+                            }
                         }
 
                         #endregion
@@ -222,7 +239,7 @@ namespace Negocio
 
                         //add na tabela de fluxo correto
                         AtividadeFluxoCorreto fluxoCorreto = new AtividadeFluxoCorreto();
-                        //fluxoCorreto.Ciclo = cicloAtual;
+                        fluxoCorreto.Ciclo = cicloAtual;
                         fluxoCorreto.IdTarefa = tarefaDaTag.IdTarefa;
                         fluxoCorreto.IdAtividade = ativ.Id;
                         fluxoCorreto.dataCheck = DateTime.Now;
@@ -239,8 +256,9 @@ namespace Negocio
                             if (ativ.NumMaximoCiclo != 0 && listFluxos.Count == ativ.NumMaximoCiclo)
                             {
 
+                                int novoCiclo = cicloAtual + 1;
                                 //update na atividade coluna cicloAtual com o novo valor
-                                //AtividadeNG.updateCicloAtualAtividade(novoCiclo, ativ.Id);
+                                AtividadeNG.updateCicloAtualAtividade(novoCiclo, ativ.Id);
                                 TarefaNG.updateStatusExecucaoByIdAtividade(1, ativ.Id);
 
                                 result[0] = "valido";
@@ -249,8 +267,9 @@ namespace Negocio
                             }
                             else
                             {
+                                int novoCiclo = cicloAtual + 1;
                                 //update na atividade coluna cicloAtual com o novo valor
-                                //AtividadeNG.updateCicloAtualAtividade(novoCiclo, ativ.Id);
+                                AtividadeNG.updateCicloAtualAtividade(novoCiclo, ativ.Id);
                                 TarefaNG.updateStatusExecucaoByIdAtividade(1, ativ.Id);
 
                                 result[0] = "valido";
@@ -416,6 +435,19 @@ namespace Negocio
             {
                 throw new Exception("Ocorreu um erro ao verificar o Check realizado: " + e.Message);
             }
+        }
+
+        private static bool naoChegaNoTarget(int idTarefaChecada, int idTarefaAntecessora)
+        {
+            List<TarefaSucedente> listaSucessoras = TarefaSucedenteNG.getTarefasSucessorasCheck(idTarefaAntecessora);
+            foreach (TarefaSucedente tarefaSucessora in listaSucessoras)
+            {
+                if (tarefaSucessora.IdTarefaProxima == idTarefaChecada)
+                {
+                    return true; // e ciclico 
+                }
+            }
+            return false;
         }
 
         private static string getNomeTarefasSucedentes(List<TarefaSucedente> listaSucedentes)

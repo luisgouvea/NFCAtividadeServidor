@@ -43,6 +43,20 @@ namespace Negocio
             return listTarefas;
         }
 
+        public static List<Tarefa> getAllTarefasRoteiroByIdAtividade(int idAtividade)
+        {
+            List<Tarefa> listTarefas = Persistencia.TarefaDD.getTarefasByAtividade(idAtividade);
+            foreach (Tarefa tarefa in listTarefas)
+            {
+                int id = tarefa.IdTarefa;
+                List<TarefaPrecedente> listAntecessoras = Persistencia.TarefaPrecedenteDD.getTarefasAntecessoras(id);
+                List<TarefaSucedente> listaSucessores = Persistencia.TarefaSucedenteDD.getTarefasSucessoras(id);
+                tarefa.listaAntecessoras = listAntecessoras;
+                tarefa.listaSucessoras = listaSucessores;
+            }
+            return listTarefas;
+        }
+
         public static Tarefa getTarefaByTagAndTarefa(int identificadorTag, int idTarefa)
         {
             Tarefa tarefa = Persistencia.TarefaDD.getTarefaByTagAndTarefa(identificadorTag, idTarefa);
