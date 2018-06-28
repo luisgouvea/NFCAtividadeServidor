@@ -171,70 +171,34 @@ namespace Negocio
                     {
                         AtividadeFluxoCorreto ultimoCheck = AtividadeFluxoCorretoNG.getUltimoCheckCorretoByIdAtividade(ativ.Id);
 
-                        #region Logica de precedencia
-                        List<TarefaPrecedente> listaAnte = TarefaPrecedenteNG.getTarefasAntecessorasCheck(tarefaDaTag.IdTarefa);
-                        int tamanhoListaAnte = listaAnte.Count();
-                        int count = 0;
-                        List<int> listaFaltantes = new List<int>();
-                        foreach (AtividadeFluxoCorreto fluxo in listFluxos)
-                        {
-                            foreach (TarefaPrecedente tarefaPrece in listaAnte)
-                            {
-                                if (tarefaPrece.IdTarefaAntecessora == fluxo.IdTarefa)
-                                {
-                                    count++;
-                                }
-                                else
-                                {
-                                    listaFaltantes.Add(tarefaPrece.IdTarefaAntecessora);
-                                }
-                            }
-                        }
-
-                        if (count != tamanhoListaAnte)
-                        {
-                            bool invalido = false;
-                            foreach (int id in listaFaltantes)
-                            {
-                                if (naoChegaNoTarget(tarefaDaTag.IdTarefa, id) == false)
-                                {
-                                    invalido = true;
-                                    break;
-                                }
-                            }
-                            if (invalido)
-                            {
-                                realizaHistoricoTarefa(tarefaSelecionadaUsuario, 1);
-                                result[0] = "invalido";
-                                result[1] = "Existe alguma tarefa que deve ser executada antes da tarefa escolhida."; // causa do erro
-                                result[2] = "Realize o check de todas as tarefas precedentes desta tarefa escolhida."; // solucao do erro
-                                return result;
-                                //return false;
-                            }
-                        }
-
-                        #endregion
+                        
 
                         #region Logica de sucessao
 
                         int ultiIdTarefaExecutado = ultimoCheck.IdTarefa;
                         List<TarefaSucedente> listaSucedentes = TarefaSucedenteNG.getTarefasSucessorasCheck(ultiIdTarefaExecutado);
                         string nomeTarefasSucessoras = getNomeTarefasSucedentes(listaSucedentes);
+                        bool checkValido = false;
                         foreach (TarefaSucedente proximaTarefa in listaSucedentes)
                         {
-                            if (proximaTarefa.IdTarefaProxima != tarefaDaTag.IdTarefa)
+                            if (proximaTarefa.IdTarefaProxima == tarefaDaTag.IdTarefa)
                             {
                                 // a tarefa do check eh uma sucessora da ultima tarefa checada
                                 //break;
-                                realizaHistoricoTarefa(tarefaSelecionadaUsuario, 1);
-                                result[0] = "invalido";
-                                result[1] = "Não é a vez da tarefa escolhida."; // causa do erro
-                                result[2] = "Você deve escolher alguma(s) dessa(s) tarefa(s): " + nomeTarefasSucessoras + "."; // solucao do erro
-                                return result;
+                                checkValido = true;
+
                                 //return false;
                             }
                         }
 
+                        if (checkValido == false)
+                        {
+                            realizaHistoricoTarefa(tarefaSelecionadaUsuario, 1);
+                            result[0] = "invalido";
+                            result[1] = "Não é a vez da tarefa escolhida."; // causa do erro
+                            result[2] = "Você deve escolher alguma(s) dessa(s) tarefa(s): " + nomeTarefasSucessoras + "."; // solucao do erro
+                            return result;
+                        }
                         #endregion
 
                         //add na tabela de fluxo correto
@@ -437,7 +401,47 @@ namespace Negocio
             }
         }
 
-        private static bool naoChegaNoTarget(int idTarefaChecada, int idTarefaAntecessora)
+        private static bool nuncaExecutouCorretamente(List<AtividadeFluxoCorreto> listFluxos, int idTarefa)
+        {
+            foreach (AtividadeFluxoCorreto tarefaExecutada in listFluxos)
+            {
+                if(tarefaExecutada.IdTarefa == idTarefa)
+                {
+                    //ja executou
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        //private static List<int> limpaJaExecutados(List<int> tarefasJaExecutadas, List<int> listaFaltantes)
+        //{
+        //    foreach (int idTarefaFaltando in listaFaltantes)
+        //    {
+        //        foreach (int idTarefaExecutada in tarefasJaExecutadas)
+        //        {
+        //            if (idTarefaFaltando == idTarefaExecutada)
+        //            {
+        //                listaFaltantes.Remove(idTarefaExecutada);
+        //            }
+        //        }
+        //    }
+        //}
+
+        private static bool faltanteChegaNoTarget(int idTarefaChecada, int idTarefaAntecessora)
+        {
+            List<TarefaSucedente> listaSucessoras = TarefaSucedenteNG.getTarefasSucessorasCheck(idTarefaChecada);
+            foreach (TarefaSucedente tarefaSucessora in listaSucessoras)
+            {
+                if (tarefaSucessora.IdTarefaProxima == idTarefaAntecessora)
+                {
+                    return true; // e ciclico 
+                }
+            }
+            return false;
+        }
+
+        private static bool chegaNoTarget(int idTarefaChecada, int idTarefaAntecessora)
         {
             List<TarefaSucedente> listaSucessoras = TarefaSucedenteNG.getTarefasSucessorasCheck(idTarefaAntecessora);
             foreach (TarefaSucedente tarefaSucessora in listaSucessoras)

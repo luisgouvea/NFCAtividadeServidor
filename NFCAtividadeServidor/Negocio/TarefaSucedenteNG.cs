@@ -29,8 +29,14 @@ namespace Negocio
             //Persistencia.TarefaSucedenteDD.deleteSucessaoTarefa(idTarefaSucessao); // delete all encadeamento sucessor
             foreach (TarefaPrecedente tarefaSucessao in tarefa.listaAntecessoras)
             {
-                Persistencia.TarefaSucedenteDD.deleteSucessaoTarefa(tarefaSucessao.IdTarefaAntecessora); // delete all encadeamento sucessor
+                try { 
+                //Persistencia.TarefaSucedenteDD.deleteSucessaoTarefa(tarefaSucessao.IdTarefaAntecessora); // delete all encadeamento sucessor
                 Persistencia.TarefaSucedenteDD.insertSucessaoTarefa(tarefaSucessao.IdTarefaAntecessora, idTarefaSucessao); // cria novamente
+                }
+                catch
+                {
+
+                }
             }
             return true;
         }
