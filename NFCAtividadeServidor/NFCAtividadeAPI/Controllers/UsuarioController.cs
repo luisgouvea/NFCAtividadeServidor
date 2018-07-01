@@ -22,7 +22,7 @@ namespace NFCAtividadeAPI.Controllers
                 string senha = parametros[1];
                 Usuario usuario = Negocio.UsuarioNG.getUsuario(login, senha);
 
-                return Request.CreateResponse(HttpStatusCode.OK, usuario.IdUsuario);
+                return Request.CreateResponse(HttpStatusCode.OK, usuario);
             }
             catch (Exception e)
             {
@@ -40,8 +40,8 @@ namespace NFCAtividadeAPI.Controllers
             try
             {
                 int idUsuario = Negocio.UsuarioNG.addUsuario(usuario);
-
-                return Request.CreateResponse(HttpStatusCode.OK, idUsuario);
+                Usuario usu = Negocio.UsuarioNG.getUsuarioById(idUsuario);
+                return Request.CreateResponse(HttpStatusCode.OK, usu);
             }
             catch (Exception e)
             {

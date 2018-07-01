@@ -39,11 +39,7 @@ namespace Persistencia
                 if (dReader != null)
                 {
                     dReader.Read();
-                    Usuario usuario = new Usuario();
-                    if (dReader["id_usuario"] != DBNull.Value)
-                    {                        
-                        usuario.IdUsuario = Int32.Parse(dReader["id_usuario"].ToString());
-                    }
+                    Usuario usuario = getDadosUsuario(dReader);
                     conexao.Close();
                     dReader.Close();
                     return usuario;
@@ -210,6 +206,8 @@ namespace Persistencia
         {
             Usuario usuario = new Usuario();
             usuario.Nome = Conversao.FieldToString(dReader["nome"]);
+            usuario.Senha = Conversao.FieldToString(dReader["senha"]);
+            usuario.Login = Conversao.FieldToString(dReader["login"]);
             usuario.IdUsuario = Conversao.FieldToInteger(dReader["id_usuario"]);
             return usuario;
         }
