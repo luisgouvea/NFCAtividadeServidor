@@ -19,14 +19,15 @@ namespace Negocio
 
             Atividade a = AtividadeNG.getAtividadeByIdAtividade(tarefa.IdAtividade);
             int cicloAtual = a.CicloAtual;
-            if (cicloAtual == 0)
-            {
-                tarefaCheck.Ciclo = 1;
-            }
-            else
-            {
-                tarefaCheck.Ciclo = cicloAtual;
-            }
+            //if (cicloAtual == 0)
+            //{
+            //    tarefaCheck.Ciclo = 1;
+            //}
+            //else
+            //{
+            //    tarefaCheck.Ciclo = cicloAtual;
+            //}
+            tarefaCheck.Ciclo = cicloAtual;
             return Persistencia.TarefaCheckDD.addRegistroCheckNFC(tarefaCheck);
         }
 
@@ -89,6 +90,7 @@ namespace Negocio
                 {
                     // TEM CICLO INFINITO
                     int cicloAtual = AtividadeNG.getCicloAtualAtividade(ativ.Id);
+                    int novoCiclo = cicloAtual + 1;
                     //listFluxos = AtividadeFluxoCorretoNG.getAllCheckByCicloAndIdAtividade(cicloAtual, ativ.Id);
 
                     List<AtividadeFluxoCorreto> listFluxos = null;
@@ -124,12 +126,20 @@ namespace Negocio
                     {
                         //GET FLUXOS POR DIA DE HOJE (NAO TEM LIMITACAO DE DIA)
                         listFluxos = AtividadeFluxoCorretoNG.getAllCheckByCicloAndDayCheckAndIdAtividade(DateTime.Now, cicloAtual, ativ.Id);
-
                         if (ativ.NumMaximoCiclo != 0)
                         {
-                            if (listFluxos != null && listFluxos.Count >= ativ.NumMaximoCiclo && listFluxos[0].dataCheck.Day == DateTime.Now.Day)
+                            //if (listFluxos != null && listFluxos.Count >= ativ.NumMaximoCiclo && listFluxos[0].dataCheck.Day == DateTime.Now.Day)
+                            //{
+                            //    //passou do limite de ciclo
+                            //    result[0] = "invalido";
+                            //    result[1] = "Foi atingido o número total de ciclos completos da atividade. A atividade não pode ser mais executada HOJE"; // causa do erro
+                            //    result[2] = "Realize o check das tarefas da Atividade, no próximo dia válido."; // solucao do erro
+                            //    return result;
+                            //}
+                            if(novoCiclo > ativ.NumMaximoCiclo)
                             {
                                 //passou do limite de ciclo
+                                realizaHistoricoTarefa(tarefaSelecionadaUsuario, 1); // 1 = invalido
                                 result[0] = "invalido";
                                 result[1] = "Foi atingido o número total de ciclos completos da atividade. A atividade não pode ser mais executada HOJE"; // causa do erro
                                 result[2] = "Realize o check das tarefas da Atividade, no próximo dia válido."; // solucao do erro
@@ -217,21 +227,21 @@ namespace Negocio
                         if (tarefaDaTag.FinalizaFluxo)
                         {
 
-                            if (ativ.NumMaximoCiclo != 0 && listFluxos.Count == ativ.NumMaximoCiclo)
+                            // if (ativ.NumMaximoCiclo != 0 && listFluxos.Count == ativ.NumMaximoCiclo)
+                            if (ativ.NumMaximoCiclo == novoCiclo)
                             {
-
-                                int novoCiclo = cicloAtual + 1;
+                                realizaHistoricoTarefa(tarefaSelecionadaUsuario, 2);
                                 //update na atividade coluna cicloAtual com o novo valor
                                 AtividadeNG.updateCicloAtualAtividade(novoCiclo, ativ.Id);
                                 TarefaNG.updateStatusExecucaoByIdAtividade(1, ativ.Id);
 
                                 result[0] = "valido";
-                                result[1] = "Muito bem! Você finalizou o fluxo, o número de fluxos completos diários, foi atingido. Realize o check no próximo dia válido"; // proximoPasso
+                                result[1] = "Muito bem! Você finalizou o fluxo. O número de fluxos completos diários, foi atingido. Realize o check no próximo dia válido"; // proximoPasso
                                 result[2] = "";
                             }
                             else
                             {
-                                int novoCiclo = cicloAtual + 1;
+                                realizaHistoricoTarefa(tarefaSelecionadaUsuario, 2);
                                 //update na atividade coluna cicloAtual com o novo valor
                                 AtividadeNG.updateCicloAtualAtividade(novoCiclo, ativ.Id);
                                 TarefaNG.updateStatusExecucaoByIdAtividade(1, ativ.Id);
@@ -241,7 +251,10 @@ namespace Negocio
                                 result[2] = "";
                             }
                         }
-                        realizaHistoricoTarefa(tarefaSelecionadaUsuario, 2);
+                        else
+                        {
+                            realizaHistoricoTarefa(tarefaSelecionadaUsuario, 2);
+                        }                       
                     }
                 }
                 else // CHECK SEQUENCIAL

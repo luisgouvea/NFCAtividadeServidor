@@ -47,7 +47,6 @@
     <Compile Include="AtividadeFluxoCorretoDD.cs" />
     <Compile Include="ModelosErro\APIError.cs" />
     <Compile Include="ModelosUtil\FiltroPesquisaHome.cs" />
-    <Compile Include="Modelos\AmigoUsuario.cs" />
     <Compile Include="Modelos\Atividade.cs" />
     <Compile Include="Modelos\AtividadeFluxoCorreto.cs" />
     <Compile Include="Modelos\DetalhesAtividade.cs" />

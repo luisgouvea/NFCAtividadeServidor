@@ -20,14 +20,18 @@ namespace Persistencia
             {
 
                 string sql = "INSERT INTO TarefaCheck " +
-                    "(id_tarefa, nome_tarefa, data_execucao, id_status_check_nfc) " +
-                    "VALUES (@id_tarefa, @nome_tarefa, @data_execucao, @id_status_check_nfc)";
+                    "(id_tarefa, nome_tarefa, data_execucao, id_status_check_nfc, ciclo) " +
+                    "VALUES (@id_tarefa, @nome_tarefa, @data_execucao, @id_status_check_nfc, @ciclo)";
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
 
                 IDbDataParameter parametro = command.CreateParameter();
                 DataBase.getParametroCampo(ref parametro, "@id_tarefa", tarefaCheck.IdTarefa, tipoDadoBD.Integer);
+                command.Parameters.Add(parametro);
+
+                parametro = command.CreateParameter();
+                DataBase.getParametroCampo(ref parametro, "@ciclo", tarefaCheck.Ciclo, tipoDadoBD.Integer);
                 command.Parameters.Add(parametro);
 
                 parametro = command.CreateParameter();
@@ -99,6 +103,7 @@ namespace Persistencia
                             tarefaCheck.Nome = Conversao.FieldToString(dReader["nome_tarefa"]);
                             tarefaCheck.DataExecucao = Conversao.FieldToDateTime(dReader["data_execucao"]);
                             tarefaCheck.IdStatusCheckNFC = Conversao.FieldToInteger(dReader["id_status_check_nfc"]);
+                            tarefaCheck.Ciclo = Conversao.FieldToInteger(dReader["ciclo"]);
                             listaHistoricoCheck.Add(tarefaCheck);
                         }
 

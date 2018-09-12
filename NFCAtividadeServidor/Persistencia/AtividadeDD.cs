@@ -406,14 +406,15 @@ namespace Persistencia
                 {
                     if (idStatusFilled)
                     {
-                        sql += "AND data_criacao = @data_criacao ";
+                        sql += "AND DAY(data_criacao) = DAY(@data_criacao) ";
                     }
                     else
                     {
-                        sql += "data_criacao = @data_criacao ";
+                        sql += "DAY(data_criacao) = DAY(@data_criacao) ";
                     }
                     dataCriacaoFilled = true;
                 }
+
                 if (!string.IsNullOrEmpty(filtro.DescricaoAtividade))
                 {
                     if (dataCriacaoFilled)
@@ -523,11 +524,11 @@ namespace Persistencia
                 {
                     if (idStatusFilled)
                     {
-                        sql += "AND data_criacao = @data_criacao ";
+                        sql += "AND DAY(data_criacao) = DAY(@data_criacao) ";
                     }
                     else
                     {
-                        sql += "data_criacao = @data_criacao ";
+                        sql += "DAY(data_criacao) = DAY(@data_criacao) ";
                     }
                     dataCriacaoFilled = true;
                 }
@@ -617,8 +618,8 @@ namespace Persistencia
             try
             {
                 string sql = "INSERT INTO Atividade " +
-                    "(id_status, id_usuario_executor, id_usuario_criador, nome, id_modo_execucao, num_maximo_ciclo, dia_execucao, ciclo_atual, data_finalizacao, data_criacao) " +
-                    "VALUES (@id_status, @id_usuario_executor, @id_usuario_criador, @nome,  @id_modo_execucao, @num_maximo_ciclo, @dia_execucao, @ciclo_atual, @data_finalizacao, @data_criacao); SELECT SCOPE_IDENTITY();";
+                    "(id_status, id_usuario_executor, id_usuario_criador, nome, id_modo_execucao, num_maximo_ciclo, dia_execucao, ciclo_atual, data_finalizacao, data_criacao, descricao) " +
+                    "VALUES (@id_status, @id_usuario_executor, @id_usuario_criador, @nome,  @id_modo_execucao, @num_maximo_ciclo, @dia_execucao, @ciclo_atual, @data_finalizacao, @data_criacao, @descricao); SELECT SCOPE_IDENTITY();";
 
                 conexao = DataBase.getConection();
                 IDbCommand command = DataBase.getCommand(sql, conexao);
@@ -656,13 +657,12 @@ namespace Persistencia
                 string sql = "UPDATE Atividade " +
                     "SET id_status = @id_status, " +
                     "nome = @nome, " +
+                    "descricao = @descricao, " +
                     "data_finalizacao = @data_finalizacao, " +
                     "data_criacao = @data_criacao, " +
                     "num_maximo_ciclo = @num_maximo_ciclo, " +
                     "dia_execucao = @dia_execucao, " +
-                    "id_modo_execucao = @id_modo_execucao, " +
-                    "descricao = @descricao, " +
-                    "data_finalizacao = @data_finalizacao " +
+                    "id_modo_execucao = @id_modo_execucao " +
                     "WHERE id_atividade = @id_atividade";
 
                 conexao = DataBase.getConection();
@@ -715,6 +715,10 @@ namespace Persistencia
             command.Parameters.Add(parametro);
 
             parametro = command.CreateParameter();
+            DataBase.getParametroCampo(ref parametro, "@descricao", atividade.Descricao, tipoDadoBD.VarChar);
+            command.Parameters.Add(parametro);
+
+            parametro = command.CreateParameter();
             DataBase.getParametroCampo(ref parametro, "@dia_execucao", Conversao.StringToField(atividade.DiaExecucao), tipoDadoBD.VarChar);
             command.Parameters.Add(parametro);
 
@@ -755,6 +759,7 @@ namespace Persistencia
             atividade.IdModoExecucao = Conversao.FieldToInteger(dReader["id_modo_execucao"]);
             atividade.NumMaximoCiclo = Conversao.FieldToInteger(dReader["num_maximo_ciclo"]);
             atividade.IdStatus = Conversao.FieldToInteger(dReader["id_status"]);
+            atividade.CicloAtual = Conversao.FieldToInteger(dReader["ciclo_atual"]);
             return atividade;
         }
     }
